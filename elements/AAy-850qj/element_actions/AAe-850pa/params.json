@@ -1,0 +1,13 @@
+{
+    "caption": "Reset",
+    "fields": {
+        "AAf": {
+            "caption": "Quiet reset",
+            "default_val": false,
+            "doc": "Do not trigger an event",
+            "editor": "Checkbox",
+            "name": "quiet_reset",
+            "rank": 0
+        }
+    }
+}

@@ -1,0 +1,244 @@
+{
+    "add_hover_pressed": true,
+    "add_is_visible": true,
+    "can_fit_height": true,
+    "can_fit_width": true,
+    "category": "input forms",
+    "default_dim": {
+        "height": 48,
+        "width": 200
+    },
+    "display": "Headless Dropdown",
+    "events": {
+        "ABu": {
+            "caption": "searchbox_value_is_changed",
+            "name": "searchbox_value_is_changed"
+        }
+    },
+    "fields": {
+        "ABT": {
+            "caption": "Data",
+            "editor": "custom_type",
+            "name": "data_type",
+            "rank": 0
+        },
+        "ABU": {
+            "caption": "search_list",
+            "doc": "Lista de itens exibidos no dropdown.",
+            "editor": "DynamicValue",
+            "is_list": true,
+            "name": "search_list",
+            "rank": 1,
+            "value": "custom_data_ABT"
+        },
+        "ABV": {
+            "caption": "id",
+            "editor": "StaticText",
+            "name": "id",
+            "optional": true,
+            "rank": 2
+        },
+        "ABW": {
+            "caption": "caption_field",
+            "editor": "custom_field_ABT",
+            "name": "caption_field",
+            "optional": true,
+            "rank": 3
+        },
+        "ABX": {
+            "caption": "secondary_caption_field",
+            "editor": "custom_field_ABT",
+            "name": "secondary_caption_field",
+            "optional": true,
+            "rank": 4
+        },
+        "ABY": {
+            "caption": "separator",
+            "editor": "StaticText",
+            "name": "separator",
+            "optional": true,
+            "rank": 5
+        },
+        "ABZ": {
+            "caption": "dynamic_caption_field",
+            "editor": "StaticText",
+            "long_text": true,
+            "name": "dynamic_caption_field",
+            "optional": true,
+            "rank": 6
+        },
+        "ABa": {
+            "caption": "default_value",
+            "editor": "DynamicValue",
+            "name": "default_value",
+            "optional": true,
+            "rank": 7,
+            "value": "custom_data_ABT"
+        },
+        "ABb": {
+            "caption": "max_entries_to_show",
+            "default_val": 10,
+            "editor": "StaticNumber",
+            "name": "max_entries_to_show",
+            "optional": true,
+            "rank": 8
+        },
+        "ABc": {
+            "caption": "placeholder",
+            "editor": "DynamicValue",
+            "name": "placeholder",
+            "optional": true,
+            "rank": 9,
+            "value": "text"
+        },
+        "ABd": {
+            "caption": "placeholder_color",
+            "default_val": "rgba(153,153,153,1)",
+            "editor": "Color",
+            "name": "placeholder_color",
+            "optional": true,
+            "rank": 10
+        },
+        "ABe": {
+            "caption": "dropdown_background",
+            "default_val": "rgba(255,255,255,1)",
+            "editor": "Color",
+            "name": "dropdown_background",
+            "optional": true,
+            "rank": 11
+        },
+        "ABf": {
+            "caption": "dropdown_font_color",
+            "default_val": "rgba(51,51,51,1)",
+            "editor": "Color",
+            "name": "dropdown_font_color",
+            "optional": true,
+            "rank": 12
+        },
+        "ABg": {
+            "caption": "dropdown_hover_color",
+            "default_val": "rgba(88,151,251,1)",
+            "editor": "Color",
+            "name": "dropdown_hover_color",
+            "optional": true,
+            "rank": 13
+        },
+        "ABh": {
+            "caption": "dropdown_font_size",
+            "default_val": 12,
+            "editor": "StaticNumber",
+            "name": "dropdown_font_size",
+            "optional": true,
+            "rank": 14
+        },
+        "ABi": {
+            "caption": "search_background",
+            "default_val": "rgba(245,245,245,1)",
+            "editor": "Color",
+            "name": "search_background",
+            "optional": true,
+            "rank": 15
+        },
+        "ABj": {
+            "caption": "search_border_color",
+            "default_val": "rgba(204,204,204,1)",
+            "editor": "Color",
+            "name": "search_border_color",
+            "optional": true,
+            "rank": 16
+        },
+        "ABk": {
+            "caption": "search_font_color",
+            "default_val": "rgba(51,51,51,1)",
+            "editor": "Color",
+            "name": "search_font_color",
+            "optional": true,
+            "rank": 17
+        },
+        "ABl": {
+            "caption": "search_placeholder_color",
+            "default_val": "rgba(153,153,153,1)",
+            "editor": "Color",
+            "name": "search_placeholder_color",
+            "optional": true,
+            "rank": 18
+        },
+        "ABm": {
+            "caption": "search_box_height",
+            "default_val": "35",
+            "editor": "StaticText",
+            "name": "search_box_height",
+            "optional": true,
+            "rank": 19
+        },
+        "ABn": {
+            "caption": "option_padding_vertical",
+            "default_val": 3,
+            "editor": "StaticNumber",
+            "name": "option_padding_vertical",
+            "optional": true,
+            "rank": 20
+        },
+        "ABo": {
+            "caption": "dropdown_animation",
+            "default_val": "fade",
+            "editor": "Dropdown",
+            "name": "dropdown_animation",
+            "optional": true,
+            "options": "none,fade,slide,zoom",
+            "rank": 21
+        },
+        "ABp": {
+            "caption": "keep_open_on_search",
+            "default_val": false,
+            "editor": "Checkbox",
+            "name": "keep_open_on_search",
+            "optional": true,
+            "rank": 22
+        },
+        "ABq": {
+            "caption": "close_on_select",
+            "default_val": false,
+            "editor": "Checkbox",
+            "name": "close_on_select",
+            "optional": true,
+            "rank": 23
+        },
+        "ABr": {
+            "caption": "open_up_if_no_space",
+            "default_val": false,
+            "editor": "Checkbox",
+            "name": "open_up_if_no_space",
+            "optional": true,
+            "rank": 24
+        },
+        "ABs": {
+            "caption": "disabled",
+            "default_val": false,
+            "editor": "Checkbox",
+            "name": "disabled",
+            "rank": 25
+        }
+    },
+    "icon": "ion-android-checkbox-blank",
+    "platform_type": "web",
+    "property_applications": {
+        "Background": true,
+        "Border": true,
+        "BoxShadow": true,
+        "Font": true,
+        "MinWidth": true,
+        "Padding": true,
+        "resizable": true
+    },
+    "states": {
+        "ABt": {
+            "caption": "value",
+            "initialization_code": {
+                "fn": "function(properties, context) {\n\n\n\n}"
+            },
+            "name": "selected",
+            "value": "custom_data_ABT"
+        }
+    }
+}

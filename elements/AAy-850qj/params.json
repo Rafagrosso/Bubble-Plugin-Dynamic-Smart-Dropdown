@@ -1,0 +1,195 @@
+{
+    "add_hover_pressed": false,
+    "add_is_visible": true,
+    "autobinding_value": "text",
+    "can_fit_height": true,
+    "can_fit_width": true,
+    "category": "input forms",
+    "default_dim": {
+        "height": 48,
+        "width": 150
+    },
+    "display": "Dynamic Dropdown",
+    "events": {
+        "AAg": {
+            "caption": "Searchbox value is changed",
+            "doc": "Disparado sempre que o valor selecionado muda (inclusive quando é limpo).",
+            "name": "searchbox_value_is_changed"
+        }
+    },
+    "fields": {
+        "AAh": {
+            "caption": "Data type",
+            "editor": "custom_type",
+            "name": "data_type",
+            "rank": 1
+        },
+        "AAj": {
+            "caption": "Data source (list of things)",
+            "doc": "Lista de registros a serem exibidos no dropdown.",
+            "editor": "DynamicValue",
+            "is_list": true,
+            "name": "search_list",
+            "optional": false,
+            "rank": 2,
+            "value": "custom_data_AAh"
+        },
+        "AAk": {
+            "caption": "Primary field",
+            "doc": "Campo do tipo texto que será exibido como principal.",
+            "editor": "custom_field_AAh",
+            "name": "caption_field",
+            "optional": false,
+            "rank": 3
+        },
+        "AAl": {
+            "caption": "Disable dropdown",
+            "default_val": false,
+            "doc": "Desativa a interação do usuário.",
+            "editor": "Checkbox",
+            "name": "disabled",
+            "rank": 8,
+            "value": "boolean"
+        },
+        "AAm": {
+            "caption": "Placeholder text",
+            "doc": "Texto exibido no campo quando nada está selecionado.",
+            "editor": "StaticText",
+            "name": "placeholder",
+            "optional": true,
+            "rank": 10,
+            "value": "text"
+        },
+        "AAo": {
+            "caption": "Dynamic caption (expression)",
+            "doc": "Permite montar textos dinâmicos usando placeholders como [campo] ou [objeto->campo].",
+            "editor": "StaticText",
+            "long_text": true,
+            "name": "dynamic_caption_field",
+            "optional": true,
+            "rank": 6
+        },
+        "AAq": {
+            "caption": "Max entries to show",
+            "default_val": 10,
+            "doc": "Limita a quantidade de opções exibidas no popup (para performance).",
+            "editor": "StaticNumber",
+            "name": "max_entries_to_show",
+            "rank": 9
+        },
+        "AAs": {
+            "caption": "Secondary field",
+            "doc": "Campo adicional que será concatenado ao texto principal.",
+            "editor": "custom_field_AAh",
+            "name": "secondary_caption_field",
+            "optional": true,
+            "rank": 4
+        },
+        "AAt": {
+            "caption": "Separator",
+            "doc": "Define o separador entre o campo principal e o secundário.",
+            "editor": "StaticText",
+            "name": "separator",
+            "optional": true,
+            "rank": 5
+        },
+        "AAv": {
+            "caption": "Custom ID field",
+            "doc": "Campo que identifica o registro (caso não use _id).",
+            "editor": "StaticText",
+            "field_type_restriction": "text_image_file",
+            "name": "id",
+            "optional": true,
+            "rank": 14
+        },
+        "AAw": {
+            "caption": "Default selected item",
+            "doc": "Item padrão a ser selecionado automaticamente.",
+            "editor": "DynamicValue",
+            "name": "default_value",
+            "optional": true,
+            "rank": 7,
+            "value": "custom_data_AAh"
+        },
+        "AAz": {
+            "caption": "Dados e Identificação",
+            "editor": "Label",
+            "name": "dados_e_identificação",
+            "rank": 0
+        },
+        "ABK": {
+            "caption": "Dropdown direction",
+            "default_val": "auto",
+            "doc": "Define a direção em que o dropdown será aberto. Use \"auto\" para deixar o sistema decidir automaticamente entre cima e baixo. Valores aceitos: \"auto\", \"above\", \"below\".",
+            "editor": "Dropdown",
+            "name": "dropdown_direction",
+            "optional": true,
+            "options": "auto,above,below",
+            "rank": 11
+        },
+        "ABL": {
+            "caption": "dropdown_animation",
+            "default_val": "fade",
+            "editor": "Dropdown",
+            "name": "dropdown_animation",
+            "optional": true,
+            "options": "fade,slide,zoom,none",
+            "rank": 12
+        },
+        "ABM": {
+            "caption": "dropdown_animation_duration",
+            "default_val": 250,
+            "editor": "StaticNumber",
+            "name": "dropdown_animation_duration",
+            "optional": true,
+            "rank": 13
+        }
+    },
+    "has_reset_fn": true,
+    "icon": "ion-android-arrow-dropdown",
+    "property_applications": {
+        "Background": true,
+        "Border": true,
+        "BoxShadow": true,
+        "Font": true,
+        "MinWidth": true,
+        "Padding": true,
+        "resizable": true
+    },
+    "states": {
+        "AAx": {
+            "caption": "value",
+            "doc": "Retorna o item (Thing) atualmente selecionado.",
+            "initialization_code": {
+                "fn": "function(properties, context) {}"
+            },
+            "name": "selected",
+            "value": "custom_data_AAh"
+        },
+        "ABP": {
+            "caption": "status",
+            "initialization_code": {
+                "fn": "function(properties, context) {\n\n\n\n}"
+            },
+            "name": "sd_status",
+            "value": "text"
+        },
+        "ABQ": {
+            "caption": "log",
+            "initialization_code": {
+                "fn": "function(properties, context) {\n\n\n\n}"
+            },
+            "name": "sd_log",
+            "value": "text"
+        },
+        "ABR": {
+            "caption": "error",
+            "initialization_code": {
+                "fn": "function(properties, context) {\n\n\n\n}"
+            },
+            "name": "sd_error",
+            "value": "text"
+        }
+    },
+    "support_autobinding": false
+}
