@@ -143,6 +143,118 @@
             "name": "dropdown_animation_duration",
             "optional": true,
             "rank": 13
+        },
+        "ABv": {
+            "caption": "Group results",
+            "default_val": false,
+            "doc": "Agrupa as opções do dropdown (inclusive os resultados da pesquisa) pelo campo definido em \"Group by (field)\".",
+            "editor": "Checkbox",
+            "name": "group_results",
+            "rank": 15
+        },
+        "ABw": {
+            "caption": "Group by (field)",
+            "doc": "Campo usado como título dos grupos quando \"Group results\" está ativo.",
+            "editor": "custom_field_AAh",
+            "name": "group_by_field",
+            "optional": true,
+            "rank": 16
+        },
+        "ABx": {
+            "caption": "Multiple selection",
+            "default_val": false,
+            "doc": "Permite selecionar vários itens (com checkboxes e chips). Use o estado \"values (list)\" para a lista completa e \"value\" para o último item selecionado.",
+            "editor": "Checkbox",
+            "name": "multiple_selection",
+            "rank": 17
+        },
+        "ACJ": {
+            "caption": "Pesquisa e Estilo do Popup",
+            "editor": "Label",
+            "name": "pesquisa_e_estilo",
+            "rank": 18
+        },
+        "ABz": {
+            "caption": "Search placeholder",
+            "doc": "Texto exibido no campo de pesquisa dentro do popup.",
+            "editor": "StaticText",
+            "name": "search_placeholder",
+            "optional": true,
+            "rank": 19
+        },
+        "ACA": {
+            "caption": "No results text",
+            "doc": "Texto exibido quando a pesquisa não encontra resultados.",
+            "editor": "StaticText",
+            "name": "no_results_text",
+            "optional": true,
+            "rank": 20
+        },
+        "ACI": {
+            "caption": "Show search icon",
+            "default_val": true,
+            "doc": "Exibe o ícone de lupa dentro do campo de pesquisa.",
+            "editor": "Checkbox",
+            "name": "show_search_icon",
+            "optional": true,
+            "rank": 21
+        },
+        "ACF": {
+            "caption": "Search input height (px)",
+            "default_val": 38,
+            "editor": "StaticNumber",
+            "name": "search_height",
+            "optional": true,
+            "rank": 22
+        },
+        "ACG": {
+            "caption": "Search input radius (px)",
+            "default_val": 10,
+            "editor": "StaticNumber",
+            "name": "search_border_radius",
+            "optional": true,
+            "rank": 23
+        },
+        "ACB": {
+            "caption": "Search input background",
+            "default_val": "rgba(248,250,252,1)",
+            "editor": "Color",
+            "name": "search_background",
+            "optional": true,
+            "rank": 24
+        },
+        "ACC": {
+            "caption": "Search input border color",
+            "default_val": "rgba(226,232,240,1)",
+            "editor": "Color",
+            "name": "search_border_color",
+            "optional": true,
+            "rank": 25
+        },
+        "ACD": {
+            "caption": "Search input text color",
+            "default_val": "rgba(15,23,42,1)",
+            "editor": "Color",
+            "name": "search_font_color",
+            "optional": true,
+            "rank": 26
+        },
+        "ACE": {
+            "caption": "Search placeholder color",
+            "default_val": "rgba(148,163,184,1)",
+            "editor": "Color",
+            "name": "search_placeholder_color",
+            "optional": true,
+            "rank": 27
+        },
+        "ACH": {
+            "caption": "Accent color",
+            "default_val": "rgba(99,102,241,1)",
+            "doc": "Cor de destaque usada no foco da pesquisa, checkboxes, chips e itens selecionados.",
+            "editor": "Color",
+            "name": "accent_color",
+            "optional": true,
+            "rank": 28
         }
     },
     "has_reset_fn": true,
@@ -159,11 +271,21 @@
     "states": {
         "AAx": {
             "caption": "value",
-            "doc": "Retorna o item (Thing) atualmente selecionado.",
+            "doc": "Retorna o item (Thing) atualmente selecionado. No modo de múltipla seleção, retorna o último item selecionado.",
             "initialization_code": {
                 "fn": "function(properties, context) {}"
             },
             "name": "selected",
+            "value": "custom_data_AAh"
+        },
+        "ABy": {
+            "caption": "values (list)",
+            "doc": "Lista de itens (Things) selecionados. Use com o modo \"Multiple selection\"; no modo individual retorna uma lista com no máximo um item.",
+            "initialization_code": {
+                "fn": "function(properties, context) {}"
+            },
+            "is_list": true,
+            "name": "selected_list",
             "value": "custom_data_AAh"
         },
         "ABP": {
