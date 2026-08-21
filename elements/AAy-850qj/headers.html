@@ -1,4 +1,6 @@
-<!-- SmartDropdown — estilos premium (sem dependências externas) -->
+<!-- SmartDropdown — estilos premium compartilhados (sem dependências externas).
+     Este mesmo bloco é usado nos headers dos elementos Dynamic Dropdown e
+     Headless Dropdown; a personalização por instância é feita via CSS vars. -->
 <style>
   /* host / control ------------------------------------------------------ */
   .sdd-host { overflow: visible !important; }
@@ -20,7 +22,7 @@
   }
 
   .sdd-value-wrap { flex: 1 1 auto; min-width: 0; display: flex; align-items: center; gap: 6px; overflow: hidden; }
-  .sdd-placeholder { color: #94a3b8; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .sdd-placeholder { color: var(--sdd-ph, #94a3b8); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
   .sdd-single-value { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 
   /* chips (multiple selection) ------------------------------------------ */
@@ -61,7 +63,7 @@
   .sdd-popup {
     position: fixed; z-index: 2147483000;
     display: none; flex-direction: column;
-    background: #ffffff;
+    background: var(--sdd-pop-bg, #ffffff);
     border: 1px solid rgba(15,23,42,.08);
     border-radius: 14px;
     box-shadow: 0 4px 6px -2px rgba(15,23,42,.06), 0 18px 44px -10px rgba(15,23,42,.22);
@@ -75,7 +77,7 @@
   .sdd-search-wrap {
     flex: 0 0 auto;
     padding: 10px;
-    background: #fff;
+    background: var(--sdd-pop-bg, #fff);
     border-bottom: 1px solid rgba(15,23,42,.06);
   }
   .sdd-search-box { position: relative; }
@@ -107,7 +109,7 @@
   /* list ------------------------------------------------------------------ */
   .sdd-list { flex: 1 1 auto; overflow-y: auto; padding: 6px; overscroll-behavior: contain; }
   .sdd-list::-webkit-scrollbar { width: 8px; }
-  .sdd-list::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 8px; border: 2px solid #fff; }
+  .sdd-list::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 8px; border: 2px solid var(--sdd-pop-bg, #fff); }
   .sdd-list::-webkit-scrollbar-track { background: transparent; }
 
   .sdd-group-header {
@@ -120,11 +122,14 @@
 
   .sdd-option {
     display: flex; align-items: center; gap: 10px;
-    padding: 9px 10px; border-radius: 9px;
-    cursor: pointer; color: #1e293b;
+    padding: var(--sdd-opt-pv, 9px) 10px; border-radius: 9px;
+    cursor: pointer; color: var(--sdd-opt-color, #1e293b);
     transition: background .1s ease;
   }
-  .sdd-option:hover, .sdd-option.sdd-focus { background: #f1f5f9; }
+  .sdd-option:hover, .sdd-option.sdd-focus {
+    background: #f1f5f9;
+    background: color-mix(in srgb, var(--sdd-hover, #64748b) 12%, #fff);
+  }
   .sdd-option.sdd-selected {
     background: #eef2ff;
     background: color-mix(in srgb, var(--sdd-accent, #6366f1) 10%, #fff);
@@ -165,6 +170,6 @@
 
   @media (max-width: 480px) {
     .sdd-popup { border-radius: 12px; }
-    .sdd-option { padding: 11px 10px; }
+    .sdd-option { padding: max(var(--sdd-opt-pv, 9px), 11px) 10px; }
   }
 </style>

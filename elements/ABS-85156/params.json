@@ -190,7 +190,8 @@
         },
         "ABp": {
             "caption": "keep_open_on_search",
-            "default_val": false,
+            "default_val": true,
+            "doc": "Mantido por compatibilidade: a pesquisa sempre mantém o popup aberto.",
             "editor": "Checkbox",
             "name": "keep_open_on_search",
             "optional": true,
@@ -198,7 +199,8 @@
         },
         "ABq": {
             "caption": "close_on_select",
-            "default_val": false,
+            "default_val": true,
+            "doc": "Fecha o popup ao selecionar (modo individual). No modo de múltipla seleção o popup permanece aberto.",
             "editor": "Checkbox",
             "name": "close_on_select",
             "optional": true,
@@ -206,7 +208,8 @@
         },
         "ABr": {
             "caption": "open_up_if_no_space",
-            "default_val": false,
+            "default_val": true,
+            "doc": "Abre para cima automaticamente quando não há espaço abaixo. Desmarcado, abre sempre para baixo.",
             "editor": "Checkbox",
             "name": "open_up_if_no_space",
             "optional": true,
@@ -218,8 +221,83 @@
             "editor": "Checkbox",
             "name": "disabled",
             "rank": 25
+        },
+        "ACK": {
+            "caption": "Group results",
+            "default_val": false,
+            "doc": "Agrupa as opções do dropdown (inclusive os resultados da pesquisa) pelo campo definido em \"Group by (field)\".",
+            "editor": "Checkbox",
+            "name": "group_results",
+            "rank": 26
+        },
+        "ACL": {
+            "caption": "Group by (field)",
+            "doc": "Campo usado como título dos grupos quando \"Group results\" está ativo.",
+            "editor": "custom_field_ABT",
+            "name": "group_by_field",
+            "optional": true,
+            "rank": 27
+        },
+        "ACM": {
+            "caption": "Multiple selection",
+            "default_val": false,
+            "doc": "Permite selecionar vários itens (com checkboxes e chips). Use o estado \"values (list)\" para a lista e \"value\" para o último item selecionado.",
+            "editor": "Checkbox",
+            "name": "multiple_selection",
+            "rank": 28
+        },
+        "ACN": {
+            "caption": "Search placeholder",
+            "doc": "Texto exibido no campo de pesquisa dentro do popup.",
+            "editor": "StaticText",
+            "name": "search_placeholder",
+            "optional": true,
+            "rank": 29
+        },
+        "ACO": {
+            "caption": "No results text",
+            "doc": "Texto exibido quando a pesquisa não encontra resultados.",
+            "editor": "StaticText",
+            "name": "no_results_text",
+            "optional": true,
+            "rank": 30
+        },
+        "ACP": {
+            "caption": "Show search icon",
+            "default_val": true,
+            "doc": "Exibe o ícone de lupa dentro do campo de pesquisa.",
+            "editor": "Checkbox",
+            "name": "show_search_icon",
+            "optional": true,
+            "rank": 31
+        },
+        "ACQ": {
+            "caption": "Search input radius (px)",
+            "default_val": 10,
+            "editor": "StaticNumber",
+            "name": "search_border_radius",
+            "optional": true,
+            "rank": 32
+        },
+        "ACR": {
+            "caption": "dropdown_animation_duration",
+            "default_val": 200,
+            "editor": "StaticNumber",
+            "name": "dropdown_animation_duration",
+            "optional": true,
+            "rank": 33
+        },
+        "ACS": {
+            "caption": "Accent color",
+            "default_val": "rgba(99,102,241,1)",
+            "doc": "Cor de destaque usada no foco da pesquisa, checkboxes, chips e itens selecionados.",
+            "editor": "Color",
+            "name": "accent_color",
+            "optional": true,
+            "rank": 34
         }
     },
+    "has_reset_fn": true,
     "icon": "ion-android-checkbox-blank",
     "platform_type": "web",
     "property_applications": {
@@ -234,10 +312,21 @@
     "states": {
         "ABt": {
             "caption": "value",
+            "doc": "Retorna o item (Thing) atualmente selecionado. No modo de múltipla seleção, retorna o último item selecionado.",
             "initialization_code": {
                 "fn": "function(properties, context) {\n\n\n\n}"
             },
             "name": "selected",
+            "value": "custom_data_ABT"
+        },
+        "ACT": {
+            "caption": "values (list)",
+            "doc": "Lista de itens (Things) selecionados. Use com o modo \"Multiple selection\"; no modo individual retorna uma lista com no máximo um item.",
+            "initialization_code": {
+                "fn": "function(properties, context) {}"
+            },
+            "is_list": true,
+            "name": "selected_list",
             "value": "custom_data_ABT"
         }
     }

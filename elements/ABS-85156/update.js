@@ -1,152 +1,114 @@
 function(instance, properties, context) {
-  instance.data = instance.data || {};
-  if (!instance.data._root) return;
+  var d = instance.data;
+  if (!d || !d.ready) return;
 
-  // Apply Bubble native font & colors to control root (so it inherits)
+  // ---- typography inherited from the Bubble element ----------------------
   try {
-    const ff = properties.bubble.font_face().split('::').join('');
-    instance.data._root.css('font-family', ff);
-    instance.data._root.css('font-size', properties.bubble.font_size() + 'px');
-    instance.data._root.css('color', properties.bubble.font_color());
-  } catch(e){}
+    var ff = properties.bubble.font_face().split('::').join('');
+    var fs = properties.bubble.font_size() + 'px';
+    var fc = properties.bubble.font_color();
+    d.$root.css({ 'font-family': ff, 'font-size': fs, 'color': fc });
+    d.$popup.css({ 'font-family': ff, 'font-size': fs });
+  } catch (e) {}
 
-  // Map behavior properties
-  instance.data._anim = properties.dropdown_animation || 'fade'; // 'fade','slide','zoom' or 'none'
-  instance.data._keepOpenOnSearch = (properties.keep_open_on_search === undefined) ? true : !!properties.keep_open_on_search;
-  instance.data._openUpIfNoSpace = (properties.open_up_if_no_space === undefined) ? true : !!properties.open_up_if_no_space;
-  instance.data._closeOnSelect = (properties.close_on_select === undefined) ? true : !!properties.close_on_select;
-  instance.data._disabled = !!properties.disabled;
-
-  // Disabled appearance
-  instance.data._control.toggleClass('sd-disabled', instance.data._disabled);
-  if (instance.data._disabled) instance.data._control.attr('aria-disabled','true'); else instance.data._control.removeAttr('aria-disabled');
-
-  // Build items from search_list
-  let raw = [];
+  // dropdown_font_size overrides the popup font size when provided
   try {
-    if (properties.search_list && properties.search_list.length() > 0) raw = properties.search_list.get(0, properties.search_list.length());
-  } catch(e){ raw = []; }
-
-  const props = raw[0] ? raw[0].listProperties() : [];
-
-  // create items array
-  const items = raw.map(function(e){
-    const id = props.includes('_id') ? e.get('_id') : e.get(properties.id || 'display');
-    // caption logic
-    let text = '';
-    if (properties.secondary_caption_field && properties.caption_field) {
-      text = (e.get(properties.caption_field) || '') + (properties.separator || '') + (e.get(properties.secondary_caption_field) || '');
-    } else if (properties.caption_field) {
-      text = e.get(properties.caption_field) || '';
-    } else if (properties.dynamic_caption_field) {
-      text = (properties.dynamic_caption_field || '').replace(/\[[^\]]+\]/g, function(s){
-        const key = s.replace(/[\[\]]/g,'');
-        if (key.includes('->')) {
-          const parts = key.split('->');
-          return e.get(parts[0]) ? e.get(parts[0]).get(parts[1]) : '';
-        }
-        return e.get(key) || '';
-      });
-    } else {
-      text = e.get(properties.display || 'display') || '';
+    if (properties.dropdown_font_size > 0) {
+      d.$popup.css('font-size', properties.dropdown_font_size + 'px');
     }
-    return { id: id, text: text, original: e };
+  } catch (e) {}
+
+  // ---- behavior properties ----------------------------------------------
+  d.multiple = !!properties.multiple_selection;
+  d.grouping = !!properties.group_results && !!properties.group_by_field;
+  d.disabled = !!properties.disabled;
+  d.maxEntries = (properties.max_entries_to_show > 0) ? properties.max_entries_to_show : 0;
+  d.anim = properties.dropdown_animation || 'fade';
+  d.animDur = (properties.dropdown_animation_duration != null) ? properties.dropdown_animation_duration : 200;
+  // open_up_if_no_space=true -> auto flip; false -> always open below
+  d.direction = (properties.open_up_if_no_space === false) ? 'below' : 'auto';
+  // close_on_select applies to single mode; multiple mode always stays open
+  d.closeOnSelect = (properties.close_on_select === false) ? false : true;
+  d.placeholderText = properties.placeholder || '';
+  d.noResultsText = properties.no_results_text || 'Nenhum resultado encontrado';
+
+  d.$search.attr('placeholder', properties.search_placeholder || 'Pesquisar…');
+  d.$popup.toggleClass('sdd-no-icon', properties.show_search_icon === false);
+  d.$root.toggleClass('sdd-disabled', d.disabled);
+  d.$root.toggleClass('sdd-multiple', d.multiple);
+  d.$control.attr('aria-disabled', d.disabled ? 'true' : 'false');
+  if (d.disabled && d.isOpen) d.closePopup();
+
+  // ---- popup + search customization (from Bubble fields) ------------------
+  try {
+    var searchH = parseFloat(properties.search_box_height);
+    var styleVars = {
+      '--sdd-accent': properties.accent_color || '#6366f1',
+      '--sdd-pop-bg': properties.dropdown_background || '#ffffff',
+      '--sdd-opt-color': properties.dropdown_font_color || '#1e293b',
+      '--sdd-hover': properties.dropdown_hover_color || '#64748b',
+      '--sdd-ph': properties.placeholder_color || '#94a3b8',
+      '--sdd-opt-pv': ((properties.option_padding_vertical != null && properties.option_padding_vertical >= 0) ? properties.option_padding_vertical : 9) + 'px',
+      '--sdd-s-bg': properties.search_background || '#f8fafc',
+      '--sdd-s-border': properties.search_border_color || '#e2e8f0',
+      '--sdd-s-color': properties.search_font_color || '#0f172a',
+      '--sdd-s-ph': properties.search_placeholder_color || '#94a3b8',
+      '--sdd-s-h': ((searchH > 0) ? searchH : 38) + 'px',
+      '--sdd-s-r': ((properties.search_border_radius != null && properties.search_border_radius >= 0) ? properties.search_border_radius : 10) + 'px'
+    };
+    Object.keys(styleVars).forEach(function(k) {
+      d.$popup[0].style.setProperty(k, styleVars[k]);
+      d.$root[0].style.setProperty(k, styleVars[k]);
+    });
+  } catch (e) {}
+
+  // ---- build items --------------------------------------------------------
+  // IMPORTANT: no try/catch around .length()/.get() — Bubble throws a special
+  // "not ready" exception here to defer and re-run this update automatically.
+  var raw = [];
+  if (properties.search_list) {
+    var len = properties.search_list.length();
+    if (len > 0) raw = properties.search_list.get(0, len);
+  }
+  var propsList = raw[0] ? raw[0].listProperties() : [];
+  var hasBubbleId = propsList.indexOf('_id') !== -1;
+
+  var items = raw.map(function(e, i) {
+    var id = null;
+    if (properties.id) id = e.get(properties.id);
+    if ((id == null || id === '') && hasBubbleId) id = e.get('_id');
+    if (id == null || id === '') id = 'sdd_idx_' + i;
+    var it = { id: String(id), text: d.createCaption(properties, e), original: e };
+    if (d.grouping) it.group = d.groupLabel(e, properties.group_by_field);
+    return it;
   });
 
-  // respect max_entries_to_show
-  const max = properties.max_entries_to_show || items.length;
-  instance.data._items = items.slice(0, max);
+  d.items = items;
+  d.byId = {};
+  items.forEach(function(it) { d.byId[it.id] = it; });
 
-  // Render list initially (no query)
-  instance.data._renderList('');
-
-  // Placeholder / default selection logic:
-  if (properties.default_value) {
-    // try set default value
-    let dvId = null;
-    try {
-      dvId = properties.default_value.get(properties.id) || properties.default_value.get('_id');
-    } catch(err){ dvId = null; }
-    if (dvId) {
-      const found = instance.data._items.find(i => i.id == dvId);
-      if (found) {
-        instance.data._selected = found;
-        instance.data._value.text(found.text);
-        instance.data._root.addClass('sd-has-value');
-        try { instance.publishState('selected', found.original); } catch(err){}
-      } else {
-        // if default value doesn't match available options -> clear
-        instance.data._selected = null;
-        instance.data._value.text(properties.placeholder || '');
-        instance.data._root.removeClass('sd-has-value');
-        try { instance.publishState('selected', null); } catch(err){}
-      }
-    } else {
-      // default provided but empty id -> treat as no selection
-      instance.data._selected = null;
-      instance.data._value.text(properties.placeholder || '');
-      instance.data._root.removeClass('sd-has-value');
-      try { instance.publishState('selected', null); } catch(err){}
-    }
-  } else {
-    // no default -> no selection (blank placeholder)
-    instance.data._selected = null;
-    instance.data._value.text(properties.placeholder || '');
-    instance.data._root.removeClass('sd-has-value');
-    try { instance.publishState('selected', null); } catch(err){}
+  // keep only selections that still exist in the new list
+  d.selectedIds = d.selectedIds.filter(function(id) { return !!d.byId[id]; });
+  if (!d.multiple && d.selectedIds.length > 1) {
+    d.selectedIds = [d.selectedIds[d.selectedIds.length - 1]];
   }
 
-  // adjust control height to parent's height (keeps vertical centering)
-  try {
-    const h = instance.canvas.height();
-    instance.data._control.css({'height': h + 'px', 'line-height': h + 'px'});
-    instance.data._value.css('line-height', h + 'px');
-  } catch(e){}
-
-  // ensure popup animation class
-  instance.data._popup.removeClass('sd-anim-fade sd-anim-slide sd-anim-zoom');
-  if (instance.data._anim && instance.data._anim !== 'none') instance.data._popup.addClass('sd-anim-' + instance.data._anim);
-
-  // search interaction: keep open on search and filter
-  instance.data._search.off('input.sd').on('input.sd', function(){
-    const q = $(this).val() || '';
-    // filter and render
-    const filtered = instance.data._items.filter(it => (it.text || '').toString().toLowerCase().indexOf(q.toString().toLowerCase()) !== -1);
-    // temporarily render filtered list
-    instance.data._list.empty();
-    if (filtered.length) {
-      filtered.forEach(function(it){
-        const opt = $('<div class="sd-option"></div>').text(it.text).data('item', it);
-        opt.on('mouseenter', function(){ $(this).addClass('highlight'); }).on('mouseleave', function(){ $(this).removeClass('highlight'); });
-        opt.on('click', function(e){
-          e.stopPropagation();
-          const item = $(this).data('item');
-          instance.data._selected = item;
-          instance.data._value.text(item.text);
-          instance.data._root.addClass('sd-has-value');
-          try { instance.publishState('selected', item.original); } catch(err){}
-          try { instance.triggerEvent('searchbox_value_is_changed'); } catch(err){}
-          if (instance.data._closeOnSelect) instance.data._close();
-        });
-        instance.data._list.append(opt);
-      });
-    } else {
-      instance.data._list.append($('<div class="sd-option" style="opacity:.6;cursor:default;">' + (properties.no_results_text || 'No results') + '</div>'));
+  // default value — only before the first user interaction, so updates
+  // never wipe out what the user already picked
+  if (!d.touched && !d.selectedIds.length && properties.default_value) {
+    var dvId = null;
+    if (properties.id) dvId = properties.default_value.get(properties.id);
+    if (dvId == null || dvId === '') {
+      var dvProps = (typeof properties.default_value.listProperties === 'function') ? properties.default_value.listProperties() : [];
+      if (dvProps.indexOf('_id') !== -1) dvId = properties.default_value.get('_id');
     }
-    if (instance.data._keepOpenOnSearch) instance.data._open();
-  });
+    if (dvId != null && dvId !== '' && d.byId[String(dvId)]) {
+      d.selectedIds = [String(dvId)];
+    }
+  }
 
-  // clicking control opens popup and focuses search input
-  instance.data._control.off('click').on('click', function(e){
-    if (instance.data._disabled) return;
-    instance.data._open();
-    instance.data._search.focus();
-    e.stopPropagation();
-  });
-
-  // clicking inside popup prevents close
-  instance.data._popup.off('click').on('click', function(e){ e.stopPropagation(); });
-
-  // final log (for debugging)
-  console.log('[sd] update: items=', instance.data._items.length, 'default=', !!properties.default_value);
+  d.renderControl();
+  d.renderList();
+  if (d.isOpen) d.positionPopup();
+  d.publishSelection(false);
 }
