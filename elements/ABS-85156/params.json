@@ -295,6 +295,16 @@
             "name": "accent_color",
             "optional": true,
             "rank": 34
+        },
+        "ACV": {
+            "caption": "Default selected Lista",
+            "doc": "Lista de itens pré-selecionados quando \"Multiple selection\" está ativo. Aplicada apenas antes da primeira interação do usuário.",
+            "editor": "DynamicValue",
+            "is_list": true,
+            "name": "default_value_list",
+            "optional": true,
+            "rank": 35,
+            "value": "custom_data_ABT"
         }
     },
     "has_reset_fn": true,

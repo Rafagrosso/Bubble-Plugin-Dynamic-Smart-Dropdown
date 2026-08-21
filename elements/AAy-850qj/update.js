@@ -77,17 +77,36 @@ function(instance, properties, context) {
     d.selectedIds = [d.selectedIds[d.selectedIds.length - 1]];
   }
 
-  // default value — only before the first user interaction, so updates
-  // never wipe out what the user already picked
-  if (!d.touched && !d.selectedIds.length && properties.default_value) {
-    var dvId = null;
-    if (properties.id) dvId = properties.default_value.get(properties.id);
-    if (dvId == null || dvId === '') {
-      var dvProps = (typeof properties.default_value.listProperties === 'function') ? properties.default_value.listProperties() : [];
-      if (dvProps.indexOf('_id') !== -1) dvId = properties.default_value.get('_id');
+  // default values — only before the first user interaction, so updates
+  // never wipe out what the user already picked.
+  // Multiple mode: "default_values" (list) first, falling back to
+  // "default_value"; single mode: "default_value" only.
+  var resolveThingId = function(thing) {
+    var vid = null;
+    if (properties.id) vid = thing.get(properties.id);
+    if (vid == null || vid === '') {
+      var tp = (typeof thing.listProperties === 'function') ? thing.listProperties() : [];
+      if (tp.indexOf('_id') !== -1) vid = thing.get('_id');
     }
-    if (dvId != null && dvId !== '' && d.byId[String(dvId)]) {
-      d.selectedIds = [String(dvId)];
+    return (vid == null || vid === '') ? null : String(vid);
+  };
+
+  if (!d.touched && !d.selectedIds.length) {
+    if (d.multiple && properties.default_value_list) {
+      var dlen = properties.default_value_list.length();
+      if (dlen > 0) {
+        var defaults = properties.default_value_list.get(0, dlen);
+        var defIds = [];
+        defaults.forEach(function(t) {
+          var vid = resolveThingId(t);
+          if (vid && d.byId[vid] && defIds.indexOf(vid) === -1) defIds.push(vid);
+        });
+        if (defIds.length) d.selectedIds = defIds;
+      }
+    }
+    if (!d.selectedIds.length && properties.default_value) {
+      var dvId = resolveThingId(properties.default_value);
+      if (dvId && d.byId[dvId]) d.selectedIds = [dvId];
     }
   }
 

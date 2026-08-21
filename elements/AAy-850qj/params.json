@@ -104,11 +104,21 @@
         },
         "AAw": {
             "caption": "Default selected item",
-            "doc": "Item padrão a ser selecionado automaticamente.",
+            "doc": "Item padrão selecionado automaticamente (modo individual; no modo múltiplo serve de fallback quando a lista padrão está vazia).",
             "editor": "DynamicValue",
             "name": "default_value",
             "optional": true,
             "rank": 7,
+            "value": "custom_data_AAh"
+        },
+        "ACU": {
+            "caption": "Default selected Lista",
+            "doc": "Lista de itens pré-selecionados quando \"Multiple selection\" está ativo. Aplicada apenas antes da primeira interação do usuário.",
+            "editor": "DynamicValue",
+            "is_list": true,
+            "name": "default_value_list",
+            "optional": true,
+            "rank": 29,
             "value": "custom_data_AAh"
         },
         "AAz": {
