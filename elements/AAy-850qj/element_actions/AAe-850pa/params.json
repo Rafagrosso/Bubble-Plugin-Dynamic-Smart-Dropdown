@@ -4,7 +4,7 @@
         "AAf": {
             "caption": "Quiet reset",
             "default_val": false,
-            "doc": "Do not trigger an event",
+            "doc": "Limpa a seleção e os dois estados; com \"Quiet reset\" marcado não dispara o evento",
             "editor": "Checkbox",
             "name": "quiet_reset",
             "rank": 0

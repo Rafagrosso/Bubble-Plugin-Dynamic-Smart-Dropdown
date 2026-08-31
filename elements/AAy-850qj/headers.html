@@ -1,62 +1,170 @@
-<!-- HEADER (cole no Shared HTML header) -->
-<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet">
-
+<!-- SmartDropdown — estilos premium (sem dependências externas) -->
 <style>
-  .smart-dropdown * { box-sizing: border-box !important; }
-  .smart-dropdown .select2-container { display: block !important; width: 100% !important; height: 100% !important; position: relative !important; }
-  .smart-dropdown .select2-selection--single { display:flex !important; align-items:center !important; justify-content:flex-start !important; border:none !important; background:transparent !important; height:100% !important; padding:0 35px 0 10px !important; box-sizing:border-box !important; }
-  .smart-dropdown .select2-selection__rendered { display:flex !important; align-items:center !important; justify-content:flex-start !important; width:100% !important; height:100% !important; padding:0 !important; margin:0 !important; text-align:left !important; }
-  .smart-dropdown .select2-selection__arrow { position:absolute !important; right:10px !important; top:0 !important; bottom:0 !important; margin:auto 0 !important; height:12px !important; display:flex !important; align-items:center !important; pointer-events:none !important; }
-  .select2-dropdown { z-index:999999 !important; border-radius:6px !important; box-shadow:0 2px 8px rgba(0,0,0,0.15) !important; overflow:hidden !important; }
-  .smart-dropdown .select2-results__option { padding:8px 10px !important; text-align:left !important; }
-  .smart-dropdown .select2-results__option--highlighted { background-color:var(--highlighted-color,#5897fb) !important; color:#fff !important; }
+  /* host / control ------------------------------------------------------ */
+  .sdd-host { overflow: visible !important; }
+  .sdd-root { position: relative; width: 100%; height: 100%; box-sizing: border-box; font-family: inherit; font-size: inherit; color: inherit; }
+  .sdd-root * { box-sizing: border-box; }
+
+  .sdd-control {
+    width: 100%; height: 100%;
+    display: flex; align-items: center; gap: 8px;
+    padding: 0 12px;
+    cursor: pointer; user-select: none;
+    background: transparent; border: none; outline: none;
+    border-radius: inherit;
+  }
+  .sdd-root.sdd-focused .sdd-control {
+    border-radius: 8px;
+    box-shadow: 0 0 0 3px rgba(99,102,241,.16);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--sdd-accent, #6366f1) 18%, transparent);
+  }
+
+  .sdd-value-wrap { flex: 1 1 auto; min-width: 0; display: flex; align-items: center; gap: 6px; overflow: hidden; }
+  .sdd-placeholder { color: #94a3b8; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .sdd-single-value { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+  /* chips (multiple selection) ------------------------------------------ */
+  .sdd-tags { display: flex; align-items: center; gap: 6px; overflow: hidden; }
+  .sdd-tag {
+    display: inline-flex; align-items: center; gap: 4px;
+    max-width: 150px; padding: 3px 6px 3px 10px;
+    border-radius: 8px;
+    background: #eef2ff;
+    background: color-mix(in srgb, var(--sdd-accent, #6366f1) 10%, #fff);
+    color: var(--sdd-accent, #4338ca);
+    font-size: .85em; line-height: 1.25; white-space: nowrap;
+  }
+  .sdd-tag-label { overflow: hidden; text-overflow: ellipsis; }
+  .sdd-tag-x {
+    border: none; background: transparent; color: inherit;
+    cursor: pointer; font-size: 1em; line-height: 1; padding: 1px 3px; border-radius: 4px;
+  }
+  .sdd-tag-x:hover { background: rgba(99,102,241,.15); background: color-mix(in srgb, var(--sdd-accent, #6366f1) 18%, transparent); }
+  .sdd-tag-count { padding: 3px 8px; background: #e2e8f0; color: #475569; }
+
+  /* clear + arrow -------------------------------------------------------- */
+  .sdd-clear {
+    display: none; flex: 0 0 auto;
+    border: none; background: transparent;
+    width: 22px; height: 22px; border-radius: 50%;
+    color: #94a3b8; cursor: pointer; padding: 0;
+    align-items: center; justify-content: center;
+    transition: background .12s ease, color .12s ease;
+  }
+  .sdd-root.sdd-has-value .sdd-clear { display: inline-flex; }
+  .sdd-clear:hover { background: #f1f5f9; color: #475569; }
+  .sdd-arrow { flex: 0 0 auto; display: inline-flex; color: #64748b; transition: transform .18s ease; pointer-events: none; }
+  .sdd-root.sdd-focused .sdd-arrow { transform: rotate(180deg); }
+  .sdd-root.sdd-disabled .sdd-control { cursor: not-allowed; opacity: .55; box-shadow: none; }
+
+  /* popup ---------------------------------------------------------------- */
+  .sdd-popup {
+    position: fixed; z-index: 2147483000;
+    display: none; flex-direction: column;
+    background: #ffffff;
+    border: 1px solid rgba(15,23,42,.08);
+    border-radius: 14px;
+    box-shadow: 0 4px 6px -2px rgba(15,23,42,.06), 0 18px 44px -10px rgba(15,23,42,.22);
+    overflow: hidden;
+    font-family: inherit;
+  }
+  .sdd-popup.sdd-open { display: flex; }
+  .sdd-popup, .sdd-popup * { box-sizing: border-box; }
+
+  /* search fixed at the top of the popup (customizável via CSS vars) ----- */
+  .sdd-search-wrap {
+    flex: 0 0 auto;
+    padding: 10px;
+    background: #fff;
+    border-bottom: 1px solid rgba(15,23,42,.06);
+  }
+  .sdd-search-box { position: relative; }
+  .sdd-search-box .sdd-search-icon {
+    position: absolute; left: 11px; top: 50%; transform: translateY(-50%);
+    color: var(--sdd-s-ph, #94a3b8); display: inline-flex; pointer-events: none;
+  }
+  .sdd-search {
+    width: 100%;
+    height: var(--sdd-s-h, 38px);
+    padding: 0 12px 0 34px;
+    border-radius: var(--sdd-s-r, 10px);
+    border: 1px solid var(--sdd-s-border, #e2e8f0);
+    background: var(--sdd-s-bg, #f8fafc);
+    color: var(--sdd-s-color, #0f172a);
+    font-family: inherit; font-size: inherit; outline: none;
+    transition: border-color .12s ease, box-shadow .12s ease, background .12s ease;
+  }
+  .sdd-popup.sdd-no-icon .sdd-search { padding-left: 12px; }
+  .sdd-popup.sdd-no-icon .sdd-search-icon { display: none; }
+  .sdd-search::placeholder { color: var(--sdd-s-ph, #94a3b8); }
+  .sdd-search:focus {
+    border-color: var(--sdd-accent, #a5b4fc);
+    background: #fff;
+    box-shadow: 0 0 0 3px rgba(99,102,241,.15);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--sdd-accent, #6366f1) 16%, transparent);
+  }
+
+  /* list ------------------------------------------------------------------ */
+  .sdd-list { flex: 1 1 auto; overflow-y: auto; padding: 6px; overscroll-behavior: contain; }
+  .sdd-list::-webkit-scrollbar { width: 8px; }
+  .sdd-list::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 8px; border: 2px solid #fff; }
+  .sdd-list::-webkit-scrollbar-track { background: transparent; }
+
+  .sdd-group-header {
+    padding: 10px 10px 4px;
+    font-size: .72em; font-weight: 600;
+    text-transform: uppercase; letter-spacing: .07em;
+    color: #94a3b8;
+  }
+  .sdd-group + .sdd-group { margin-top: 4px; }
+
+  .sdd-option {
+    display: flex; align-items: center; gap: 10px;
+    padding: 9px 10px; border-radius: 9px;
+    cursor: pointer; color: #1e293b;
+    transition: background .1s ease;
+  }
+  .sdd-option:hover, .sdd-option.sdd-focus { background: #f1f5f9; }
+  .sdd-option.sdd-selected {
+    background: #eef2ff;
+    background: color-mix(in srgb, var(--sdd-accent, #6366f1) 10%, #fff);
+    color: var(--sdd-accent, #4338ca);
+    font-weight: 500;
+  }
+  .sdd-option.sdd-selected:hover, .sdd-option.sdd-selected.sdd-focus {
+    background: #e0e7ff;
+    background: color-mix(in srgb, var(--sdd-accent, #6366f1) 16%, #fff);
+  }
+  .sdd-option-label { flex: 1 1 auto; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .sdd-tick { color: var(--sdd-accent, #6366f1); display: inline-flex; flex: 0 0 auto; }
+
+  /* checkbox (multiple mode) --------------------------------------------- */
+  .sdd-check {
+    flex: 0 0 18px; width: 18px; height: 18px;
+    border-radius: 6px; border: 1.5px solid #cbd5e1;
+    display: inline-flex; align-items: center; justify-content: center;
+    background: #fff; color: #fff;
+    transition: background .12s ease, border-color .12s ease;
+  }
+  .sdd-check svg { opacity: 0; transform: scale(.6); transition: opacity .12s ease, transform .12s ease; }
+  .sdd-option.sdd-selected .sdd-check { background: var(--sdd-accent, #6366f1); border-color: var(--sdd-accent, #6366f1); }
+  .sdd-option.sdd-selected .sdd-check svg { opacity: 1; transform: scale(1); }
+
+  .sdd-empty { padding: 22px 12px; text-align: center; color: #94a3b8; }
+
+  /* animations (duration set inline via animation-duration) --------------- */
+  .sdd-anim-fade  { animation-name: sddFade;  animation-timing-function: cubic-bezier(.16,1,.3,1); animation-fill-mode: both; }
+  .sdd-anim-slide { animation-name: sddSlide; animation-timing-function: cubic-bezier(.16,1,.3,1); animation-fill-mode: both; transform-origin: top center; }
+  .sdd-anim-zoom  { animation-name: sddZoom;  animation-timing-function: cubic-bezier(.16,1,.3,1); animation-fill-mode: both; transform-origin: top center; }
+  .sdd-popup.sdd-up.sdd-anim-slide { animation-name: sddSlideUp; transform-origin: bottom center; }
+  .sdd-popup.sdd-up.sdd-anim-zoom  { transform-origin: bottom center; }
+  @keyframes sddFade    { from { opacity: 0; } to { opacity: 1; } }
+  @keyframes sddSlide   { from { opacity: 0; transform: translateY(-8px); } to { opacity: 1; transform: translateY(0); } }
+  @keyframes sddSlideUp { from { opacity: 0; transform: translateY(8px); }  to { opacity: 1; transform: translateY(0); } }
+  @keyframes sddZoom    { from { opacity: 0; transform: scale(.96); }       to { opacity: 1; transform: scale(1); } }
+
+  @media (max-width: 480px) {
+    .sdd-popup { border-radius: 12px; }
+    .sdd-option { padding: 11px 10px; }
+  }
 </style>
-
-<script>
-  (function(){
-    // create a global promise to track Select2 readiness
-    if (!window.__select2Ready) {
-      window.__select2Ready = new Promise(function(resolve, reject){
-        try {
-          // already available
-          if (window.jQuery && $.fn && $.fn.select2 && typeof $.fn.select2 === 'function') {
-            console.log('[SD] select2 already present');
-            resolve(true);
-            return;
-          }
-
-          // load script with fallback and timeout
-          var loaded = false;
-          var script = document.createElement('script');
-          script.src = "https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js";
-          script.async = true;
-          script.onload = function() {
-            loaded = true;
-            console.log('[SD] select2 loaded (onload)');
-            resolve(true);
-          };
-          script.onerror = function() {
-            console.error('[SD] select2 failed to load (onerror)');
-            reject(new Error('select2 load error'));
-          };
-          document.head.appendChild(script);
-
-          // timeout fallback
-          setTimeout(function(){
-            if (!loaded) {
-              if (window.jQuery && $.fn && $.fn.select2 && typeof $.fn.select2 === 'function') {
-                console.log('[SD] select2 available after timeout check');
-                resolve(true);
-              } else {
-                console.warn('[SD] select2 not available after timeout');
-                reject(new Error('select2 timeout'));
-              }
-            }
-          }, 4000);
-        } catch(err) { reject(err); }
-      });
-    }
-  })();
-</script>
-
-<script src="https://ajax.googleapis.com/ajax/libs/webfont/1/webfont.js"></script>

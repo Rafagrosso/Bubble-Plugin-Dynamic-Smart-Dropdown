@@ -1,148 +1,287 @@
 {
-    "add_hover_pressed": false,
+    "add_hover_pressed": true,
     "add_is_visible": true,
     "autobinding_value": "text",
     "can_fit_height": true,
     "can_fit_width": true,
     "category": "input forms",
     "default_dim": {
-        "height": 48,
+        "height": 44,
         "width": 150
     },
     "display": "Dynamic Dropdown",
     "events": {
         "AAg": {
-            "caption": "Searchbox value is changed",
-            "doc": "Disparado sempre que o valor selecionado muda (inclusive quando é limpo).",
+            "caption": "searchbox_value_is_changed",
+            "doc": "Ao selecionar, desmarcar (multi), remover chip, limpar no \"×\" e no Reset (exceto quiet)",
             "name": "searchbox_value_is_changed"
         }
     },
     "fields": {
-        "AAh": {
-            "caption": "Data type",
-            "editor": "custom_type",
-            "name": "data_type",
-            "rank": 1
+        "ABv": {
+            "caption": "Dados e Identificação",
+            "doc": "Separador visual no editor",
+            "editor": "Label",
+            "name": "Dados e Identificação",
+            "rank": 0
         },
-        "AAj": {
+        "ABw": {
             "caption": "Data source (list of things)",
-            "doc": "Lista de registros a serem exibidos no dropdown.",
+            "doc": "Lista exibida no dropdown (\"Do a search for…\")",
             "editor": "DynamicValue",
             "is_list": true,
             "name": "search_list",
-            "optional": false,
             "rank": 2,
-            "value": "custom_data_AAh"
+            "value": "_any_thing"
         },
-        "AAk": {
-            "caption": "Primary field",
-            "doc": "Campo do tipo texto que será exibido como principal.",
-            "editor": "custom_field_AAh",
-            "name": "caption_field",
-            "optional": false,
-            "rank": 3
-        },
-        "AAl": {
-            "caption": "Disable dropdown",
-            "default_val": false,
-            "doc": "Desativa a interação do usuário.",
-            "editor": "Checkbox",
-            "name": "disabled",
-            "rank": 8,
-            "value": "boolean"
-        },
-        "AAm": {
-            "caption": "Placeholder text",
-            "doc": "Texto exibido no campo quando nada está selecionado.",
+        "ABz": {
+            "caption": "separator",
+            "doc": "Separador entre principal e secundário",
             "editor": "StaticText",
-            "name": "placeholder",
+            "name": "separator",
             "optional": true,
-            "rank": 10,
-            "value": "text"
+            "rank": 5
         },
-        "AAo": {
+        "ACA": {
             "caption": "Dynamic caption (expression)",
-            "doc": "Permite montar textos dinâmicos usando placeholders como [campo] ou [objeto->campo].",
+            "doc": "Texto com placeholders [campo] ou [objeto->campo] (tem prioridade sobre os campos acima)",
             "editor": "StaticText",
             "long_text": true,
             "name": "dynamic_caption_field",
             "optional": true,
             "rank": 6
         },
-        "AAq": {
-            "caption": "Max entries to show",
-            "default_val": 10,
-            "doc": "Limita a quantidade de opções exibidas no popup (para performance).",
-            "editor": "StaticNumber",
-            "name": "max_entries_to_show",
-            "rank": 9
-        },
-        "AAs": {
-            "caption": "Secondary field",
-            "doc": "Campo adicional que será concatenado ao texto principal.",
-            "editor": "custom_field_AAh",
-            "name": "secondary_caption_field",
-            "optional": true,
-            "rank": 4
-        },
-        "AAt": {
-            "caption": "Separator",
-            "doc": "Define o separador entre o campo principal e o secundário.",
-            "editor": "StaticText",
-            "name": "separator",
-            "optional": true,
-            "rank": 5
-        },
-        "AAv": {
-            "caption": "Custom ID field",
-            "doc": "Campo que identifica o registro (caso não use _id).",
-            "editor": "StaticText",
-            "field_type_restriction": "text_image_file",
-            "name": "id",
-            "optional": true,
-            "rank": 14
-        },
-        "AAw": {
+        "ACB": {
             "caption": "Default selected item",
-            "doc": "Item padrão a ser selecionado automaticamente.",
+            "doc": "Item pré-selecionado (aplicado só antes da 1ª interação do usuário)",
             "editor": "DynamicValue",
             "name": "default_value",
             "optional": true,
             "rank": 7,
-            "value": "custom_data_AAh"
+            "value": "_any_thing"
         },
-        "AAz": {
-            "caption": "Dados e Identificação",
-            "editor": "Label",
-            "name": "dados_e_identificação",
-            "rank": 0
+        "ACC": {
+            "caption": "Disable dropdown",
+            "default_val": false,
+            "doc": "Desativa a interação",
+            "editor": "Checkbox",
+            "name": "disabled",
+            "rank": 9
         },
-        "ABK": {
+        "ACD": {
+            "caption": "Max entries to show",
+            "default_val": 10,
+            "doc": "Limita opções exibidas (0/vazio = sem limite)",
+            "editor": "DynamicValue",
+            "name": "max_entries_to_show",
+            "optional": true,
+            "rank": 10,
+            "value": "number"
+        },
+        "ACE": {
+            "caption": "Placeholder text",
+            "doc": "Texto quando nada está selecionado",
+            "editor": "DynamicValue",
+            "name": "placeholder",
+            "optional": true,
+            "rank": 11,
+            "value": "text"
+        },
+        "ACF": {
             "caption": "Dropdown direction",
             "default_val": "auto",
-            "doc": "Define a direção em que o dropdown será aberto. Use \"auto\" para deixar o sistema decidir automaticamente entre cima e baixo. Valores aceitos: \"auto\", \"above\", \"below\".",
+            "doc": "Direção de abertura do popup",
             "editor": "Dropdown",
             "name": "dropdown_direction",
-            "optional": true,
+            "optional": false,
             "options": "auto,above,below",
-            "rank": 11
-        },
-        "ABL": {
-            "caption": "dropdown_animation",
-            "default_val": "fade",
-            "editor": "Dropdown",
-            "name": "dropdown_animation",
-            "optional": true,
-            "options": "fade,slide,zoom,none",
             "rank": 12
         },
-        "ABM": {
-            "caption": "dropdown_animation_duration",
+        "ACG": {
+            "caption": "Data type",
+            "doc": "Tipo de dado do dropdown",
+            "editor": "custom_type",
+            "name": "data_type",
+            "rank": 1
+        },
+        "ACH": {
+            "caption": "Dropdown animation",
+            "default_val": "fade",
+            "doc": "Animação de abertura",
+            "editor": "Dropdown",
+            "name": "dropdown_animation",
+            "optional": false,
+            "options": "fade,slide,zoom,none",
+            "rank": 13
+        },
+        "ACI": {
+            "caption": "Animation duration (ms)",
             "default_val": 250,
-            "editor": "StaticNumber",
+            "doc": "Duração da animação (ms)",
+            "editor": "DynamicValue",
             "name": "dropdown_animation_duration",
             "optional": true,
-            "rank": 13
+            "rank": 14,
+            "value": "number"
+        },
+        "ACJ": {
+            "caption": "Custom ID field",
+            "doc": "Campo identificador quando não usar _id",
+            "editor": "DynamicValue",
+            "name": "id",
+            "optional": true,
+            "rank": 15,
+            "value": "text"
+        },
+        "ACK": {
+            "caption": "Group results",
+            "default_val": true,
+            "doc": "Agrupa as opções (vale também na pesquisa)",
+            "editor": "Checkbox",
+            "name": "group_results",
+            "rank": 16
+        },
+        "ACL": {
+            "caption": "Group by (field)",
+            "doc": "Campo quCampo que vira o título dos grupose vira o título dos grupos",
+            "editor": "custom_field_ACG",
+            "field_type_restriction": "text_image_file",
+            "name": "group_by_field",
+            "rank": 17
+        },
+        "ACM": {
+            "caption": "Multiple selection",
+            "default_val": true,
+            "doc": "Múltipla seleção (checkboxes + chips)",
+            "editor": "Checkbox",
+            "name": "multiple_selection",
+            "rank": 18
+        },
+        "ACN": {
+            "caption": "pesquisa_e_estilo",
+            "doc": "Separador visual no editor",
+            "editor": "DynamicValue",
+            "name": "pesquisa_e_estilo",
+            "optional": true,
+            "rank": 19,
+            "value": "text"
+        },
+        "ACO": {
+            "caption": "Search placeholder",
+            "doc": "Placeholder do input de pesquisa (padrão \"Pesquisar…\")",
+            "editor": "DynamicValue",
+            "name": "search_placeholder",
+            "optional": true,
+            "rank": 20,
+            "value": "text"
+        },
+        "ACP": {
+            "caption": "No results text",
+            "doc": "Texto de busca vazia (padrão \"Nenhum resultado encontrado\")",
+            "editor": "DynamicValue",
+            "name": "no_results_text",
+            "optional": true,
+            "rank": 21,
+            "value": "text"
+        },
+        "ACQ": {
+            "caption": "Show search icon",
+            "default_val": true,
+            "doc": "Lupa dentro do input de pesquisa",
+            "editor": "Checkbox",
+            "name": "show_search_icon",
+            "rank": 22
+        },
+        "ACR": {
+            "caption": "Search input height (px)",
+            "default_val": 38,
+            "doc": "Altura do input de pesquisa",
+            "editor": "DynamicValue",
+            "name": "search_height",
+            "optional": true,
+            "rank": 23,
+            "value": "number"
+        },
+        "ACS": {
+            "caption": "Search input radius (px)",
+            "default_val": 10,
+            "doc": "Raio da borda do input",
+            "editor": "DynamicValue",
+            "name": "search_border_radius",
+            "optional": true,
+            "rank": 24,
+            "value": "number"
+        },
+        "ACT": {
+            "caption": "Search input background",
+            "default_val": "rgba(248,250,252,1)",
+            "doc": "Fundo do input",
+            "editor": "Color",
+            "name": "search_background",
+            "optional": true,
+            "rank": 25
+        },
+        "ACU": {
+            "caption": "Search input border color",
+            "default_val": "rgba(226,232,240,1)",
+            "doc": "Borda do input",
+            "editor": "Color",
+            "name": "search_border_color",
+            "optional": true,
+            "rank": 26
+        },
+        "ACV": {
+            "caption": "Search input text color",
+            "default_val": "rgba(15,23,42,1)",
+            "doc": "Cor do texto digitado",
+            "editor": "Color",
+            "name": "search_font_color",
+            "optional": true,
+            "rank": 27
+        },
+        "ACW": {
+            "caption": "Search placeholder color",
+            "default_val": "rgba(148,163,184,1)",
+            "doc": "Cor do placeholder e da lupa",
+            "editor": "Color",
+            "name": "search_placeholder_color",
+            "optional": true,
+            "rank": 28
+        },
+        "ACX": {
+            "caption": "Accent color",
+            "default_val": "rgba(99,102,241,1)",
+            "doc": "Cor de destaque: foco da pesquisa, checkboxes, chips, item selecionado",
+            "editor": "Color",
+            "name": "accent_color",
+            "optional": true,
+            "rank": 29
+        },
+        "ACa": {
+            "caption": "Primary field",
+            "doc": "Campo de texto principal exibido",
+            "editor": "custom_field_ACG",
+            "field_type_restriction": "text_image_file",
+            "name": "caption_field",
+            "rank": 3
+        },
+        "ACb": {
+            "caption": "Secondary field",
+            "doc": "Campo concatenado ao principal",
+            "editor": "custom_field_ACG",
+            "field_type_restriction": "text_image_file",
+            "name": "secondary_caption_field",
+            "optional": true,
+            "rank": 4
+        },
+        "ACc": {
+            "caption": "Default selected Lista",
+            "editor": "DynamicValue",
+            "is_list": true,
+            "name": "default_value_list",
+            "optional": true,
+            "rank": 8,
+            "value": "_any_thing"
         }
     },
     "has_reset_fn": true,
@@ -159,12 +298,12 @@
     "states": {
         "AAx": {
             "caption": "value",
-            "doc": "Retorna o item (Thing) atualmente selecionado.",
+            "doc": "Item selecionado (Thing). No modo múltiplo: o último selecionado. null quando vazio",
             "initialization_code": {
                 "fn": "function(properties, context) {}"
             },
             "name": "selected",
-            "value": "custom_data_AAh"
+            "value": "custom_data_ACG"
         },
         "ABP": {
             "caption": "status",
@@ -174,21 +313,15 @@
             "name": "sd_status",
             "value": "text"
         },
-        "ABQ": {
-            "caption": "log",
+        "ACZ": {
+            "caption": "selected_list",
+            "doc": "Lista completa dos selecionados. No modo individual: 0 ou 1 item",
             "initialization_code": {
                 "fn": "function(properties, context) {\n\n\n\n}"
             },
-            "name": "sd_log",
-            "value": "text"
-        },
-        "ABR": {
-            "caption": "error",
-            "initialization_code": {
-                "fn": "function(properties, context) {\n\n\n\n}"
-            },
-            "name": "sd_error",
-            "value": "text"
+            "is_list": true,
+            "name": "selected_list",
+            "value": "custom_data_ACG"
         }
     },
     "support_autobinding": false
