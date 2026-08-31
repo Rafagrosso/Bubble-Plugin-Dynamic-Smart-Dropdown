@@ -54,7 +54,9 @@ function(instance, properties, context) {
     var len = properties.search_list.length();
     if (len > 0) raw = properties.search_list.get(0, len);
   }
-  var propsList = raw[0] ? raw[0].listProperties() : [];
+  // Option Sets don't implement listProperties()/_id like regular Things —
+  // guard the call so the whole update doesn't throw and abort mid-way.
+  var propsList = (raw[0] && typeof raw[0].listProperties === 'function') ? raw[0].listProperties() : [];
   var hasBubbleId = propsList.indexOf('_id') !== -1;
 
   var items = raw.map(function(e, i) {
