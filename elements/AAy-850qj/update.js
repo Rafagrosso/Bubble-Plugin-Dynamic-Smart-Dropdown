@@ -29,22 +29,26 @@ function(instance, properties, context) {
   d.$control.attr('aria-disabled', d.disabled ? 'true' : 'false');
   if (d.disabled && d.isOpen) d.closePopup();
 
-  // ---- search input / popup customization (from Bubble fields) -----------
-  try {
-    var styleVars = {
-      '--sdd-accent': properties.accent_color || '#6366f1',
-      '--sdd-s-bg': properties.search_background || '#f8fafc',
-      '--sdd-s-border': properties.search_border_color || '#e2e8f0',
-      '--sdd-s-color': properties.search_font_color || '#0f172a',
-      '--sdd-s-ph': properties.search_placeholder_color || '#94a3b8',
-      '--sdd-s-h': ((properties.search_height > 0) ? properties.search_height : 38) + 'px',
-      '--sdd-s-r': ((properties.search_border_radius != null && properties.search_border_radius >= 0) ? properties.search_border_radius : 10) + 'px'
-    };
-    Object.keys(styleVars).forEach(function(k) {
-      d.$popup[0].style.setProperty(k, styleVars[k]);
-      d.$root[0].style.setProperty(k, styleVars[k]);
-    });
-  } catch (e) {}
+  // ---- colours (every value is validated and derived in applyTheme) ------
+  var controlColor = null;
+  try { controlColor = properties.bubble.font_color(); } catch (e) {}
+  d.applyTheme({
+    accent: properties.accent_color,
+    popupBackground: properties.dropdown_background,
+    optionColor: properties.dropdown_font_color,
+    hoverColor: properties.dropdown_hover_color,
+    selectedBackground: properties.selected_background,
+    selectedColor: properties.selected_font_color,
+    placeholderColor: properties.placeholder_color,
+    controlColor: controlColor,
+    searchBackground: properties.search_background,
+    searchBorder: properties.search_border_color,
+    searchColor: properties.search_font_color,
+    searchPlaceholder: properties.search_placeholder_color,
+    searchHeight: properties.search_height,
+    searchRadius: properties.search_border_radius,
+    optionPadding: properties.option_padding_vertical
+  });
 
   // ---- build items --------------------------------------------------------
   // IMPORTANT: no try/catch around .length()/.get() — Bubble throws a special

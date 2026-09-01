@@ -111,16 +111,6 @@
             "rank": 7,
             "value": "custom_data_AAh"
         },
-        "ACU": {
-            "caption": "Default selected Lista",
-            "doc": "Lista de itens pré-selecionados quando \"Multiple selection\" está ativo. Aplicada apenas antes da primeira interação do usuário.",
-            "editor": "DynamicValue",
-            "is_list": true,
-            "name": "default_value_list",
-            "optional": true,
-            "rank": 29,
-            "value": "custom_data_AAh"
-        },
         "AAz": {
             "caption": "Dados e Identificação",
             "editor": "Label",
@@ -178,12 +168,6 @@
             "name": "multiple_selection",
             "rank": 17
         },
-        "ACJ": {
-            "caption": "Pesquisa e Estilo do Popup",
-            "editor": "Label",
-            "name": "pesquisa_e_estilo",
-            "rank": 18
-        },
         "ABz": {
             "caption": "Search placeholder",
             "doc": "Texto exibido no campo de pesquisa dentro do popup.",
@@ -199,31 +183,6 @@
             "name": "no_results_text",
             "optional": true,
             "rank": 20
-        },
-        "ACI": {
-            "caption": "Show search icon",
-            "default_val": true,
-            "doc": "Exibe o ícone de lupa dentro do campo de pesquisa.",
-            "editor": "Checkbox",
-            "name": "show_search_icon",
-            "optional": true,
-            "rank": 21
-        },
-        "ACF": {
-            "caption": "Search input height (px)",
-            "default_val": 38,
-            "editor": "StaticNumber",
-            "name": "search_height",
-            "optional": true,
-            "rank": 22
-        },
-        "ACG": {
-            "caption": "Search input radius (px)",
-            "default_val": 10,
-            "editor": "StaticNumber",
-            "name": "search_border_radius",
-            "optional": true,
-            "rank": 23
         },
         "ACB": {
             "caption": "Search input background",
@@ -257,6 +216,22 @@
             "optional": true,
             "rank": 27
         },
+        "ACF": {
+            "caption": "Search input height (px)",
+            "default_val": 38,
+            "editor": "StaticNumber",
+            "name": "search_height",
+            "optional": true,
+            "rank": 22
+        },
+        "ACG": {
+            "caption": "Search input radius (px)",
+            "default_val": 10,
+            "editor": "StaticNumber",
+            "name": "search_border_radius",
+            "optional": true,
+            "rank": 23
+        },
         "ACH": {
             "caption": "Accent color",
             "default_val": "rgba(99,102,241,1)",
@@ -265,6 +240,94 @@
             "name": "accent_color",
             "optional": true,
             "rank": 28
+        },
+        "ACI": {
+            "caption": "Show search icon",
+            "default_val": true,
+            "doc": "Exibe o ícone de lupa dentro do campo de pesquisa.",
+            "editor": "Checkbox",
+            "name": "show_search_icon",
+            "optional": true,
+            "rank": 21
+        },
+        "ACJ": {
+            "caption": "Pesquisa e Estilo do Popup",
+            "editor": "Label",
+            "name": "pesquisa_e_estilo",
+            "rank": 18
+        },
+        "ACU": {
+            "caption": "Default selected Lista",
+            "doc": "Lista de itens pré-selecionados quando \"Multiple selection\" está ativo. Aplicada apenas antes da primeira interação do usuário.",
+            "editor": "DynamicValue",
+            "is_list": true,
+            "name": "default_value_list",
+            "optional": true,
+            "rank": 29,
+            "value": "custom_data_AAh"
+        },
+        "ACW": {
+            "caption": "Dropdown background",
+            "default_val": "rgba(255,255,255,1)",
+            "doc": "Cor de fundo do popup (lista + área da pesquisa).",
+            "editor": "Color",
+            "name": "dropdown_background",
+            "optional": true,
+            "rank": 30
+        },
+        "ACX": {
+            "caption": "Dropdown font color",
+            "default_val": "rgba(30,41,59,1)",
+            "doc": "Cor do texto das opções.",
+            "editor": "Color",
+            "name": "dropdown_font_color",
+            "optional": true,
+            "rank": 31
+        },
+        "ACY": {
+            "caption": "Dropdown hover color",
+            "default_val": "rgba(100,116,139,1)",
+            "doc": "Cor base do realce ao passar o mouse (aplicada como tom suave sobre o fundo).",
+            "editor": "Color",
+            "name": "dropdown_hover_color",
+            "optional": true,
+            "rank": 32
+        },
+        "ACZ": {
+            "caption": "Selected background",
+            "default_val": "",
+            "doc": "Fundo do item selecionado. Deixe vazio para derivar automaticamente da Accent color.",
+            "editor": "Color",
+            "name": "selected_background",
+            "optional": true,
+            "rank": 33
+        },
+        "ADA": {
+            "caption": "Selected font color",
+            "default_val": "",
+            "doc": "Cor do texto do item selecionado. Deixe vazio para calcular automaticamente com contraste garantido.",
+            "editor": "Color",
+            "name": "selected_font_color",
+            "optional": true,
+            "rank": 34
+        },
+        "ADB": {
+            "caption": "Placeholder color",
+            "default_val": "rgba(148,163,184,1)",
+            "doc": "Cor do texto do placeholder no controle.",
+            "editor": "Color",
+            "name": "placeholder_color",
+            "optional": true,
+            "rank": 35
+        },
+        "ADC": {
+            "caption": "Option vertical padding (px)",
+            "default_val": 9,
+            "doc": "Espaçamento vertical de cada opção da lista.",
+            "editor": "StaticNumber",
+            "name": "option_padding_vertical",
+            "optional": true,
+            "rank": 36
         }
     },
     "has_reset_fn": true,
@@ -286,16 +349,6 @@
                 "fn": "function(properties, context) {}"
             },
             "name": "selected",
-            "value": "custom_data_AAh"
-        },
-        "ABy": {
-            "caption": "values (list)",
-            "doc": "Lista de itens (Things) selecionados. Use com o modo \"Multiple selection\"; no modo individual retorna uma lista com no máximo um item.",
-            "initialization_code": {
-                "fn": "function(properties, context) {}"
-            },
-            "is_list": true,
-            "name": "selected_list",
             "value": "custom_data_AAh"
         },
         "ABP": {
@@ -321,6 +374,16 @@
             },
             "name": "sd_error",
             "value": "text"
+        },
+        "ABy": {
+            "caption": "values (list)",
+            "doc": "Lista de itens (Things) selecionados. Use com o modo \"Multiple selection\"; no modo individual retorna uma lista com no máximo um item.",
+            "initialization_code": {
+                "fn": "function(properties, context) {}"
+            },
+            "is_list": true,
+            "name": "selected_list",
+            "value": "custom_data_AAh"
         }
     },
     "support_autobinding": false
