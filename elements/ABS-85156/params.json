@@ -305,6 +305,24 @@
             "optional": true,
             "rank": 35,
             "value": "custom_data_ABT"
+        },
+        "ADD": {
+            "caption": "Selected background",
+            "default_val": "",
+            "doc": "Fundo do item selecionado. Deixe vazio para derivar automaticamente da Accent color.",
+            "editor": "Color",
+            "name": "selected_background",
+            "optional": true,
+            "rank": 36
+        },
+        "ADE": {
+            "caption": "Selected font color",
+            "default_val": "",
+            "doc": "Cor do texto do item selecionado. Deixe vazio para calcular automaticamente com contraste garantido.",
+            "editor": "Color",
+            "name": "selected_font_color",
+            "optional": true,
+            "rank": 37
         }
     },
     "has_reset_fn": true,
