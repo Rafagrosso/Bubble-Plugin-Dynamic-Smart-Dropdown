@@ -152,10 +152,11 @@
   }
   .sdd-option.sdd-selected:hover, .sdd-option.sdd-selected.sdd-focus { background: var(--sdd-sel-bg-hover, #e0e7ff); }
   .sdd-option-label { flex: 1 1 auto; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-  /* always in the DOM, revealed on the selected row, so toggling a
-     selection never needs the row to be rebuilt */
-  .sdd-tick { color: var(--sdd-accent, #6366f1); display: none; flex: 0 0 auto; }
-  .sdd-option.sdd-selected .sdd-tick { display: inline-flex; }
+  /* the tick element is only ever added to the selected row by the JS; this
+     rule is a safety net whose specificity beats any older stylesheet still
+     lingering on the page, so a tick can never show up on every row */
+  .sdd-tick { color: var(--sdd-accent, #6366f1); display: inline-flex; flex: 0 0 auto; }
+  .sdd-option:not(.sdd-selected) .sdd-tick { display: none; }
 
   /* checkbox (multiple mode) --------------------------------------------- */
   .sdd-check {

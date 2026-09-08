@@ -66,11 +66,18 @@ function(instance, properties, context) {
   var propsList = (raw[0] && typeof raw[0].listProperties === 'function') ? raw[0].listProperties() : [];
   var hasBubbleId = propsList.indexOf('_id') !== -1;
 
+  // one id resolver for both the list rows and the default values: when the
+  // two disagreed, a default could never match its own row in the list
+  var thingId = function(thing) {
+    var vid = null;
+    if (properties.id) vid = thing.get(properties.id);
+    if ((vid == null || vid === '') && hasBubbleId) vid = thing.get('_id');
+    return (vid == null || vid === '') ? null : String(vid);
+  };
+
   var items = raw.map(function(e, i) {
-    var id = null;
-    if (properties.id) id = e.get(properties.id);
-    if ((id == null || id === '') && hasBubbleId) id = e.get('_id');
-    if (id == null || id === '') id = 'sdd_idx_' + i;
+    // Option Sets and records without _id fall back to their position
+    var id = thingId(e) || ('sdd_idx_' + i);
     var it = { id: String(id), text: d.createCaption(properties, e), original: e };
     if (d.grouping) it.group = d.groupLabel(e, properties.group_by_field);
     if (d.sortField) {
@@ -95,22 +102,33 @@ function(instance, properties, context) {
   // never wipe out what the user already picked.
   // Multiple mode: "default_value_list" first, falling back to
   // "default_value"; single mode: "default_value" only.
-  var resolveThingId = function(thing) {
-    var vid = null;
-    if (properties.id) vid = thing.get(properties.id);
-    if (vid == null || vid === '') {
-      var tp = (typeof thing.listProperties === 'function') ? thing.listProperties() : [];
-      if (tp.indexOf('_id') !== -1) vid = thing.get('_id');
+  // Resolves a default to the id of its own row in the list, so that row is
+  // highlighted. The id alone is not enough: Option Sets and lists without
+  // _id are keyed by position, so the record is also matched by identity and
+  // then by the caption it renders as.
+  var ghostSeq = 0;
+  var matchInList = function(thing) {
+    var vid = thingId(thing);
+    if (vid && d.byId[vid]) return vid;
+    for (var i = 0; i < d.items.length; i++) {
+      if (d.items[i].original === thing) return d.items[i].id;
     }
-    return (vid == null || vid === '') ? null : String(vid);
+    var caption = d.createCaption(properties, thing);
+    if (caption !== '') {
+      for (var j = 0; j < d.items.length; j++) {
+        if (d.items[j].text === caption) return d.items[j].id;
+      }
+    }
+    return null;
   };
 
-  // a default that isn't in the provided list still gets selected: it is
-  // registered on the side so the control, the chips and the exposed states
+  // a default genuinely absent from the provided list still gets selected: it
+  // is registered on the side so the control, the chips and the exposed states
   // show it even before (or without) the list containing that record
   var registerDefault = function(thing) {
-    var vid = resolveThingId(thing);
-    if (!vid) return null;
+    var found = matchInList(thing);
+    if (found) return found;
+    var vid = thingId(thing) || ('sdd_default_' + (ghostSeq++));
     if (!d.byId[vid]) {
       d.byId[vid] = { id: vid, text: d.createCaption(properties, thing), original: thing };
     }

@@ -382,9 +382,10 @@ function(instance, context) {
       .attr('aria-selected', isSel ? 'true' : 'false');
     if (d.multiple) opt.append('<span class="sdd-check" aria-hidden="true">' + checkIco + '</span>');
     $('<span class="sdd-option-label"></span>').text(it.text).appendTo(opt);
-    // the tick is always present; CSS reveals it on the selected row, which
-    // lets selection be toggled without re-rendering the row
-    if (!d.multiple) opt.append('<span class="sdd-tick">' + checkIco + '</span>');
+    // single mode: the tick exists only on the selected row. Keeping it out of
+    // the DOM entirely (rather than hiding it with CSS) means an outdated copy
+    // of the stylesheet can never end up showing a tick on every row.
+    if (!d.multiple && isSel) opt.append('<span class="sdd-tick">' + checkIco + '</span>');
     opt.on('mousedown', function(ev) { ev.preventDefault(); }); // keeps focus in the search input
     opt.on('click', function(ev) { ev.stopPropagation(); d.toggleItem(it.id); });
     list.append(opt);
@@ -433,6 +434,11 @@ function(instance, context) {
       var $o = $(this);
       var sel = d.selectedIds.indexOf($o.attr('data-id')) !== -1;
       $o.toggleClass('sdd-selected', sel).attr('aria-selected', sel ? 'true' : 'false');
+      if (!d.multiple) {
+        var tick = $o.children('.sdd-tick');
+        if (sel && !tick.length) $o.append('<span class="sdd-tick">' + checkIco + '</span>');
+        else if (!sel && tick.length) tick.remove();
+      }
     });
   };
 
