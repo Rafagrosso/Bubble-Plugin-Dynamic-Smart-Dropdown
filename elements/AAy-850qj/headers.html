@@ -133,7 +133,9 @@
     text-transform: uppercase; letter-spacing: .07em;
     color: var(--sdd-muted, #94a3b8);
   }
-  .sdd-group + .sdd-group { margin-top: 4px; }
+  /* group headers sit flat in the list (chunked rendering), so spacing
+     comes from the header that follows an option */
+  .sdd-option + .sdd-group-header { margin-top: 6px; }
 
   .sdd-option {
     display: flex; align-items: center; gap: 10px;
@@ -150,7 +152,10 @@
   }
   .sdd-option.sdd-selected:hover, .sdd-option.sdd-selected.sdd-focus { background: var(--sdd-sel-bg-hover, #e0e7ff); }
   .sdd-option-label { flex: 1 1 auto; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-  .sdd-tick { color: var(--sdd-accent, #6366f1); display: inline-flex; flex: 0 0 auto; }
+  /* always in the DOM, revealed on the selected row, so toggling a
+     selection never needs the row to be rebuilt */
+  .sdd-tick { color: var(--sdd-accent, #6366f1); display: none; flex: 0 0 auto; }
+  .sdd-option.sdd-selected .sdd-tick { display: inline-flex; }
 
   /* checkbox (multiple mode) --------------------------------------------- */
   .sdd-check {
