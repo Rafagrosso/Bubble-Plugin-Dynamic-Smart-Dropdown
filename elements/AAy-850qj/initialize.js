@@ -11,6 +11,7 @@ function(instance, context) {
   d.selectedIds = [];
   d._plan = [];               // flat render plan (group headers + options)
   d._planIdx = 0;             // how much of the plan is already in the DOM
+  d.defaultIds = [];          // what the default fields currently point at
   d.searchLimit = 0;          // caps search results only
   d.sortDir = 'none';
   d.sortField = null;
@@ -324,6 +325,18 @@ function(instance, context) {
   d.clearSelection = function(fireEvent) {
     d.touched = true;
     d.selectedIds = [];
+    d.renderControl();
+    d.refreshOptionStates();
+    d.publishSelection(!!fireEvent);
+  };
+
+  // Bubble's "Reset relevant inputs" calls the element's reset function, and a
+  // native input goes back to its default value there — not to empty. Clearing
+  // also marked the element as touched, which switched the default off for the
+  // rest of the page's life.
+  d.resetToDefault = function(fireEvent) {
+    d.touched = false;
+    d.selectedIds = (d.defaultIds || []).slice();
     d.renderControl();
     d.refreshOptionStates();
     d.publishSelection(!!fireEvent);
