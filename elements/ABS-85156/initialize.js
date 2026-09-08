@@ -218,28 +218,59 @@ function(instance, context) {
   // ---- caption / group helpers ------------------------------------------
   // NOTE: never wrap e.get() in try/catch here — Bubble uses a special
   // exception to defer the update until the data is loaded.
-  d.createCaption = function(properties, e) {
+  // Returns { text, hasContent }. hasContent is false when the configured
+  // caption fields are all blank for this record, which is what lets the list
+  // leave those records out instead of rendering empty rows.
+  d.buildCaption = function(properties, e) {
+    var filled = function(v) { return v != null && String(v).trim() !== ''; };
+
     if (properties.dynamic_caption_field) {
-      return String(properties.dynamic_caption_field).replace(/\[([^\]]+)\]/g, function(_, key) {
+      var placeholders = 0, resolved = 0;
+      var text = String(properties.dynamic_caption_field).replace(/\[([^\]]+)\]/g, function(_, key) {
+        placeholders++;
         key = key.trim();
+        var v;
         if (key.indexOf('->') !== -1) {
-          var parts = key.split('->');
-          var sub = e.get(parts[0].trim());
-          var v2 = (sub && typeof sub.get === 'function') ? sub.get(parts[1].trim()) : null;
-          return v2 == null ? '' : String(v2);
+          var path = key.split('->');
+          var sub = e.get(path[0].trim());
+          v = (sub && typeof sub.get === 'function') ? sub.get(path[1].trim()) : null;
+        } else {
+          v = e.get(key);
         }
-        var v = e.get(key);
-        return v == null ? '' : String(v);
-      });
+        if (!filled(v)) return '';
+        resolved++;
+        return String(v);
+      }).trim();
+      // when a placeholder came back empty the literal text around it is left
+      // dangling ("Beta —", "— Gama"), so tidy the edges. An expression whose
+      // values all resolved is returned exactly as the user wrote it.
+      if (placeholders > 0 && resolved < placeholders) {
+        text = text.replace(/\s{2,}/g, ' ')
+                   .replace(/^[\s\-–—·|,;:/]+/, '')
+                   .replace(/[\s\-–—·|,;:/]+$/, '')
+                   .trim();
+      }
+      // an expression whose placeholders all came back empty leaves only its
+      // literal text behind — that counts as blank
+      return { text: text, hasContent: text !== '' && (placeholders === 0 || resolved > 0) };
     }
-    var main = properties.caption_field ? e.get(properties.caption_field) : null;
-    if (main == null) main = '';
-    if (properties.secondary_caption_field) {
-      var sec = e.get(properties.secondary_caption_field);
-      if (sec != null && sec !== '') return String(main) + (properties.separator != null ? properties.separator : ' ') + String(sec);
-    }
-    return String(main);
+
+    var parts = [];
+    var add = function(v) { if (filled(v)) parts.push(String(v).trim()); };
+    if (properties.caption_field) add(e.get(properties.caption_field));
+    if (properties.secondary_caption_field) add(e.get(properties.secondary_caption_field));
+
+    // nothing configured: fall back to the record's own display text rather
+    // than rendering a list of blank rows
+    if (!properties.caption_field && !properties.secondary_caption_field) add(e.get('display'));
+
+    var sep = (properties.separator != null && properties.separator !== '') ? properties.separator : ' ';
+    // joining only the filled parts keeps a dangling separator off the label
+    // when one of the two caption fields is empty
+    return { text: parts.join(sep), hasContent: parts.length > 0 };
   };
+
+  d.createCaption = function(properties, e) { return d.buildCaption(properties, e).text; };
 
   d.groupLabel = function(e, field) {
     var gv = e.get(field);
