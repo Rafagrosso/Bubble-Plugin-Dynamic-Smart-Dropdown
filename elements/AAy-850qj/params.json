@@ -1,5 +1,5 @@
 {
-    "add_hover_pressed": false,
+    "add_hover_pressed": true,
     "add_is_visible": true,
     "autobinding_value": "text",
     "can_fit_height": true,
@@ -48,7 +48,7 @@
             "doc": "Desativa a interação do usuário.",
             "editor": "Checkbox",
             "name": "disabled",
-            "rank": 8,
+            "rank": 9,
             "value": "boolean"
         },
         "AAm": {
@@ -57,7 +57,7 @@
             "editor": "StaticText",
             "name": "placeholder",
             "optional": true,
-            "rank": 10,
+            "rank": 11,
             "value": "text"
         },
         "AAo": {
@@ -75,7 +75,7 @@
             "doc": "Limita a quantidade de opções exibidas no popup (para performance).",
             "editor": "StaticNumber",
             "name": "max_entries_to_show",
-            "rank": 9
+            "rank": 10
         },
         "AAs": {
             "caption": "Secondary field",
@@ -100,7 +100,7 @@
             "field_type_restriction": "text_image_file",
             "name": "id",
             "optional": true,
-            "rank": 14
+            "rank": 15
         },
         "AAw": {
             "caption": "Default selected item",
@@ -125,7 +125,7 @@
             "name": "dropdown_direction",
             "optional": true,
             "options": "auto,above,below",
-            "rank": 11
+            "rank": 12
         },
         "ABL": {
             "caption": "dropdown_animation",
@@ -134,7 +134,7 @@
             "name": "dropdown_animation",
             "optional": true,
             "options": "fade,slide,zoom,none",
-            "rank": 12
+            "rank": 13
         },
         "ABM": {
             "caption": "dropdown_animation_duration",
@@ -142,7 +142,7 @@
             "editor": "StaticNumber",
             "name": "dropdown_animation_duration",
             "optional": true,
-            "rank": 13
+            "rank": 14
         },
         "ABv": {
             "caption": "Group results",
@@ -150,7 +150,7 @@
             "doc": "Agrupa as opções do dropdown (inclusive os resultados da pesquisa) pelo campo definido em \"Group by (field)\".",
             "editor": "Checkbox",
             "name": "group_results",
-            "rank": 15
+            "rank": 16
         },
         "ABw": {
             "caption": "Group by (field)",
@@ -158,7 +158,7 @@
             "editor": "custom_field_AAh",
             "name": "group_by_field",
             "optional": true,
-            "rank": 16
+            "rank": 17
         },
         "ABx": {
             "caption": "Multiple selection",
@@ -166,7 +166,7 @@
             "doc": "Permite selecionar vários itens (com checkboxes e chips). Use o estado \"values (list)\" para a lista completa e \"value\" para o último item selecionado.",
             "editor": "Checkbox",
             "name": "multiple_selection",
-            "rank": 17
+            "rank": 18
         },
         "ABz": {
             "caption": "Search placeholder",
@@ -174,7 +174,7 @@
             "editor": "StaticText",
             "name": "search_placeholder",
             "optional": true,
-            "rank": 19
+            "rank": 20
         },
         "ACA": {
             "caption": "No results text",
@@ -182,7 +182,7 @@
             "editor": "StaticText",
             "name": "no_results_text",
             "optional": true,
-            "rank": 20
+            "rank": 21
         },
         "ACB": {
             "caption": "Search input background",
@@ -190,7 +190,7 @@
             "editor": "Color",
             "name": "search_background",
             "optional": true,
-            "rank": 24
+            "rank": 25
         },
         "ACC": {
             "caption": "Search input border color",
@@ -198,7 +198,7 @@
             "editor": "Color",
             "name": "search_border_color",
             "optional": true,
-            "rank": 25
+            "rank": 26
         },
         "ACD": {
             "caption": "Search input text color",
@@ -206,7 +206,7 @@
             "editor": "Color",
             "name": "search_font_color",
             "optional": true,
-            "rank": 26
+            "rank": 27
         },
         "ACE": {
             "caption": "Search placeholder color",
@@ -214,7 +214,7 @@
             "editor": "Color",
             "name": "search_placeholder_color",
             "optional": true,
-            "rank": 27
+            "rank": 28
         },
         "ACF": {
             "caption": "Search input height (px)",
@@ -222,7 +222,7 @@
             "editor": "StaticNumber",
             "name": "search_height",
             "optional": true,
-            "rank": 22
+            "rank": 23
         },
         "ACG": {
             "caption": "Search input radius (px)",
@@ -230,7 +230,7 @@
             "editor": "StaticNumber",
             "name": "search_border_radius",
             "optional": true,
-            "rank": 23
+            "rank": 24
         },
         "ACH": {
             "caption": "Accent color",
@@ -239,7 +239,7 @@
             "editor": "Color",
             "name": "accent_color",
             "optional": true,
-            "rank": 28
+            "rank": 29
         },
         "ACI": {
             "caption": "Show search icon",
@@ -248,13 +248,13 @@
             "editor": "Checkbox",
             "name": "show_search_icon",
             "optional": true,
-            "rank": 21
+            "rank": 22
         },
         "ACJ": {
             "caption": "Pesquisa e Estilo do Popup",
             "editor": "Label",
             "name": "pesquisa_e_estilo",
-            "rank": 18
+            "rank": 19
         },
         "ACU": {
             "caption": "Default selected Lista",
@@ -263,7 +263,7 @@
             "is_list": true,
             "name": "default_value_list",
             "optional": true,
-            "rank": 29,
+            "rank": 8,
             "value": "custom_data_AAh"
         },
         "ACW": {
