@@ -85,17 +85,22 @@ function(instance, properties, context) {
     return (vid == null || vid === '') ? null : String(vid);
   };
 
-  var items = raw.map(function(e, i) {
+  var items = [];
+  raw.forEach(function(e, i) {
+    var caption = d.buildCaption(properties, e);
+    // records whose caption fields are all blank would render as empty rows,
+    // so they are left out of the list entirely
+    if (!caption.hasContent) return;
     // Option Sets and records without _id fall back to their position
     var id = thingId(e) || ('sdd_idx_' + i);
-    var it = { id: String(id), text: d.createCaption(properties, e), original: e };
+    var it = { id: String(id), text: caption.text, original: e };
     if (d.grouping) it.group = d.groupLabel(e, properties.group_by_field);
     if (d.sortField) {
       var sv = e.get(d.sortField);
       // a field pointing at another Thing sorts by its display text
       it.sortValue = (sv && typeof sv.get === 'function') ? d.groupLabel(e, d.sortField) : sv;
     }
-    return it;
+    items.push(it);
   });
 
   d.items = d.sortItems(items);
