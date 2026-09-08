@@ -351,55 +351,55 @@
         "ADS": {
             "caption": "Dados",
             "editor": "Label",
-            "name": "section_0",
+            "name": "sec_dados",
             "rank": 0
         },
         "ADT": {
             "caption": "Texto exibido",
             "editor": "Label",
-            "name": "section_4",
+            "name": "sec_texto_exibido",
             "rank": 4
         },
         "ADU": {
             "caption": "Ordenação e agrupamento",
             "editor": "Label",
-            "name": "section_9",
+            "name": "sec_ordenacao_e_agrupamento",
             "rank": 9
         },
         "ADV": {
             "caption": "Seleção",
             "editor": "Label",
-            "name": "section_14",
+            "name": "sec_selecao",
             "rank": 14
         },
         "ADW": {
             "caption": "Pesquisa",
             "editor": "Label",
-            "name": "section_19",
+            "name": "sec_pesquisa",
             "rank": 19
         },
         "ADX": {
             "caption": "Comportamento do popup",
             "editor": "Label",
-            "name": "section_24",
+            "name": "sec_comportamento_do_popup",
             "rank": 24
         },
         "ADY": {
             "caption": "Estilo — campo",
             "editor": "Label",
-            "name": "section_30",
+            "name": "sec_estilo_campo",
             "rank": 30
         },
         "ADZ": {
             "caption": "Estilo — popup",
             "editor": "Label",
-            "name": "section_34",
+            "name": "sec_estilo_popup",
             "rank": 34
         },
         "AEA": {
             "caption": "Estilo — caixa de pesquisa",
             "editor": "Label",
-            "name": "section_42",
+            "name": "sec_estilo_caixa_de_pesquisa",
             "rank": 42
         }
     },

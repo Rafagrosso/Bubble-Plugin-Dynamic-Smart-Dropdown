@@ -1,5 +1,5 @@
 {
-    "add_hover_pressed": false,
+    "add_hover_pressed": true,
     "add_is_visible": true,
     "autobinding_value": "text",
     "can_fit_height": true,
@@ -340,55 +340,55 @@
         "ADJ": {
             "caption": "Dados",
             "editor": "Label",
-            "name": "section_0",
+            "name": "sec_dados",
             "rank": 0
         },
         "ADK": {
             "caption": "Texto exibido",
             "editor": "Label",
-            "name": "section_4",
+            "name": "sec_texto_exibido",
             "rank": 4
         },
         "ADL": {
             "caption": "Ordenação e agrupamento",
             "editor": "Label",
-            "name": "section_9",
+            "name": "sec_ordenacao_e_agrupamento",
             "rank": 9
         },
         "ADM": {
             "caption": "Seleção",
             "editor": "Label",
-            "name": "section_14",
+            "name": "sec_selecao",
             "rank": 14
         },
         "ADN": {
             "caption": "Pesquisa",
             "editor": "Label",
-            "name": "section_19",
+            "name": "sec_pesquisa",
             "rank": 19
         },
         "ADO": {
             "caption": "Comportamento do popup",
             "editor": "Label",
-            "name": "section_24",
+            "name": "sec_comportamento_do_popup",
             "rank": 24
         },
         "ADP": {
             "caption": "Estilo — campo",
             "editor": "Label",
-            "name": "section_28",
+            "name": "sec_estilo_campo",
             "rank": 28
         },
         "ADQ": {
             "caption": "Estilo — popup",
             "editor": "Label",
-            "name": "section_32",
+            "name": "sec_estilo_popup",
             "rank": 32
         },
         "ADR": {
             "caption": "Estilo — caixa de pesquisa",
             "editor": "Label",
-            "name": "section_39",
+            "name": "sec_estilo_caixa_de_pesquisa",
             "rank": 39
         }
     },
