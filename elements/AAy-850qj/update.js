@@ -140,23 +140,38 @@ function(instance, properties, context) {
     return vid;
   };
 
-  if (!d.touched && !d.selectedIds.length) {
-    if (d.multiple && properties.default_value_list) {
-      var dlen = properties.default_value_list.length();
-      if (dlen > 0) {
-        var defaults = properties.default_value_list.get(0, dlen);
-        var defIds = [];
-        defaults.forEach(function(t) {
-          var vid = registerDefault(t);
-          if (vid && defIds.indexOf(vid) === -1) defIds.push(vid);
-        });
-        if (defIds.length) d.selectedIds = defIds;
-      }
+  // Which records the defaults point at. Recomputed on every update — even
+  // after the user has picked something — so a later reset can restore them.
+  var defaultIds = [];
+  var addDefault = function(thing) {
+    var vid = registerDefault(thing);
+    if (vid && defaultIds.indexOf(vid) === -1) defaultIds.push(vid);
+  };
+  var listDefaults = function() {
+    if (!properties.default_value_list) return [];
+    var n = properties.default_value_list.length();
+    return (n > 0) ? properties.default_value_list.get(0, n) : [];
+  };
+
+  if (d.multiple) {
+    listDefaults().forEach(addDefault);
+    // multiple selection with only the single field filled: honour it anyway
+    if (!defaultIds.length && properties.default_value) addDefault(properties.default_value);
+  } else {
+    if (properties.default_value) addDefault(properties.default_value);
+    // single selection with only the list filled: take its first entry, so a
+    // default is never silently ignored just because it sits in the other field
+    if (!defaultIds.length) {
+      var firstOfList = listDefaults()[0];
+      if (firstOfList) addDefault(firstOfList);
     }
-    if (!d.selectedIds.length && properties.default_value) {
-      var dvId = registerDefault(properties.default_value);
-      if (dvId) d.selectedIds = [dvId];
-    }
+  }
+  d.defaultIds = defaultIds;
+
+  // applied only before the first user interaction, so updates never overwrite
+  // a real choice
+  if (!d.touched && !d.selectedIds.length && defaultIds.length) {
+    d.selectedIds = defaultIds.slice();
   }
 
   d.renderControl();

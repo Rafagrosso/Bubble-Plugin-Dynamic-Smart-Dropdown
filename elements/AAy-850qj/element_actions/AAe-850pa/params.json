@@ -1,10 +1,10 @@
 {
-    "caption": "Reset",
+    "caption": "Clear selection",
     "fields": {
         "AAf": {
             "caption": "Quiet reset",
             "default_val": false,
-            "doc": "Do not trigger an event",
+            "doc": "Não dispara o evento \"Searchbox value is changed\" ao limpar.",
             "editor": "Checkbox",
             "name": "quiet_reset",
             "rank": 0

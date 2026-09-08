@@ -104,7 +104,7 @@
         },
         "AAw": {
             "caption": "Default selected item",
-            "doc": "Item padrão selecionado automaticamente (modo individual; no modo múltiplo serve de fallback quando a lista padrão está vazia).",
+            "doc": "Item pré-selecionado no modo individual. No modo de múltipla seleção também é usado, como alternativa, quando \"Default selected items (list)\" está vazio.",
             "editor": "DynamicValue",
             "name": "default_value",
             "optional": true,
@@ -248,7 +248,7 @@
         },
         "ACU": {
             "caption": "Default selected items (list)",
-            "doc": "Lista de itens pré-selecionados quando \"Multiple selection\" está ativo. Aplicada apenas antes da primeira interação do usuário.",
+            "doc": "Itens pré-selecionados no modo de múltipla seleção. No modo individual, o primeiro item desta lista é usado quando \"Default selected item\" está vazio. Os padrões são aplicados no carregamento e restaurados por \"Reset relevant inputs\".",
             "editor": "DynamicValue",
             "is_list": true,
             "name": "default_value_list",
