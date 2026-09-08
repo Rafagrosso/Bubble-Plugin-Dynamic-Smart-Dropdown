@@ -217,16 +217,27 @@ function(instance, context) {
   // ---- caption / group helpers ------------------------------------------
   // NOTE: never wrap e.get() in try/catch here — Bubble uses a special
   // exception to defer the update until the data is loaded.
-  // Returns { text, hasContent }. hasContent is false when the configured
-  // caption fields are all blank for this record, which is what lets the list
-  // leave those records out instead of rendering empty rows.
+  // Returns { text, hasContent }. The rule is deliberately literal: a record
+  // is only ever hidden when it would render nothing at all. Anything that
+  // produces visible text stays in the list, whatever it is made of.
   d.buildCaption = function(properties, e) {
-    var filled = function(v) { return v != null && String(v).trim() !== ''; };
+    // one field value as text. A related record shows its display text and a
+    // date its local format; anything unrecognised still falls back to its
+    // plain string form, so a row is never hidden just because its value has
+    // an unusual shape.
+    var textOf = function(v) {
+      if (v == null) return '';
+      if (typeof v.get === 'function') {
+        var display = v.get('display');
+        return (display != null && String(display).trim() !== '') ? String(display) : String(v);
+      }
+      if (v instanceof Date) return v.toLocaleDateString();
+      return String(v);
+    };
 
     if (properties.dynamic_caption_field) {
-      var placeholders = 0, resolved = 0;
+      var missing = false;
       var text = String(properties.dynamic_caption_field).replace(/\[([^\]]+)\]/g, function(_, key) {
-        placeholders++;
         key = key.trim();
         var v;
         if (key.indexOf('->') !== -1) {
@@ -236,26 +247,24 @@ function(instance, context) {
         } else {
           v = e.get(key);
         }
-        if (!filled(v)) return '';
-        resolved++;
-        return String(v);
-      }).trim();
-      // when a placeholder came back empty the literal text around it is left
-      // dangling ("Beta —", "— Gama"), so tidy the edges. An expression whose
-      // values all resolved is returned exactly as the user wrote it.
-      if (placeholders > 0 && resolved < placeholders) {
+        var value = textOf(v);
+        if (value.trim() === '') { missing = true; return ''; }
+        return value;
+      });
+      // an empty placeholder leaves its punctuation dangling ("Beta —"), so
+      // tidy the edges — only in that case, so an expression whose values all
+      // resolved is returned exactly as it was written
+      if (missing) {
         text = text.replace(/\s{2,}/g, ' ')
                    .replace(/^[\s\-–—·|,;:/]+/, '')
-                   .replace(/[\s\-–—·|,;:/]+$/, '')
-                   .trim();
+                   .replace(/[\s\-–—·|,;:/]+$/, '');
       }
-      // an expression whose placeholders all came back empty leaves only its
-      // literal text behind — that counts as blank
-      return { text: text, hasContent: text !== '' && (placeholders === 0 || resolved > 0) };
+      text = text.trim();
+      return { text: text, hasContent: text !== '' };
     }
 
     var parts = [];
-    var add = function(v) { if (filled(v)) parts.push(String(v).trim()); };
+    var add = function(v) { var s = textOf(v).trim(); if (s !== '') parts.push(s); };
     if (properties.caption_field) add(e.get(properties.caption_field));
     if (properties.secondary_caption_field) add(e.get(properties.secondary_caption_field));
 
@@ -266,7 +275,8 @@ function(instance, context) {
     var sep = (properties.separator != null && properties.separator !== '') ? properties.separator : ' ';
     // joining only the filled parts keeps a dangling separator off the label
     // when one of the two caption fields is empty
-    return { text: parts.join(sep), hasContent: parts.length > 0 };
+    var joined = parts.join(sep);
+    return { text: joined, hasContent: joined !== '' };
   };
 
   d.createCaption = function(properties, e) { return d.buildCaption(properties, e).text; };
