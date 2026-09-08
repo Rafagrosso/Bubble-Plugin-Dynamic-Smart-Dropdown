@@ -40,7 +40,7 @@
             "editor": "custom_field_AAh",
             "name": "caption_field",
             "optional": false,
-            "rank": 3
+            "rank": 5
         },
         "AAl": {
             "caption": "Disable dropdown",
@@ -48,7 +48,7 @@
             "doc": "Desativa a interação do usuário.",
             "editor": "Checkbox",
             "name": "disabled",
-            "rank": 8,
+            "rank": 18,
             "value": "boolean"
         },
         "AAm": {
@@ -57,7 +57,7 @@
             "editor": "StaticText",
             "name": "placeholder",
             "optional": true,
-            "rank": 10,
+            "rank": 29,
             "value": "text"
         },
         "AAo": {
@@ -67,7 +67,7 @@
             "long_text": true,
             "name": "dynamic_caption_field",
             "optional": true,
-            "rank": 6
+            "rank": 8
         },
         "AAq": {
             "caption": "Search results limit",
@@ -75,7 +75,7 @@
             "doc": "Limita quantos resultados a pesquisa exibe. Sem pesquisa, a lista completa fornecida é exibida (0 ou vazio = sem limite).",
             "editor": "StaticNumber",
             "name": "max_entries_to_show",
-            "rank": 9
+            "rank": 20
         },
         "AAs": {
             "caption": "Secondary field",
@@ -83,7 +83,7 @@
             "editor": "custom_field_AAh",
             "name": "secondary_caption_field",
             "optional": true,
-            "rank": 4
+            "rank": 6
         },
         "AAt": {
             "caption": "Separator",
@@ -91,7 +91,7 @@
             "editor": "StaticText",
             "name": "separator",
             "optional": true,
-            "rank": 5
+            "rank": 7
         },
         "AAv": {
             "caption": "Custom ID field",
@@ -100,7 +100,7 @@
             "field_type_restriction": "text_image_file",
             "name": "id",
             "optional": true,
-            "rank": 14
+            "rank": 3
         },
         "AAw": {
             "caption": "Default selected item",
@@ -108,14 +108,8 @@
             "editor": "DynamicValue",
             "name": "default_value",
             "optional": true,
-            "rank": 7,
+            "rank": 16,
             "value": "custom_data_AAh"
-        },
-        "AAz": {
-            "caption": "Dados e Identificação",
-            "editor": "Label",
-            "name": "dados_e_identificação",
-            "rank": 0
         },
         "ABK": {
             "caption": "Dropdown direction",
@@ -125,24 +119,26 @@
             "name": "dropdown_direction",
             "optional": true,
             "options": "auto,above,below",
-            "rank": 11
+            "rank": 25
         },
         "ABL": {
-            "caption": "dropdown_animation",
+            "caption": "Dropdown animation",
             "default_val": "fade",
+            "doc": "Animação de abertura do popup.",
             "editor": "Dropdown",
             "name": "dropdown_animation",
             "optional": true,
             "options": "fade,slide,zoom,none",
-            "rank": 12
+            "rank": 26
         },
         "ABM": {
-            "caption": "dropdown_animation_duration",
+            "caption": "Animation duration (ms)",
             "default_val": 250,
+            "doc": "Duração da animação de abertura, em milissegundos.",
             "editor": "StaticNumber",
             "name": "dropdown_animation_duration",
             "optional": true,
-            "rank": 13
+            "rank": 27
         },
         "ABv": {
             "caption": "Group results",
@@ -150,7 +146,7 @@
             "doc": "Agrupa as opções do dropdown (inclusive os resultados da pesquisa) pelo campo definido em \"Group by (field)\".",
             "editor": "Checkbox",
             "name": "group_results",
-            "rank": 15
+            "rank": 12
         },
         "ABw": {
             "caption": "Group by (field)",
@@ -158,7 +154,7 @@
             "editor": "custom_field_AAh",
             "name": "group_by_field",
             "optional": true,
-            "rank": 16
+            "rank": 13
         },
         "ABx": {
             "caption": "Multiple selection",
@@ -166,7 +162,7 @@
             "doc": "Permite selecionar vários itens (com checkboxes e chips). Use o estado \"values (list)\" para a lista completa e \"value\" para o último item selecionado.",
             "editor": "Checkbox",
             "name": "multiple_selection",
-            "rank": 17
+            "rank": 15
         },
         "ABz": {
             "caption": "Search placeholder",
@@ -174,7 +170,7 @@
             "editor": "StaticText",
             "name": "search_placeholder",
             "optional": true,
-            "rank": 19
+            "rank": 21
         },
         "ACA": {
             "caption": "No results text",
@@ -182,7 +178,7 @@
             "editor": "StaticText",
             "name": "no_results_text",
             "optional": true,
-            "rank": 20
+            "rank": 22
         },
         "ACB": {
             "caption": "Search input background",
@@ -190,7 +186,7 @@
             "editor": "Color",
             "name": "search_background",
             "optional": true,
-            "rank": 24
+            "rank": 42
         },
         "ACC": {
             "caption": "Search input border color",
@@ -198,7 +194,7 @@
             "editor": "Color",
             "name": "search_border_color",
             "optional": true,
-            "rank": 25
+            "rank": 43
         },
         "ACD": {
             "caption": "Search input text color",
@@ -206,7 +202,7 @@
             "editor": "Color",
             "name": "search_font_color",
             "optional": true,
-            "rank": 26
+            "rank": 44
         },
         "ACE": {
             "caption": "Search placeholder color",
@@ -214,7 +210,7 @@
             "editor": "Color",
             "name": "search_placeholder_color",
             "optional": true,
-            "rank": 27
+            "rank": 45
         },
         "ACF": {
             "caption": "Search input height (px)",
@@ -222,7 +218,7 @@
             "editor": "StaticNumber",
             "name": "search_height",
             "optional": true,
-            "rank": 22
+            "rank": 40
         },
         "ACG": {
             "caption": "Search input radius (px)",
@@ -230,16 +226,16 @@
             "editor": "StaticNumber",
             "name": "search_border_radius",
             "optional": true,
-            "rank": 23
+            "rank": 41
         },
         "ACH": {
             "caption": "Accent color",
             "default_val": "rgba(99,102,241,1)",
-            "doc": "Cor de destaque usada no foco da pesquisa, checkboxes, chips e itens selecionados.",
+            "doc": "Cor de destaque: foco, checkboxes, chips e item selecionado. Os demais tons são derivados dela automaticamente.",
             "editor": "Color",
             "name": "accent_color",
             "optional": true,
-            "rank": 28
+            "rank": 31
         },
         "ACI": {
             "caption": "Show search icon",
@@ -248,22 +244,16 @@
             "editor": "Checkbox",
             "name": "show_search_icon",
             "optional": true,
-            "rank": 21
-        },
-        "ACJ": {
-            "caption": "Pesquisa e Estilo do Popup",
-            "editor": "Label",
-            "name": "pesquisa_e_estilo",
-            "rank": 18
+            "rank": 23
         },
         "ACU": {
-            "caption": "Default selected Lista",
+            "caption": "Default selected items (list)",
             "doc": "Lista de itens pré-selecionados quando \"Multiple selection\" está ativo. Aplicada apenas antes da primeira interação do usuário.",
             "editor": "DynamicValue",
             "is_list": true,
             "name": "default_value_list",
             "optional": true,
-            "rank": 29,
+            "rank": 17,
             "value": "custom_data_AAh"
         },
         "ACW": {
@@ -273,7 +263,7 @@
             "editor": "Color",
             "name": "dropdown_background",
             "optional": true,
-            "rank": 30
+            "rank": 33
         },
         "ACX": {
             "caption": "Dropdown font color",
@@ -282,7 +272,7 @@
             "editor": "Color",
             "name": "dropdown_font_color",
             "optional": true,
-            "rank": 31
+            "rank": 34
         },
         "ACY": {
             "caption": "Dropdown hover color",
@@ -291,7 +281,7 @@
             "editor": "Color",
             "name": "dropdown_hover_color",
             "optional": true,
-            "rank": 32
+            "rank": 35
         },
         "ACZ": {
             "caption": "Selected background",
@@ -300,7 +290,7 @@
             "editor": "Color",
             "name": "selected_background",
             "optional": true,
-            "rank": 33
+            "rank": 36
         },
         "ADA": {
             "caption": "Selected font color",
@@ -309,7 +299,7 @@
             "editor": "Color",
             "name": "selected_font_color",
             "optional": true,
-            "rank": 34
+            "rank": 37
         },
         "ADB": {
             "caption": "Placeholder color",
@@ -318,7 +308,7 @@
             "editor": "Color",
             "name": "placeholder_color",
             "optional": true,
-            "rank": 35
+            "rank": 30
         },
         "ADC": {
             "caption": "Option vertical padding (px)",
@@ -327,7 +317,7 @@
             "editor": "StaticNumber",
             "name": "option_padding_vertical",
             "optional": true,
-            "rank": 36
+            "rank": 38
         },
         "ADF": {
             "caption": "Sort by (field)",
@@ -335,7 +325,7 @@
             "editor": "custom_field_AAh",
             "name": "sort_by_field",
             "optional": true,
-            "rank": 37
+            "rank": 10
         },
         "ADG": {
             "caption": "Sort direction",
@@ -345,7 +335,61 @@
             "name": "sort_direction",
             "optional": true,
             "options": "none,ascending,descending",
-            "rank": 38
+            "rank": 11
+        },
+        "ADJ": {
+            "caption": "Dados",
+            "editor": "Label",
+            "name": "section_0",
+            "rank": 0
+        },
+        "ADK": {
+            "caption": "Texto exibido",
+            "editor": "Label",
+            "name": "section_4",
+            "rank": 4
+        },
+        "ADL": {
+            "caption": "Ordenação e agrupamento",
+            "editor": "Label",
+            "name": "section_9",
+            "rank": 9
+        },
+        "ADM": {
+            "caption": "Seleção",
+            "editor": "Label",
+            "name": "section_14",
+            "rank": 14
+        },
+        "ADN": {
+            "caption": "Pesquisa",
+            "editor": "Label",
+            "name": "section_19",
+            "rank": 19
+        },
+        "ADO": {
+            "caption": "Comportamento do popup",
+            "editor": "Label",
+            "name": "section_24",
+            "rank": 24
+        },
+        "ADP": {
+            "caption": "Estilo — campo",
+            "editor": "Label",
+            "name": "section_28",
+            "rank": 28
+        },
+        "ADQ": {
+            "caption": "Estilo — popup",
+            "editor": "Label",
+            "name": "section_32",
+            "rank": 32
+        },
+        "ADR": {
+            "caption": "Estilo — caixa de pesquisa",
+            "editor": "Label",
+            "name": "section_39",
+            "rank": 39
         }
     },
     "has_reset_fn": true,
@@ -361,7 +405,7 @@
     },
     "states": {
         "AAx": {
-            "caption": "value",
+            "caption": "Selected item",
             "doc": "Retorna o item (Thing) atualmente selecionado. No modo de múltipla seleção, retorna o último item selecionado.",
             "initialization_code": {
                 "fn": "function(properties, context) {}"
@@ -370,31 +414,16 @@
             "value": "custom_data_AAh"
         },
         "ABP": {
-            "caption": "status",
+            "caption": "Status",
+            "doc": "Diagnóstico do ciclo de vida: \"initialized\" após montar o elemento, \"ready\" a cada atualização concluída.",
             "initialization_code": {
                 "fn": "function(properties, context) {\n\n\n\n}"
             },
             "name": "sd_status",
             "value": "text"
         },
-        "ABQ": {
-            "caption": "log",
-            "initialization_code": {
-                "fn": "function(properties, context) {\n\n\n\n}"
-            },
-            "name": "sd_log",
-            "value": "text"
-        },
-        "ABR": {
-            "caption": "error",
-            "initialization_code": {
-                "fn": "function(properties, context) {\n\n\n\n}"
-            },
-            "name": "sd_error",
-            "value": "text"
-        },
         "ABy": {
-            "caption": "values (list)",
+            "caption": "Selected items (list)",
             "doc": "Lista de itens (Things) selecionados. Use com o modo \"Multiple selection\"; no modo individual retorna uma lista com no máximo um item.",
             "initialization_code": {
                 "fn": "function(properties, context) {}"
