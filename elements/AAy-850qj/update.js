@@ -15,7 +15,10 @@ function(instance, properties, context) {
   d.multiple = !!properties.multiple_selection;
   d.grouping = !!properties.group_results && !!properties.group_by_field;
   d.disabled = !!properties.disabled;
-  d.maxEntries = (properties.max_entries_to_show > 0) ? properties.max_entries_to_show : 0;
+  // caps search results only — with no query the whole list is available
+  d.searchLimit = (properties.max_entries_to_show > 0) ? properties.max_entries_to_show : 0;
+  d.sortDir = properties.sort_direction || 'none';
+  d.sortField = properties.sort_by_field || null;
   d.anim = properties.dropdown_animation || 'fade';
   d.animDur = (properties.dropdown_animation_duration != null) ? properties.dropdown_animation_duration : 250;
   d.direction = properties.dropdown_direction || 'auto';
@@ -70,12 +73,17 @@ function(instance, properties, context) {
     if (id == null || id === '') id = 'sdd_idx_' + i;
     var it = { id: String(id), text: d.createCaption(properties, e), original: e };
     if (d.grouping) it.group = d.groupLabel(e, properties.group_by_field);
+    if (d.sortField) {
+      var sv = e.get(d.sortField);
+      // a field pointing at another Thing sorts by its display text
+      it.sortValue = (sv && typeof sv.get === 'function') ? d.groupLabel(e, d.sortField) : sv;
+    }
     return it;
   });
 
-  d.items = items;
+  d.items = d.sortItems(items);
   d.byId = {};
-  items.forEach(function(it) { d.byId[it.id] = it; });
+  d.items.forEach(function(it) { d.byId[it.id] = it; });
 
   // keep only selections that still exist in the new list
   d.selectedIds = d.selectedIds.filter(function(id) { return !!d.byId[id]; });
@@ -85,7 +93,7 @@ function(instance, properties, context) {
 
   // default values — only before the first user interaction, so updates
   // never wipe out what the user already picked.
-  // Multiple mode: "default_values" (list) first, falling back to
+  // Multiple mode: "default_value_list" first, falling back to
   // "default_value"; single mode: "default_value" only.
   var resolveThingId = function(thing) {
     var vid = null;
@@ -97,6 +105,18 @@ function(instance, properties, context) {
     return (vid == null || vid === '') ? null : String(vid);
   };
 
+  // a default that isn't in the provided list still gets selected: it is
+  // registered on the side so the control, the chips and the exposed states
+  // show it even before (or without) the list containing that record
+  var registerDefault = function(thing) {
+    var vid = resolveThingId(thing);
+    if (!vid) return null;
+    if (!d.byId[vid]) {
+      d.byId[vid] = { id: vid, text: d.createCaption(properties, thing), original: thing };
+    }
+    return vid;
+  };
+
   if (!d.touched && !d.selectedIds.length) {
     if (d.multiple && properties.default_value_list) {
       var dlen = properties.default_value_list.length();
@@ -104,15 +124,15 @@ function(instance, properties, context) {
         var defaults = properties.default_value_list.get(0, dlen);
         var defIds = [];
         defaults.forEach(function(t) {
-          var vid = resolveThingId(t);
-          if (vid && d.byId[vid] && defIds.indexOf(vid) === -1) defIds.push(vid);
+          var vid = registerDefault(t);
+          if (vid && defIds.indexOf(vid) === -1) defIds.push(vid);
         });
         if (defIds.length) d.selectedIds = defIds;
       }
     }
     if (!d.selectedIds.length && properties.default_value) {
-      var dvId = resolveThingId(properties.default_value);
-      if (dvId && d.byId[dvId]) d.selectedIds = [dvId];
+      var dvId = registerDefault(properties.default_value);
+      if (dvId) d.selectedIds = [dvId];
     }
   }
 

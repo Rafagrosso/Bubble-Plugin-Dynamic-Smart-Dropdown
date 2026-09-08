@@ -9,6 +9,11 @@ function(instance, context) {
   d.items = [];
   d.byId = {};
   d.selectedIds = [];
+  d._plan = [];               // flat render plan (group headers + options)
+  d._planIdx = 0;             // how much of the plan is already in the DOM
+  d.searchLimit = 0;          // caps search results only
+  d.sortDir = 'none';
+  d.sortField = null;
   d.multiple = false;
   d.grouping = false;
   d.disabled = false;
@@ -271,7 +276,7 @@ function(instance, context) {
       d.selectedIds = [id];
     }
     d.renderControl();
-    d.renderList();
+    d.refreshOptionStates();
     d.publishSelection(true);
     if (!d.multiple && d.closeOnSelect) d.closePopup();
   };
@@ -280,7 +285,7 @@ function(instance, context) {
     d.touched = true;
     d.selectedIds = [];
     d.renderControl();
-    d.renderList();
+    d.refreshOptionStates();
     d.publishSelection(!!fireEvent);
   };
 
@@ -316,55 +321,126 @@ function(instance, context) {
     }
   };
 
-  // ---- list rendering (with search filter + grouping) -------------------
-  d.renderList = function() {
-    var st = list.scrollTop();
-    list.empty();
-    var q = (d.query || '').toLowerCase();
-    var filtered = d.items.filter(function(it) {
-      return !q || String(it.text).toLowerCase().indexOf(q) !== -1;
+  // ---- sorting -----------------------------------------------------------
+  // Applied to the whole provided list, so both the full list and any search
+  // over it come out in the same order.
+  d.sortItems = function(items) {
+    if (!d.sortDir || d.sortDir === 'none') return items;
+    var dir = (d.sortDir === 'descending') ? -1 : 1;
+    var valueOf = function(it) { return d.sortField ? it.sortValue : it.text; };
+    var isEmpty = function(v) { return v == null || v === ''; };
+    return items.slice().sort(function(a, b) {
+      var va = valueOf(a), vb = valueOf(b);
+      // blanks always sink to the bottom, whichever direction is active
+      if (isEmpty(va) && isEmpty(vb)) return 0;
+      if (isEmpty(va)) return 1;
+      if (isEmpty(vb)) return -1;
+      if (typeof va === 'number' && typeof vb === 'number') return (va - vb) * dir;
+      if (va instanceof Date && vb instanceof Date) return (va.getTime() - vb.getTime()) * dir;
+      // numeric:true keeps "Item 2" before "Item 10"; sensitivity ignores accents
+      return String(va).localeCompare(String(vb), undefined, { numeric: true, sensitivity: 'base' }) * dir;
     });
-    var capped = (d.maxEntries > 0) ? filtered.slice(0, d.maxEntries) : filtered;
+  };
 
-    if (!capped.length) {
-      list.append($('<div class="sdd-empty"></div>').text(d.noResultsText));
-      return;
+  // ---- list rendering ----------------------------------------------------
+  // No query -> the entire provided list is available. A query -> the search
+  // runs over that same entire list and only the results are capped by
+  // "max entries to show". Long lists are appended in chunks while scrolling
+  // so thousands of rows stay smooth.
+  var CHUNK = 60;
+
+  d.buildPlan = function() {
+    var q = (d.query || '').trim().toLowerCase();
+    var matches = d.items;
+    if (q) {
+      matches = d.items.filter(function(it) { return String(it.text).toLowerCase().indexOf(q) !== -1; });
+      if (d.searchLimit > 0) matches = matches.slice(0, d.searchLimit);
     }
 
-    var appendOption = function(it, container) {
-      var isSel = d.selectedIds.indexOf(it.id) !== -1;
-      var opt = $('<div class="sdd-option" role="option"></div>')
-        .attr('data-id', it.id)
-        .toggleClass('sdd-selected', isSel)
-        .attr('aria-selected', isSel ? 'true' : 'false');
-      if (d.multiple) opt.append('<span class="sdd-check" aria-hidden="true">' + checkIco + '</span>');
-      $('<span class="sdd-option-label"></span>').text(it.text).appendTo(opt);
-      if (!d.multiple && isSel) opt.append('<span class="sdd-tick">' + checkIco + '</span>');
-      opt.on('mousedown', function(ev) { ev.preventDefault(); }); // keeps focus in the search input
-      opt.on('click', function(ev) { ev.stopPropagation(); d.toggleItem(it.id); });
-      container.append(opt);
-    };
-
+    var plan = [];
     if (d.grouping) {
       var order = [], map = {};
-      capped.forEach(function(it) {
+      matches.forEach(function(it) {
         var g = (it.group == null || it.group === '') ? 'Outros' : it.group;
         if (!map[g]) { map[g] = []; order.push(g); }
         map[g].push(it);
       });
       order.forEach(function(g) {
-        var sec = $('<div class="sdd-group"></div>');
-        $('<div class="sdd-group-header"></div>').text(g).appendTo(sec);
-        map[g].forEach(function(it) { appendOption(it, sec); });
-        list.append(sec);
+        plan.push({ group: g });
+        map[g].forEach(function(it) { plan.push({ item: it }); });
       });
     } else {
-      capped.forEach(function(it) { appendOption(it, list); });
+      matches.forEach(function(it) { plan.push({ item: it }); });
     }
-    list.scrollTop(st);
+    return plan;
+  };
+
+  d.appendOption = function(it) {
+    var isSel = d.selectedIds.indexOf(it.id) !== -1;
+    var opt = $('<div class="sdd-option" role="option"></div>')
+      .attr('data-id', it.id)
+      .toggleClass('sdd-selected', isSel)
+      .attr('aria-selected', isSel ? 'true' : 'false');
+    if (d.multiple) opt.append('<span class="sdd-check" aria-hidden="true">' + checkIco + '</span>');
+    $('<span class="sdd-option-label"></span>').text(it.text).appendTo(opt);
+    // the tick is always present; CSS reveals it on the selected row, which
+    // lets selection be toggled without re-rendering the row
+    if (!d.multiple) opt.append('<span class="sdd-tick">' + checkIco + '</span>');
+    opt.on('mousedown', function(ev) { ev.preventDefault(); }); // keeps focus in the search input
+    opt.on('click', function(ev) { ev.stopPropagation(); d.toggleItem(it.id); });
+    list.append(opt);
+  };
+
+  d.renderChunk = function() {
+    var end = Math.min(d._plan.length, d._planIdx + CHUNK);
+    for (; d._planIdx < end; d._planIdx++) {
+      var entry = d._plan[d._planIdx];
+      if (entry.group != null) $('<div class="sdd-group-header"></div>').text(entry.group).appendTo(list);
+      else d.appendOption(entry.item);
+    }
+  };
+
+  // loads while the list is not scrollable yet, or the user is near the end
+  d.maybeLoadMore = function() {
+    var el = list[0], guard = 0;
+    // while the popup is still hidden the list has no measurable height, and
+    // every chunk would look like it needs filling — positionPopup calls this
+    // again once the popup is on screen
+    if (!el.clientHeight) return;
+    while (d._planIdx < d._plan.length && guard++ < 80 &&
+           el.scrollTop + el.clientHeight >= el.scrollHeight - 160) {
+      d.renderChunk();
+    }
+  };
+
+  d.renderList = function() {
+    var keep = list.scrollTop();
+    list.empty();
+    d._plan = d.buildPlan();
+    d._planIdx = 0;
+    if (!d._plan.length) {
+      list.append($('<div class="sdd-empty"></div>').text(d.noResultsText));
+      return;
+    }
+    d.renderChunk();
+    list.scrollTop(keep);
+    d.maybeLoadMore();
+  };
+
+  // selection changes only flip classes, so the scroll position and the
+  // already rendered chunks survive
+  d.refreshOptionStates = function() {
+    list.find('.sdd-option').each(function() {
+      var $o = $(this);
+      var sel = d.selectedIds.indexOf($o.attr('data-id')) !== -1;
+      $o.toggleClass('sdd-selected', sel).attr('aria-selected', sel ? 'true' : 'false');
+    });
   };
 
   // ---- popup positioning (responsive, viewport-aware) -------------------
+  // The popup never gets taller than a comfortable share of the viewport and
+  // never taller than the room actually available on the chosen side; short
+  // lists still collapse to their own height, since this only sets a cap.
   d.positionPopup = function() {
     if (!d.isOpen) return;
     var rect = control[0].getBoundingClientRect();
@@ -373,18 +449,23 @@ function(instance, context) {
     var left = Math.min(Math.max(rect.left, m), Math.max(m, vw - width - m));
     var spaceBelow = vh - rect.bottom - m;
     var spaceAbove = rect.top - m;
+    // ~62% of the viewport, clamped so it stays sensible on phones and on
+    // very tall desktop screens alike
+    var idealCap = Math.max(220, Math.min(Math.round(vh * 0.62), 460));
     var openUp;
     if (d.direction === 'above') openUp = true;
     else if (d.direction === 'below') openUp = false;
-    else openUp = (spaceBelow < 230 && spaceAbove > spaceBelow);
-    var avail = (openUp ? spaceAbove : spaceBelow) - 4;
-    var maxH = Math.max(160, Math.min(380, avail));
+    else openUp = (spaceBelow < Math.min(260, idealCap) && spaceAbove > spaceBelow);
+    var avail = (openUp ? spaceAbove : spaceBelow) - 6;
+    var maxH = Math.min(idealCap, Math.max(160, avail));
     popup.css({ left: left + 'px', width: width + 'px', maxHeight: maxH + 'px' });
     if (openUp) {
       popup.css({ top: 'auto', bottom: (vh - rect.top + 6) + 'px' }).addClass('sdd-up');
     } else {
       popup.css({ bottom: 'auto', top: (rect.bottom + 6) + 'px' }).removeClass('sdd-up');
     }
+    // a taller popup may now have room for more rows
+    if (d._plan) d.maybeLoadMore();
   };
 
   d._reposition = function() { d.positionPopup(); };
@@ -432,6 +513,9 @@ function(instance, context) {
     d.clearSelection(true);
   });
 
+  // long lists keep filling as the user reaches the end
+  list.on('scroll', function() { d.maybeLoadMore(); });
+
   // search (debounced) — filters the list without closing the popup
   var searchTimer = null;
   searchInput.on('input', function() {
@@ -464,6 +548,7 @@ function(instance, context) {
     next.addClass('sdd-focus');
     var el = next[0];
     if (el && el.scrollIntoView) el.scrollIntoView({ block: 'nearest' });
+    d.maybeLoadMore(); // arrowing to the end pulls in the next chunk
   };
 
   var onKeydown = function(e) {

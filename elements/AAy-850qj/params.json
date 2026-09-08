@@ -70,9 +70,9 @@
             "rank": 6
         },
         "AAq": {
-            "caption": "Max entries to show",
+            "caption": "Search results limit",
             "default_val": 10,
-            "doc": "Limita a quantidade de opções exibidas no popup (para performance).",
+            "doc": "Limita quantos resultados a pesquisa exibe. Sem pesquisa, a lista completa fornecida é exibida (0 ou vazio = sem limite).",
             "editor": "StaticNumber",
             "name": "max_entries_to_show",
             "rank": 9
@@ -328,6 +328,24 @@
             "name": "option_padding_vertical",
             "optional": true,
             "rank": 36
+        },
+        "ADF": {
+            "caption": "Sort by (field)",
+            "doc": "Campo usado para ordenar a lista inteira. Vazio ordena pelo texto exibido.",
+            "editor": "custom_field_AAh",
+            "name": "sort_by_field",
+            "optional": true,
+            "rank": 37
+        },
+        "ADG": {
+            "caption": "Sort direction",
+            "default_val": "none",
+            "doc": "Ordena toda a lista fornecida; a pesquisa respeita a mesma ordenação. \"none\" mantém a ordem vinda do Bubble.",
+            "editor": "Dropdown",
+            "name": "sort_direction",
+            "optional": true,
+            "options": "none,ascending,descending",
+            "rank": 38
         }
     },
     "has_reset_fn": true,
