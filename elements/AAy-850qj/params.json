@@ -39,6 +39,7 @@
             "caption": "Primary field",
             "doc": "Campo principal exibido em cada opção — o único obrigatório. Pode ser qualquer campo do tipo de dado escolhido (texto, número, data, objeto).",
             "editor": "custom_field_AAh",
+            "field_list": false,
             "name": "caption_field",
             "optional": false,
             "rank": 5
