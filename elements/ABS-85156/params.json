@@ -44,16 +44,16 @@
         },
         "ABW": {
             "caption": "Primary field",
-            "doc": "Campo principal exibido em cada opção. Só campos de texto ou número podem ser escolhidos.",
+            "doc": "Campo principal exibido em cada opção — o único obrigatório. Só campos de texto ou número podem ser escolhidos.",
             "editor": "custom_field_ABT",
             "field_type_restriction": "text_number",
             "name": "caption_field",
-            "optional": true,
+            "optional": false,
             "rank": 5
         },
         "ABX": {
             "caption": "Secondary field",
-            "doc": "Segundo campo, concatenado ao principal com o separador. Opcional.",
+            "doc": "Segundo campo, opcional, concatenado ao principal com o separador escolhido.",
             "editor": "custom_field_ABT",
             "field_type_restriction": "text_number",
             "name": "secondary_caption_field",
@@ -62,10 +62,12 @@
         },
         "ABY": {
             "caption": "Separator",
-            "doc": "Separador usado entre todos os campos preenchidos (principal, segundo e terceiro). Vazio usa um espaço. Um campo em branco não deixa separador sobrando.",
-            "editor": "StaticText",
+            "default_val": "Espaço",
+            "doc": "Separador usado entre todos os campos preenchidos (principal, segundo e terceiro). O modelo escolhido sempre sai com um espaço antes e depois, para o texto ficar legível. \"Espaço\" (ou deixar em branco) junta os campos com um espaço simples. Não é obrigatório, e um campo vazio nunca deixa separador sobrando.",
+            "editor": "Dropdown",
             "name": "separator",
             "optional": true,
+            "options": "Espaço,Barra vertical |,Hífen -,Travessão —,Vírgula,Ponto .,Ponto e vírgula ;,Dois pontos :,Underline _,Bolinha •,Asterisco *,Barra /,Seta →,Mais +,Til ~",
             "rank": 11
         },
         "ABZ": {
@@ -446,7 +448,7 @@
         },
         "AEH": {
             "caption": "Third field",
-            "doc": "Terceiro campo, concatenado aos anteriores com o mesmo separador. Opcional.",
+            "doc": "Terceiro campo, opcional, concatenado aos anteriores com o mesmo separador.",
             "editor": "custom_field_ABT",
             "field_type_restriction": "text_number",
             "name": "third_caption_field",
