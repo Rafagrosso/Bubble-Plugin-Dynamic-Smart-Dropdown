@@ -325,6 +325,37 @@ function(instance, context) {
     }
   };
 
+  // The separator is picked from a list of models. Whichever one is chosen, it
+  // is always surrounded by a single space on each side — that spacing is what
+  // keeps the caption readable with any of them. A blank separator (or the
+  // "Espaço" model) simply joins the fields with one space, and a separator
+  // typed by hand in an older configuration still works as a literal.
+  d.SEPARATORS = {
+    '': ' ', 'espaço': ' ', 'espaco': ' ', 'space': ' ',
+    'barra vertical |': '|', '|': '|',
+    'hífen -': '-', 'hifen -': '-', '-': '-',
+    'travessão —': '—', 'travessao —': '—', '—': '—',
+    'vírgula': ',', 'virgula': ',', ',': ',',
+    'ponto .': '.', '.': '.',
+    'ponto e vírgula ;': ';', 'ponto e virgula ;': ';', ';': ';',
+    'dois pontos :': ':', ':': ':',
+    'underline _': '_', '_': '_',
+    'bolinha •': '•', '•': '•',
+    'asterisco *': '*', '*': '*',
+    'barra /': '/', '/': '/',
+    'seta →': '→', '→': '→',
+    'mais +': '+', '+': '+',
+    'til ~': '~', '~': '~'
+  };
+
+  d.separatorOf = function(value) {
+    var raw = (value == null) ? '' : String(value).trim();
+    var key = raw.toLowerCase();
+    var ch = Object.prototype.hasOwnProperty.call(d.SEPARATORS, key) ? d.SEPARATORS[key] : raw;
+    if (ch === '' || ch === ' ') return ' ';
+    return ' ' + ch + ' ';
+  };
+
   d.buildCaption = function(properties, e) {
     var textOf = d.textOf;
 
@@ -375,7 +406,7 @@ function(instance, context) {
       if (own !== '') parts.push(own);
     }
 
-    var sep = (properties.separator != null && properties.separator !== '') ? properties.separator : ' ';
+    var sep = d.separatorOf(properties.separator);
     // joining only the filled parts keeps a dangling separator off the label
     // when one of the caption fields is empty
     var joined = parts.join(sep);
