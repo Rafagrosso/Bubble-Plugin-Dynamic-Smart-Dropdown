@@ -19,13 +19,14 @@
     "fields": {
         "ABT": {
             "caption": "Data type",
+            "doc": "Tipo de dado da lista. Define quais campos aparecem nos seletores abaixo.",
             "editor": "custom_type",
             "name": "data_type",
             "rank": 1
         },
         "ABU": {
             "caption": "Data source (list of things)",
-            "doc": "Lista de itens exibidos no dropdown.",
+            "doc": "Lista de registros exibidos no dropdown. Toda a lista é carregada e a pesquisa considera todos os registros dela.",
             "editor": "DynamicValue",
             "is_list": true,
             "name": "search_list",
@@ -34,39 +35,47 @@
         },
         "ABV": {
             "caption": "Custom ID field",
+            "doc": "Campo que identifica cada registro. Deixe vazio para usar o _id do Bubble (Option Sets usam a posição na lista).",
             "editor": "StaticText",
+            "field_type_restriction": "text_image_file",
             "name": "id",
             "optional": true,
             "rank": 3
         },
         "ABW": {
             "caption": "Primary field",
+            "doc": "Campo principal exibido em cada opção. Só campos de texto ou número podem ser escolhidos.",
             "editor": "custom_field_ABT",
+            "field_type_restriction": "text_number",
             "name": "caption_field",
             "optional": true,
             "rank": 5
         },
         "ABX": {
             "caption": "Secondary field",
+            "doc": "Segundo campo, concatenado ao principal com o separador. Opcional.",
             "editor": "custom_field_ABT",
+            "field_type_restriction": "text_number",
             "name": "secondary_caption_field",
-            "optional": true,
-            "rank": 6
-        },
-        "ABY": {
-            "caption": "Separator",
-            "editor": "StaticText",
-            "name": "separator",
             "optional": true,
             "rank": 7
         },
+        "ABY": {
+            "caption": "Separator",
+            "doc": "Separador usado entre todos os campos preenchidos (principal, segundo e terceiro). Vazio usa um espaço. Um campo em branco não deixa separador sobrando.",
+            "editor": "StaticText",
+            "name": "separator",
+            "optional": true,
+            "rank": 11
+        },
         "ABZ": {
             "caption": "Dynamic caption (expression)",
+            "doc": "Monta o texto livremente com marcadores: [campo] ou [objeto->campo]. Quando preenchido, substitui os três campos e o separador acima. As máscaras não se aplicam aqui.",
             "editor": "StaticText",
             "long_text": true,
             "name": "dynamic_caption_field",
             "optional": true,
-            "rank": 8
+            "rank": 12
         },
         "ABa": {
             "caption": "Default selected item",
@@ -74,7 +83,7 @@
             "editor": "DynamicValue",
             "name": "default_value",
             "optional": true,
-            "rank": 16,
+            "rank": 20,
             "value": "custom_data_ABT"
         },
         "ABb": {
@@ -84,105 +93,115 @@
             "editor": "StaticNumber",
             "name": "max_entries_to_show",
             "optional": true,
-            "rank": 20
+            "rank": 24
         },
         "ABc": {
             "caption": "Placeholder text",
-            "doc": "Texto exibido no campo quando nada está selecionado.",
+            "doc": "Texto exibido no controle quando nada está selecionado. Aceita valor dinâmico (ex.: texto de um idioma ou de um campo do banco).",
             "editor": "DynamicValue",
             "name": "placeholder",
             "optional": true,
-            "rank": 31,
+            "rank": 35,
             "value": "text"
         },
         "ABd": {
             "caption": "Placeholder color",
             "default_val": "rgba(153,153,153,1)",
+            "doc": "Cor do texto do placeholder no controle.",
             "editor": "Color",
             "name": "placeholder_color",
             "optional": true,
-            "rank": 32
+            "rank": 36
         },
         "ABe": {
             "caption": "Dropdown background",
             "default_val": "rgba(255,255,255,1)",
+            "doc": "Cor de fundo do popup (lista + área da pesquisa).",
             "editor": "Color",
             "name": "dropdown_background",
             "optional": true,
-            "rank": 35
+            "rank": 39
         },
         "ABf": {
             "caption": "Dropdown font color",
             "default_val": "rgba(51,51,51,1)",
+            "doc": "Cor do texto das opções.",
             "editor": "Color",
             "name": "dropdown_font_color",
             "optional": true,
-            "rank": 36
+            "rank": 40
         },
         "ABg": {
             "caption": "Dropdown hover color",
             "default_val": "rgba(88,151,251,1)",
+            "doc": "Cor base do realce ao passar o mouse (aplicada como tom suave sobre o fundo).",
             "editor": "Color",
             "name": "dropdown_hover_color",
             "optional": true,
-            "rank": 37
+            "rank": 41
         },
         "ABh": {
             "caption": "Dropdown font size (px)",
             "default_val": 12,
+            "doc": "Tamanho da fonte das opções, em px. Vazio ou 0 herda a fonte do elemento.",
             "editor": "StaticNumber",
             "name": "dropdown_font_size",
             "optional": true,
-            "rank": 38
+            "rank": 42
         },
         "ABi": {
             "caption": "Search input background",
             "default_val": "rgba(245,245,245,1)",
+            "doc": "Cor de fundo do campo de pesquisa.",
             "editor": "Color",
             "name": "search_background",
             "optional": true,
-            "rank": 45
+            "rank": 49
         },
         "ABj": {
             "caption": "Search input border color",
             "default_val": "rgba(204,204,204,1)",
+            "doc": "Cor da borda do campo de pesquisa.",
             "editor": "Color",
             "name": "search_border_color",
             "optional": true,
-            "rank": 46
+            "rank": 50
         },
         "ABk": {
             "caption": "Search input text color",
             "default_val": "rgba(51,51,51,1)",
+            "doc": "Cor do texto digitado no campo de pesquisa.",
             "editor": "Color",
             "name": "search_font_color",
             "optional": true,
-            "rank": 47
+            "rank": 51
         },
         "ABl": {
             "caption": "Search placeholder color",
             "default_val": "rgba(153,153,153,1)",
+            "doc": "Cor do texto de exemplo do campo de pesquisa.",
             "editor": "Color",
             "name": "search_placeholder_color",
             "optional": true,
-            "rank": 48
+            "rank": 52
         },
         "ABm": {
             "caption": "Search input height (px)",
             "default_val": "35",
+            "doc": "Altura do campo de pesquisa, em px.",
             "editor": "StaticText",
             "name": "search_box_height",
             "optional": true,
-            "rank": 43
+            "rank": 47
         },
         "ABn": {
             "caption": "Option vertical padding (px)",
             "default_val": 3,
-            "doc": "Espaçamento vertical de cada opção da lista.",
+            "doc": "Espaçamento vertical de cada opção da lista, em px.",
             "editor": "StaticNumber",
             "name": "option_padding_vertical",
             "optional": true,
-            "rank": 41
+            "rank": 45
         },
         "ABo": {
             "caption": "Dropdown animation",
@@ -192,7 +211,7 @@
             "name": "dropdown_animation",
             "optional": true,
             "options": "none,fade,slide,zoom",
-            "rank": 28
+            "rank": 32
         },
         "ABp": {
             "caption": "Keep open while searching",
@@ -201,7 +220,7 @@
             "editor": "Checkbox",
             "name": "keep_open_on_search",
             "optional": true,
-            "rank": 27
+            "rank": 31
         },
         "ABq": {
             "caption": "Close on select",
@@ -210,7 +229,7 @@
             "editor": "Checkbox",
             "name": "close_on_select",
             "optional": true,
-            "rank": 26
+            "rank": 30
         },
         "ABr": {
             "caption": "Open upwards if no space",
@@ -219,14 +238,15 @@
             "editor": "Checkbox",
             "name": "open_up_if_no_space",
             "optional": true,
-            "rank": 25
+            "rank": 29
         },
         "ABs": {
             "caption": "Disable dropdown",
             "default_val": false,
+            "doc": "Desativa a interação do usuário: o controle fica esmaecido e o popup não abre.",
             "editor": "Checkbox",
             "name": "disabled",
-            "rank": 18
+            "rank": 22
         },
         "ACK": {
             "caption": "Group results",
@@ -234,7 +254,7 @@
             "doc": "Agrupa as opções do dropdown (inclusive os resultados da pesquisa) pelo campo definido em \"Group by (field)\".",
             "editor": "Checkbox",
             "name": "group_results",
-            "rank": 12
+            "rank": 16
         },
         "ACL": {
             "caption": "Group by (field)",
@@ -242,15 +262,15 @@
             "editor": "custom_field_ABT",
             "name": "group_by_field",
             "optional": true,
-            "rank": 13
+            "rank": 17
         },
         "ACM": {
             "caption": "Multiple selection",
             "default_val": false,
-            "doc": "Permite selecionar vários itens (com checkboxes e chips). Use o estado \"values (list)\" para a lista e \"value\" para o último item selecionado.",
+            "doc": "Permite selecionar vários itens (com checkboxes e chips). Use o estado \"values (list)\" para a lista completa e \"value\" para o último item selecionado.",
             "editor": "Checkbox",
             "name": "multiple_selection",
-            "rank": 15
+            "rank": 19
         },
         "ACN": {
             "caption": "Search placeholder",
@@ -258,7 +278,7 @@
             "editor": "StaticText",
             "name": "search_placeholder",
             "optional": true,
-            "rank": 21
+            "rank": 25
         },
         "ACO": {
             "caption": "No results text",
@@ -266,7 +286,7 @@
             "editor": "StaticText",
             "name": "no_results_text",
             "optional": true,
-            "rank": 22
+            "rank": 26
         },
         "ACP": {
             "caption": "Show search icon",
@@ -275,15 +295,16 @@
             "editor": "Checkbox",
             "name": "show_search_icon",
             "optional": true,
-            "rank": 23
+            "rank": 27
         },
         "ACQ": {
             "caption": "Search input radius (px)",
             "default_val": 10,
+            "doc": "Arredondamento das bordas do campo de pesquisa, em px.",
             "editor": "StaticNumber",
             "name": "search_border_radius",
             "optional": true,
-            "rank": 44
+            "rank": 48
         },
         "ACR": {
             "caption": "Animation duration (ms)",
@@ -292,7 +313,7 @@
             "editor": "StaticNumber",
             "name": "dropdown_animation_duration",
             "optional": true,
-            "rank": 29
+            "rank": 33
         },
         "ACS": {
             "caption": "Accent color",
@@ -301,7 +322,7 @@
             "editor": "Color",
             "name": "accent_color",
             "optional": true,
-            "rank": 33
+            "rank": 37
         },
         "ACV": {
             "caption": "Default selected items (list)",
@@ -310,7 +331,7 @@
             "is_list": true,
             "name": "default_value_list",
             "optional": true,
-            "rank": 17,
+            "rank": 21,
             "value": "custom_data_ABT"
         },
         "ADD": {
@@ -320,7 +341,7 @@
             "editor": "Color",
             "name": "selected_background",
             "optional": true,
-            "rank": 39
+            "rank": 43
         },
         "ADE": {
             "caption": "Selected font color",
@@ -329,7 +350,7 @@
             "editor": "Color",
             "name": "selected_font_color",
             "optional": true,
-            "rank": 40
+            "rank": 44
         },
         "ADH": {
             "caption": "Sort by (field)",
@@ -337,7 +358,7 @@
             "editor": "custom_field_ABT",
             "name": "sort_by_field",
             "optional": true,
-            "rank": 10
+            "rank": 14
         },
         "ADI": {
             "caption": "Sort direction",
@@ -347,7 +368,7 @@
             "name": "sort_direction",
             "optional": true,
             "options": "none,ascending,descending",
-            "rank": 11
+            "rank": 15
         },
         "ADS": {
             "caption": "Dados",
@@ -365,43 +386,82 @@
             "caption": "Ordenação e agrupamento",
             "editor": "Label",
             "name": "sec_ordenacao_e_agrupamento",
-            "rank": 9
+            "rank": 13
         },
         "ADV": {
             "caption": "Seleção",
             "editor": "Label",
             "name": "sec_selecao",
-            "rank": 14
+            "rank": 18
         },
         "ADW": {
             "caption": "Pesquisa",
             "editor": "Label",
             "name": "sec_pesquisa",
-            "rank": 19
+            "rank": 23
         },
         "ADX": {
             "caption": "Comportamento do popup",
             "editor": "Label",
             "name": "sec_comportamento_do_popup",
-            "rank": 24
+            "rank": 28
         },
         "ADY": {
             "caption": "Estilo — campo",
             "editor": "Label",
             "name": "sec_estilo_campo",
-            "rank": 30
+            "rank": 34
         },
         "ADZ": {
             "caption": "Estilo — popup",
             "editor": "Label",
             "name": "sec_estilo_popup",
-            "rank": 34
+            "rank": 38
         },
         "AEA": {
             "caption": "Estilo — caixa de pesquisa",
             "editor": "Label",
             "name": "sec_estilo_caixa_de_pesquisa",
-            "rank": 42
+            "rank": 46
+        },
+        "AEF": {
+            "caption": "Primary field mask",
+            "default_val": "Nenhuma",
+            "doc": "Máscara aplicada ao campo principal. \"Nenhuma\"/\"Texto\" exibe o valor exatamente como vem do banco. As demais só formatam números (ou texto composto apenas por dígitos): Moeda (R$ 1.234,56), Número (1.234,56), Percentual (12,5%), CPF/CNPJ (000.000.000-00 / 00.000.000/0000-00), CEP (00000-000), Telefone ((00) 00000-0000), Peso (1.234 kg) e Data (dd/mm/aaaa). Texto comum, objetos e Option Sets nunca são formatados — o Option Set continua exibindo o display.",
+            "editor": "Dropdown",
+            "name": "caption_mask",
+            "optional": true,
+            "options": "Nenhuma,Texto,Moeda (R$),Número,Percentual,CPF/CNPJ,CEP,Telefone,Peso (kg),Data (dd/mm/aaaa)",
+            "rank": 6
+        },
+        "AEG": {
+            "caption": "Secondary field mask",
+            "default_val": "Nenhuma",
+            "doc": "Máscara aplicada ao segundo campo. \"Nenhuma\"/\"Texto\" exibe o valor exatamente como vem do banco. As demais só formatam números (ou texto composto apenas por dígitos): Moeda (R$ 1.234,56), Número (1.234,56), Percentual (12,5%), CPF/CNPJ (000.000.000-00 / 00.000.000/0000-00), CEP (00000-000), Telefone ((00) 00000-0000), Peso (1.234 kg) e Data (dd/mm/aaaa). Texto comum, objetos e Option Sets nunca são formatados — o Option Set continua exibindo o display.",
+            "editor": "Dropdown",
+            "name": "secondary_caption_mask",
+            "optional": true,
+            "options": "Nenhuma,Texto,Moeda (R$),Número,Percentual,CPF/CNPJ,CEP,Telefone,Peso (kg),Data (dd/mm/aaaa)",
+            "rank": 8
+        },
+        "AEH": {
+            "caption": "Third field",
+            "doc": "Terceiro campo, concatenado aos anteriores com o mesmo separador. Opcional.",
+            "editor": "custom_field_ABT",
+            "field_type_restriction": "text_number",
+            "name": "third_caption_field",
+            "optional": true,
+            "rank": 9
+        },
+        "AEI": {
+            "caption": "Third field mask",
+            "default_val": "Nenhuma",
+            "doc": "Máscara aplicada ao terceiro campo. \"Nenhuma\"/\"Texto\" exibe o valor exatamente como vem do banco. As demais só formatam números (ou texto composto apenas por dígitos): Moeda (R$ 1.234,56), Número (1.234,56), Percentual (12,5%), CPF/CNPJ (000.000.000-00 / 00.000.000/0000-00), CEP (00000-000), Telefone ((00) 00000-0000), Peso (1.234 kg) e Data (dd/mm/aaaa). Texto comum, objetos e Option Sets nunca são formatados — o Option Set continua exibindo o display.",
+            "editor": "Dropdown",
+            "name": "third_caption_mask",
+            "optional": true,
+            "options": "Nenhuma,Texto,Moeda (R$),Número,Percentual,CPF/CNPJ,CEP,Telefone,Peso (kg),Data (dd/mm/aaaa)",
+            "rank": 10
         }
     },
     "has_reset_fn": true,

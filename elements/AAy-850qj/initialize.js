@@ -221,20 +221,111 @@ function(instance, context) {
   // Returns { text, hasContent }. The rule is deliberately literal: a record
   // is only ever hidden when it would render nothing at all. Anything that
   // produces visible text stays in the list, whatever it is made of.
-  d.buildCaption = function(properties, e) {
-    // one field value as text. A related record shows its display text and a
-    // date its local format; anything unrecognised still falls back to its
-    // plain string form, so a row is never hidden just because its value has
-    // an unusual shape.
-    var textOf = function(v) {
-      if (v == null) return '';
-      if (typeof v.get === 'function') {
-        var display = v.get('display');
-        return (display != null && String(display).trim() !== '') ? String(display) : String(v);
-      }
-      if (v instanceof Date) return v.toLocaleDateString();
-      return String(v);
+  // one field value as text. A related record (including an Option Set) shows
+  // its display text and a date its local format; anything unrecognised still
+  // falls back to its plain string form, so a row is never hidden just because
+  // its value has an unusual shape.
+  d.textOf = function(v) {
+    if (v == null) return '';
+    if (typeof v.get === 'function') {
+      var display = v.get('display');
+      return (display != null && String(display).trim() !== '') ? String(display) : String(v);
+    }
+    if (v instanceof Date) return v.toLocaleDateString();
+    return String(v);
+  };
+
+  // Formats one caption value with the mask chosen for that field.
+  // A mask only ever applies to a number, or to text made of nothing but
+  // digits — the raw forms these masks exist for. Prose, text that already
+  // carries formatting, and records (Option Sets included) are returned
+  // untouched, so a mask can never mangle a value it doesn't understand.
+  // The Bubble dropdown publishes the label the app builder picked, so the
+  // labels are mapped to the internal codes here (the codes themselves are
+  // accepted too, which keeps older configurations working).
+  d.MASKS = {
+    'nenhuma': 'none', 'none': 'none', '': 'none',
+    'texto': 'text', 'text': 'text',
+    'moeda (r$)': 'currency_brl', 'moeda': 'currency_brl', 'currency_brl': 'currency_brl',
+    'número': 'number', 'numero': 'number', 'number': 'number',
+    'percentual': 'percent', 'percent': 'percent',
+    'cpf/cnpj': 'cpf_cnpj', 'cpf': 'cpf_cnpj', 'cnpj': 'cpf_cnpj', 'cpf_cnpj': 'cpf_cnpj',
+    'cep': 'cep',
+    'telefone': 'phone_br', 'phone_br': 'phone_br',
+    'peso (kg)': 'weight_kg', 'peso': 'weight_kg', 'weight_kg': 'weight_kg',
+    'data (dd/mm/aaaa)': 'date_br', 'data': 'date_br', 'date_br': 'date_br'
+  };
+
+  d.applyMask = function(value, mask) {
+    var plain = d.textOf(value);
+    mask = d.MASKS[String(mask == null ? '' : mask).trim().toLowerCase()] || 'none';
+    if (mask === 'none' || mask === 'text') return plain;
+    if (value == null) return '';
+    if (typeof value.get === 'function') return plain;   // record: display text, never masked
+
+    var num = null;      // numeric reading of the value
+    var digits = null;   // digits only, keeping any leading zeros
+    if (typeof value === 'number' && isFinite(value)) {
+      num = value;
+      digits = String(Math.trunc(Math.abs(value)));
+    } else if (typeof value === 'string') {
+      var s = value.trim();
+      if (/^-?\d+$/.test(s)) { num = parseFloat(s); digits = s.replace(/\D/g, ''); }
+      else if (/^-?\d+[.,]\d+$/.test(s)) { num = parseFloat(s.replace(',', '.')); }
+      // anything else stays exactly as it is
+    }
+
+    var br = function(n, min, max) {
+      try { return n.toLocaleString('pt-BR', { minimumFractionDigits: min, maximumFractionDigits: max }); }
+      catch (err) { return String(n); }
     };
+    var fromYmd = function(eight) {
+      var y = +eight.slice(0, 4), m = +eight.slice(4, 6), day = +eight.slice(6, 8);
+      if (y < 1900 || y > 2200 || m < 1 || m > 12 || day < 1 || day > 31) return null;
+      return new Date(y, m - 1, day);
+    };
+
+    switch (mask) {
+      case 'currency_brl':
+        return (num == null) ? plain : 'R$ ' + br(num, 2, 2);
+      case 'number':
+        return (num == null) ? plain : br(num, 0, 2);
+      case 'percent':
+        return (num == null) ? plain : br(num, 0, 2) + '%';
+      case 'weight_kg':
+        return (num == null) ? plain : br(num, 0, 3) + ' kg';
+      case 'cpf_cnpj':
+        if (digits && digits.length === 11) return digits.replace(/^(\d{3})(\d{3})(\d{3})(\d{2})$/, '$1.$2.$3-$4');
+        if (digits && digits.length === 14) return digits.replace(/^(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})$/, '$1.$2.$3/$4-$5');
+        return plain;
+      case 'cep':
+        if (digits && digits.length === 8) return digits.replace(/^(\d{5})(\d{3})$/, '$1-$2');
+        return plain;
+      case 'phone_br':
+        if (digits && digits.length === 11) return digits.replace(/^(\d{2})(\d{5})(\d{4})$/, '($1) $2-$3');
+        if (digits && digits.length === 10) return digits.replace(/^(\d{2})(\d{4})(\d{4})$/, '($1) $2-$3');
+        return plain;
+      case 'date_br':
+        var dt = null;
+        if (value instanceof Date) dt = value;
+        else if (typeof value === 'number' && isFinite(value)) {
+          if (value > 1e11) dt = new Date(value);             // milliseconds
+          else if (value > 1e9) dt = new Date(value * 1000);  // seconds
+          else if (digits && digits.length === 8) dt = fromYmd(digits);
+        } else if (typeof value === 'string') {
+          var str = value.trim();
+          if (/^\d{4}-\d{2}-\d{2}/.test(str)) dt = new Date(str.slice(0, 10) + 'T00:00:00');
+          else if (digits && digits.length === 8) dt = fromYmd(digits);
+        }
+        if (!dt || isNaN(dt.getTime())) return plain;
+        return ('0' + dt.getDate()).slice(-2) + '/' + ('0' + (dt.getMonth() + 1)).slice(-2) + '/' + dt.getFullYear();
+      default:
+        return plain;
+    }
+  };
+
+  d.buildCaption = function(properties, e) {
+    var textOf = d.textOf;
 
     if (properties.dynamic_caption_field) {
       var missing = false;
@@ -265,17 +356,27 @@ function(instance, context) {
     }
 
     var parts = [];
-    var add = function(v) { var s = textOf(v).trim(); if (s !== '') parts.push(s); };
-    if (properties.caption_field) add(e.get(properties.caption_field));
-    if (properties.secondary_caption_field) add(e.get(properties.secondary_caption_field));
+    // every caption goes through its own mask; a blank mask, a text value or a
+    // record (Option Set, Thing) is left exactly as it reads
+    var add = function(field, mask) {
+      if (!field) return;
+      var s = d.applyMask(e.get(field), mask).trim();
+      if (s !== '') parts.push(s);
+    };
+    add(properties.caption_field, properties.caption_mask);
+    add(properties.secondary_caption_field, properties.secondary_caption_mask);
+    add(properties.third_caption_field, properties.third_caption_mask);
 
     // nothing configured: fall back to the record's own display text rather
     // than rendering a list of blank rows
-    if (!properties.caption_field && !properties.secondary_caption_field) add(e.get('display'));
+    if (!properties.caption_field && !properties.secondary_caption_field && !properties.third_caption_field) {
+      var own = textOf(e.get('display')).trim();
+      if (own !== '') parts.push(own);
+    }
 
     var sep = (properties.separator != null && properties.separator !== '') ? properties.separator : ' ';
     // joining only the filled parts keeps a dangling separator off the label
-    // when one of the two caption fields is empty
+    // when one of the caption fields is empty
     var joined = parts.join(sep);
     return { text: joined, hasContent: joined !== '' };
   };
