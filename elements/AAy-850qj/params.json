@@ -53,8 +53,8 @@
         },
         "AAm": {
             "caption": "Placeholder text",
-            "doc": "Texto exibido no campo quando nada está selecionado.",
-            "editor": "StaticText",
+            "doc": "Texto exibido no controle quando nada está selecionado. Aceita valor dinâmico (ex.: texto de um idioma ou de um campo do banco).",
+            "editor": "DynamicValue",
             "name": "placeholder",
             "optional": true,
             "rank": 29,
