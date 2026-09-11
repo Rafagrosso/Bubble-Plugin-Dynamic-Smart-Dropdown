@@ -37,9 +37,8 @@
         },
         "AAk": {
             "caption": "Primary field",
-            "doc": "Campo principal exibido em cada opção — o único obrigatório. Só campos de texto ou número podem ser escolhidos.",
+            "doc": "Campo principal exibido em cada opção — o único obrigatório. Pode ser qualquer campo do tipo de dado escolhido (texto, número, data, objeto).",
             "editor": "custom_field_AAh",
-            "field_type_restriction": "text_number",
             "name": "caption_field",
             "optional": false,
             "rank": 5
@@ -81,9 +80,8 @@
         },
         "AAs": {
             "caption": "Secondary field",
-            "doc": "Segundo campo, opcional, concatenado ao principal com o separador escolhido.",
+            "doc": "Segundo campo, opcional, concatenado ao principal com o separador escolhido. Pode ser qualquer campo do tipo de dado escolhido.",
             "editor": "custom_field_AAh",
-            "field_type_restriction": "text_number",
             "name": "secondary_caption_field",
             "optional": true,
             "rank": 7
@@ -405,7 +403,7 @@
         "AEB": {
             "caption": "Primary field mask",
             "default_val": "Nenhuma",
-            "doc": "Máscara aplicada ao campo principal. \"Nenhuma\"/\"Texto\" exibe o valor exatamente como vem do banco. As demais só formatam números (ou texto composto apenas por dígitos): Moeda (R$ 1.234,56), Número (1.234,56), Percentual (12,5%), CPF/CNPJ (000.000.000-00 / 00.000.000/0000-00), CEP (00000-000), Telefone ((00) 00000-0000), Peso (1.234 kg) e Data (dd/mm/aaaa). Texto comum, objetos e Option Sets nunca são formatados — o Option Set continua exibindo o display.",
+            "doc": "Máscara do campo principal, opcional. Ela só é aplicada quando o campo traz um número (ou um texto formado apenas por dígitos): se o campo for texto, objeto ou Option Set, o valor é exibido como está — o Option Set continua mostrando o display. Um valor que já vem formatado também não é alterado. Opções: \"Nenhuma\"/\"Texto\" (sem formatação), Moeda (R$ 1.234,56), Número (1.234,56), Percentual (12,5%), CPF/CNPJ (000.000.000-00 ou 00.000.000/0000-00), CEP (00000-000), Telefone ((00) 00000-0000), Peso (1.234 kg) e Data (dd/mm/aaaa — aceita campo de data, texto ISO, 20260115 ou timestamp).",
             "editor": "Dropdown",
             "name": "caption_mask",
             "optional": true,
@@ -415,7 +413,7 @@
         "AEC": {
             "caption": "Secondary field mask",
             "default_val": "Nenhuma",
-            "doc": "Máscara aplicada ao segundo campo. \"Nenhuma\"/\"Texto\" exibe o valor exatamente como vem do banco. As demais só formatam números (ou texto composto apenas por dígitos): Moeda (R$ 1.234,56), Número (1.234,56), Percentual (12,5%), CPF/CNPJ (000.000.000-00 / 00.000.000/0000-00), CEP (00000-000), Telefone ((00) 00000-0000), Peso (1.234 kg) e Data (dd/mm/aaaa). Texto comum, objetos e Option Sets nunca são formatados — o Option Set continua exibindo o display.",
+            "doc": "Máscara do segundo campo, opcional. Ela só é aplicada quando o campo traz um número (ou um texto formado apenas por dígitos): se o campo for texto, objeto ou Option Set, o valor é exibido como está — o Option Set continua mostrando o display. Um valor que já vem formatado também não é alterado. Opções: \"Nenhuma\"/\"Texto\" (sem formatação), Moeda (R$ 1.234,56), Número (1.234,56), Percentual (12,5%), CPF/CNPJ (000.000.000-00 ou 00.000.000/0000-00), CEP (00000-000), Telefone ((00) 00000-0000), Peso (1.234 kg) e Data (dd/mm/aaaa — aceita campo de data, texto ISO, 20260115 ou timestamp).",
             "editor": "Dropdown",
             "name": "secondary_caption_mask",
             "optional": true,
@@ -424,9 +422,8 @@
         },
         "AED": {
             "caption": "Third field",
-            "doc": "Terceiro campo, opcional, concatenado aos anteriores com o mesmo separador.",
+            "doc": "Terceiro campo, opcional, concatenado aos anteriores com o mesmo separador. Pode ser qualquer campo do tipo de dado escolhido.",
             "editor": "custom_field_AAh",
-            "field_type_restriction": "text_number",
             "name": "third_caption_field",
             "optional": true,
             "rank": 9
@@ -434,7 +431,7 @@
         "AEE": {
             "caption": "Third field mask",
             "default_val": "Nenhuma",
-            "doc": "Máscara aplicada ao terceiro campo. \"Nenhuma\"/\"Texto\" exibe o valor exatamente como vem do banco. As demais só formatam números (ou texto composto apenas por dígitos): Moeda (R$ 1.234,56), Número (1.234,56), Percentual (12,5%), CPF/CNPJ (000.000.000-00 / 00.000.000/0000-00), CEP (00000-000), Telefone ((00) 00000-0000), Peso (1.234 kg) e Data (dd/mm/aaaa). Texto comum, objetos e Option Sets nunca são formatados — o Option Set continua exibindo o display.",
+            "doc": "Máscara do terceiro campo, opcional. Ela só é aplicada quando o campo traz um número (ou um texto formado apenas por dígitos): se o campo for texto, objeto ou Option Set, o valor é exibido como está — o Option Set continua mostrando o display. Um valor que já vem formatado também não é alterado. Opções: \"Nenhuma\"/\"Texto\" (sem formatação), Moeda (R$ 1.234,56), Número (1.234,56), Percentual (12,5%), CPF/CNPJ (000.000.000-00 ou 00.000.000/0000-00), CEP (00000-000), Telefone ((00) 00000-0000), Peso (1.234 kg) e Data (dd/mm/aaaa — aceita campo de data, texto ISO, 20260115 ou timestamp).",
             "editor": "Dropdown",
             "name": "third_caption_mask",
             "optional": true,
