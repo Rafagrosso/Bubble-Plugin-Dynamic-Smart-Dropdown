@@ -39,6 +39,7 @@
             "caption": "Primary field",
             "doc": "Campo principal exibido em cada opção — o único obrigatório. Só campos de texto ou número podem ser escolhidos.",
             "editor": "custom_field_AAh",
+            "field_list": false,
             "field_type_restriction": "text_number",
             "name": "caption_field",
             "optional": false,
