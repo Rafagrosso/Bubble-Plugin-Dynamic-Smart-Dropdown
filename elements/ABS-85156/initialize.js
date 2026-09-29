@@ -210,7 +210,11 @@ function(instance, context) {
   var searchInput = $('<input class="sdd-search" type="text" autocomplete="off" spellcheck="false" />');
   searchWrap.find('.sdd-search-box').append(searchInput);
   var list = $('<div class="sdd-list" role="listbox"></div>');
-  popup.append(searchWrap, list).appendTo(document.body);
+  // Portal to <html>, NOT <body>: Bubble popups blur the page with a
+  // filter/backdrop-filter on <body> (or a wrapper in it), and a filter on an
+  // ancestor blurs every descendant no matter the z-index. <html> is a sibling
+  // of <body>, so nothing in the page can blur it.
+  popup.append(searchWrap, list).appendTo(document.documentElement);
   // Manual popover = browser top layer: it renders above every z-index,
   // including a Bubble popup's blurred/translucent backdrop, even when that
   // popup is opened a second time.
@@ -669,6 +673,13 @@ function(instance, context) {
 
   d._reposition = function() { d.positionPopup(); };
 
+  // keep the popup as the last child of <html> while open, in case Bubble
+  // injects its own overlay afterwards
+  d.bringToFront = function() {
+    var html = document.documentElement;
+    if (popup[0].parentNode !== html || html.lastElementChild !== popup[0]) html.appendChild(popup[0]);
+  };
+
   d.toTopLayer = function() {
     var el = popup[0];
     try {
@@ -694,7 +705,7 @@ function(instance, context) {
     d.sweepOrphans();
     // re-attach if Bubble detached it, and (re)enter the top layer so it
     // always sits above the popup overlay
-    if (!popup[0].isConnected) popup.appendTo(document.body);
+    if (popup[0].parentNode !== document.documentElement) popup.appendTo(document.documentElement);
     d.query = '';
     searchInput.val('');
     d.renderList();
@@ -704,6 +715,11 @@ function(instance, context) {
     popup.addClass('sdd-open');
     if (d.anim && d.anim !== 'none') popup.addClass('sdd-anim-' + d.anim);
     d.toTopLayer();
+    if (window.MutationObserver && !d._guard) {
+      d._guard = new MutationObserver(function() { d.bringToFront(); });
+      d._guard.observe(document.documentElement, { childList: true });
+      d._guard.observe(document.body, { childList: true });
+    }
     control.attr('aria-expanded', 'true');
     root.addClass('sdd-focused');
     d.positionPopup();
@@ -716,6 +732,7 @@ function(instance, context) {
     if (!d.isOpen) return;
     d.isOpen = false;
     popup.removeClass('sdd-open sdd-up sdd-anim-fade sdd-anim-slide sdd-anim-zoom');
+    if (d._guard) { d._guard.disconnect(); d._guard = null; }
     try { if (popup[0].hidePopover && popup[0].matches(':popover-open')) popup[0].hidePopover(); } catch (e) {}
     control.attr('aria-expanded', 'false');
     root.removeClass('sdd-focused');
