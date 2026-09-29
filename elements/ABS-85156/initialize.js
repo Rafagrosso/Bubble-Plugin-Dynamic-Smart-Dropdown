@@ -211,6 +211,13 @@ function(instance, context) {
   searchWrap.find('.sdd-search-box').append(searchInput);
   var list = $('<div class="sdd-list" role="listbox"></div>');
   popup.append(searchWrap, list).appendTo(document.body);
+  // Manual popover = browser top layer: it renders above every z-index,
+  // including a Bubble popup's blurred/translucent backdrop, even when that
+  // popup is opened a second time.
+  popup.attr('popover', 'manual');
+  d.rootId = d.ns;
+  root.attr('data-sdd-root', d.ns);
+  popup.attr('data-sdd-root', d.ns);
 
   d.$root = root; d.$control = control; d.$placeholder = placeholderEl;
   d.$single = singleValue; d.$tags = tags; d.$clear = clearBtn;
@@ -662,9 +669,32 @@ function(instance, context) {
 
   d._reposition = function() { d.positionPopup(); };
 
+  d.toTopLayer = function() {
+    var el = popup[0];
+    try {
+      if (el.showPopover) {
+        if (el.matches(':popover-open')) el.hidePopover();
+        el.showPopover();
+      }
+    } catch (e) {}
+  };
+
+  // popups of instances Bubble already destroyed (e.g. a closed Bubble popup)
+  d.sweepOrphans = function() {
+    $('.sdd-popup[data-sdd-root]').each(function() {
+      var id = $(this).attr('data-sdd-root');
+      if (id === d.ns) return;
+      if (!$('.sdd-root[data-sdd-root="' + id + '"]').length) $(this).remove();
+    });
+  };
+
   d.openPopup = function() {
     if (d.isOpen || d.disabled) return;
     d.isOpen = true;
+    d.sweepOrphans();
+    // re-attach if Bubble detached it, and (re)enter the top layer so it
+    // always sits above the popup overlay
+    if (!popup[0].isConnected) popup.appendTo(document.body);
     d.query = '';
     searchInput.val('');
     d.renderList();
@@ -673,6 +703,7 @@ function(instance, context) {
     popup.css('animation-duration', (d.anim === 'none' ? 0 : (d.animDur || 0)) + 'ms');
     popup.addClass('sdd-open');
     if (d.anim && d.anim !== 'none') popup.addClass('sdd-anim-' + d.anim);
+    d.toTopLayer();
     control.attr('aria-expanded', 'true');
     root.addClass('sdd-focused');
     d.positionPopup();
@@ -685,6 +716,7 @@ function(instance, context) {
     if (!d.isOpen) return;
     d.isOpen = false;
     popup.removeClass('sdd-open sdd-up sdd-anim-fade sdd-anim-slide sdd-anim-zoom');
+    try { if (popup[0].hidePopover && popup[0].matches(':popover-open')) popup[0].hidePopover(); } catch (e) {}
     control.attr('aria-expanded', 'false');
     root.removeClass('sdd-focused');
     list.find('.sdd-option').removeClass('sdd-focus');

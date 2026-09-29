@@ -77,7 +77,8 @@
 
   /* popup ---------------------------------------------------------------- */
   .sdd-popup {
-    position: fixed; z-index: 2147483000;
+    position: fixed; z-index: 2147483647;
+    inset: auto; margin: 0; padding: 0; width: auto; height: auto;
     display: none; flex-direction: column;
     background: var(--sdd-pop-bg, #ffffff);
     border: 1px solid var(--sdd-pop-border, rgba(15,23,42,.10));
