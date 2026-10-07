@@ -86,10 +86,6 @@ function(instance, properties, context) {
     if (!d.focused && !d._abT) {
       if (s === d.lastAB || s === d.outputValue()) {
         d.lastAB = s; d.seenAB = s;
-      } else if (recent && d.lastAB === '' && !d._retriedClear) {
-        // we wrote blank but the field kept its old value: clear it explicitly once
-        d._retriedClear = true; d.abSentAt = Date.now();
-        try { if (typeof instance.publishAutobinding === 'function') instance.publishAutobinding(null); } catch (e) {}
       } else if (!recent) {
         d.apply(MI.parseText(spec, s, canonical), {});
         d.lastAB = s; d.seenAB = s; d.dirtyAlert = false;

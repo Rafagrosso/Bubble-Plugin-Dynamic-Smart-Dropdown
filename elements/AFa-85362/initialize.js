@@ -839,7 +839,6 @@ var MI = (function () {
   d.abDelay = 600;
   d._abT = null;
   d.abSentAt = 0;          // when we last wrote; echoes right after it can be stale
-  d._retriedClear = false;
   d.writeAutobinding = function(immediate) {
     if (d._abT) { clearTimeout(d._abT); d._abT = null; }
     if (d.disabled || d.readOnly) return;
@@ -847,11 +846,14 @@ var MI = (function () {
       d._abT = null;
       if (d.disabled || d.readOnly) return;
       var v = d.outputValue();
+      // blank is saved only when the input really is empty
+      if (v === '' && (d.state.raw !== '' || input.val() !== '')) return;
       if (v === d.lastAB) return;
       d.lastAB = v;
       d.abSentAt = Date.now();
-      if (v !== '') d._retriedClear = false;
-      try { if (typeof instance.publishAutobinding === 'function') instance.publishAutobinding(v); } catch (e) {}
+      // an empty value is published as null: Bubble can ignore an empty string
+      // but always clears the bound field for null
+      try { if (typeof instance.publishAutobinding === 'function') instance.publishAutobinding(v === '' ? null : v); } catch (e) {}
     };
     if (immediate || !(d.abDelay > 0)) go(); else d._abT = setTimeout(go, d.abDelay);
   };
