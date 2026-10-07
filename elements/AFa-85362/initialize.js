@@ -838,6 +838,8 @@ var MI = (function () {
   // Blur, Enter and explicit actions flush immediately.
   d.abDelay = 600;
   d._abT = null;
+  d.abSentAt = 0;          // when we last wrote; echoes right after it can be stale
+  d._retriedClear = false;
   d.writeAutobinding = function(immediate) {
     if (d._abT) { clearTimeout(d._abT); d._abT = null; }
     if (d.disabled || d.readOnly) return;
@@ -847,6 +849,8 @@ var MI = (function () {
       var v = d.outputValue();
       if (v === d.lastAB) return;
       d.lastAB = v;
+      d.abSentAt = Date.now();
+      if (v !== '') d._retriedClear = false;
       try { if (typeof instance.publishAutobinding === 'function') instance.publishAutobinding(v); } catch (e) {}
     };
     if (immediate || !(d.abDelay > 0)) go(); else d._abT = setTimeout(go, d.abDelay);

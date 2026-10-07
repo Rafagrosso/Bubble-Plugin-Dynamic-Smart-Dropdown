@@ -75,22 +75,39 @@ function(instance, properties, context) {
   var hasAB = (typeof ab === 'string' && ab !== '') || typeof ab === 'number';
   var initText = blank(properties.initial_content) ? '' : String(properties.initial_content);
   var canonical = d.valueFormat === 'raw';
+  // Bubble echoes the bound value back after every write, and the first echo
+  // can still carry the OLD database value. Right after our own write
+  // (d.abSentAt) a differing value is therefore never applied, so clearing the
+  // input to blank is never reverted to the previous fill.
+  var recent = !!d.abSentAt && (Date.now() - d.abSentAt < 3000);
   if (hasAB) {
     var s = String(ab);
-    d.seenAB = s;
     // never overwrite what is being typed; the echo of our own write is skipped
     if (!d.focused && !d._abT) {
-      if (s !== d.lastAB && s !== d.outputValue()) {
+      if (s === d.lastAB || s === d.outputValue()) {
+        d.lastAB = s; d.seenAB = s;
+      } else if (recent && d.lastAB === '' && !d._retriedClear) {
+        // we wrote blank but the field kept its old value: clear it explicitly once
+        d._retriedClear = true; d.abSentAt = Date.now();
+        try { if (typeof instance.publishAutobinding === 'function') instance.publishAutobinding(null); } catch (e) {}
+      } else if (!recent) {
         d.apply(MI.parseText(spec, s, canonical), {});
-        d.dirtyAlert = false;
+        d.lastAB = s; d.seenAB = s; d.dirtyAlert = false;
       }
-      d.lastAB = s;
     }
     d.lastInit = initText;
-  } else if (d.lastInit === undefined || initText !== d.lastInit) {
-    d.lastInit = initText;
-    d.apply(MI.parseText(spec, initText, false), {});
-    d.dirtyAlert = false;
+  } else {
+    // the bound field was emptied elsewhere: follow it (never right after our own write)
+    if (d.bound === true && d.seenAB && !d.focused && !d._abT && !recent && d.state.raw !== '') {
+      d.apply({ raw: '', text: '', caret: 0 }, {});
+      d.lastAB = ''; d.dirtyAlert = false;
+    }
+    if (!recent) d.seenAB = '';
+    if (d.lastInit === undefined || initText !== d.lastInit) {
+      d.lastInit = initText;
+      d.apply(MI.parseText(spec, initText, false), {});
+      d.dirtyAlert = false;
+    }
   }
 
   d.publishStates();
