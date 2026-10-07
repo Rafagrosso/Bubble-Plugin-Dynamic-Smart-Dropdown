@@ -815,13 +815,25 @@ var MI = (function () {
   // Writes to the Bubble field the element is bound to. It only ever runs for
   // edits made by the user (or by an explicit action), never for the initial
   // content, and never while the input is disabled or read-only.
-  d.writeAutobinding = function() {
+  // Typing is debounced (d.abDelay ms after the last key) so the database is
+  // not hit on every keystroke and a slow echo can never fight the typist.
+  // Blur, Enter and explicit actions flush immediately.
+  d.abDelay = 600;
+  d._abT = null;
+  d.writeAutobinding = function(immediate) {
+    if (d._abT) { clearTimeout(d._abT); d._abT = null; }
     if (d.disabled || d.readOnly) return;
-    var v = d.outputValue();
-    if (v === d.lastAB) return;
-    d.lastAB = v;
-    try { if (typeof instance.publishAutobinding === 'function') instance.publishAutobinding(v); } catch (e) {}
+    var go = function() {
+      d._abT = null;
+      if (d.disabled || d.readOnly) return;
+      var v = d.outputValue();
+      if (v === d.lastAB) return;
+      d.lastAB = v;
+      try { if (typeof instance.publishAutobinding === 'function') instance.publishAutobinding(v); } catch (e) {}
+    };
+    if (immediate || !(d.abDelay > 0)) go(); else d._abT = setTimeout(go, d.abDelay);
   };
+  d.flushAutobinding = function() { if (d._abT) d.writeAutobinding(true); };
 
   // Same idea as Bubble's own "show an alert on success": a short message,
   // never the typed value.
@@ -857,7 +869,7 @@ var MI = (function () {
     }
     d.publishStates();
     if (!o.user) return;
-    d.writeAutobinding();
+    d.writeAutobinding(o.immediate);
     d.dirtyAlert = true;
     if (!o.quiet) {
       if (prevText !== res.text) instance.triggerEvent('value_changed');
@@ -900,10 +912,12 @@ var MI = (function () {
       var r = MI.parseText(d.spec, input[0].value);
       d.apply(r, { user: true });
     }
+    d.flushAutobinding();
     d.maybeAlert();
   });
   input.on('keydown', function(ev) {
     if (ev.key === 'Enter' || ev.which === 13) {
+      d.flushAutobinding();
       d.maybeAlert();
       instance.triggerEvent('pressed_enter');
     }
@@ -921,6 +935,7 @@ var MI = (function () {
     d.focused = false;
     if (host && d.focusOutline) host.style.outline = d._prevOutline || '';
     d.setPub('is_focused', false);
+    d.flushAutobinding();
     d.maybeAlert();
     instance.triggerEvent('input_blurred');
   });
@@ -947,7 +962,7 @@ var MI = (function () {
     d.rebuildSpec(o);
     d.renderCC();
     input.attr('inputmode', d.U.mode(d.spec));
-    d.apply(MI.setRaw(d.spec, d.state.raw), { user: true });
+    d.apply(MI.setRaw(d.spec, d.state.raw), { user: true, immediate: true });
     instance.triggerEvent('country_changed');
     input.focus();
   };
@@ -1038,11 +1053,11 @@ var MI = (function () {
   d.setValue = function(text, fireEvents) {
     var canonical = d.valueFormat === 'raw';
     var r = MI.parseText(d.spec, text, canonical);
-    d.apply(r, { user: true, quiet: !fireEvents });
+    d.apply(r, { user: true, quiet: !fireEvents, immediate: true });
     d.maybeAlert();
   };
   d.clearValue = function(fireEvents) {
-    d.apply({ raw: '', text: '', caret: 0 }, { user: true, quiet: !fireEvents });
+    d.apply({ raw: '', text: '', caret: 0 }, { user: true, quiet: !fireEvents, immediate: true });
     d.maybeAlert();
   };
   d.focusInput = function(selectAll) {

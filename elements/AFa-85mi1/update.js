@@ -9,6 +9,8 @@ function(instance, properties, context) {
   d.readOnly = !!properties.read_only;
   d.checksum = properties.validate_checksum !== false;
   d.valueFormat = (MI.norm(properties.autobinding_format).indexOf('sem') === 0) ? 'raw' : 'masked';
+  var dl = parseFloat(properties.autobinding_delay);
+  d.abDelay = isFinite(dl) ? Math.max(0, Math.min(5000, dl)) : 600;
   d.alertOnSuccess = !!properties.alert_on_success;
   d.successMessage = blank(properties.success_message) ? 'Salvo com sucesso!' : String(properties.success_message);
   d.showFlag = properties.show_flag !== false;
@@ -76,7 +78,7 @@ function(instance, properties, context) {
     var s = String(ab);
     d.seenAB = s;
     // never overwrite what is being typed; the echo of our own write is skipped
-    if (!d.focused) {
+    if (!d.focused && !d._abT) {
       if (s !== d.lastAB && s !== d.outputValue()) {
         d.apply(MI.parseText(spec, s, canonical), {});
         d.dirtyAlert = false;
