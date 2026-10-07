@@ -1,0 +1,13 @@
+{
+    "caption": "Clear input",
+    "fields": {
+        "AGg": {
+            "caption": "Quiet",
+            "editor": "Checkbox",
+            "name": "quiet",
+            "rank": 0,
+            "doc": "Não dispara o evento \"Value is changed\".",
+            "default_val": false
+        }
+    }
+}

@@ -1,0 +1,22 @@
+{
+    "caption": "Set value",
+    "fields": {
+        "AGh": {
+            "caption": "Value",
+            "editor": "DynamicValue",
+            "name": "value",
+            "rank": 0,
+            "doc": "Texto a colocar no input; ele é formatado pela máscara.",
+            "value": "text",
+            "optional": true
+        },
+        "AGi": {
+            "caption": "Quiet",
+            "editor": "Checkbox",
+            "name": "quiet",
+            "rank": 1,
+            "doc": "Não dispara o evento \"Value is changed\".",
+            "default_val": false
+        }
+    }
+}
