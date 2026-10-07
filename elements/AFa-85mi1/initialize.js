@@ -596,14 +596,43 @@ var MI = (function () {
     var s = (v == null) ? '' : String(v).trim();
     return (!s || s.toLowerCase() === 'none') ? fallback : s;
   }
-  // Copies the typography chosen in the Bubble editor onto the input. A value
-  // that already equals what the element container computes is replaced by
-  // "inherit", so hover / pressed / conditional styles Bubble applies to the
-  // container keep flowing through to the text.
+  // Makes the canvas fill the element and centre its content vertically.
+  // When the element has a fixed height but Bubble's canvas does not stretch to
+  // it, the canvas is sized to the element's content box explicitly.
+  function miLayout(canvas, host) {
+    canvas.css({ width: '100%', height: '100%', display: 'flex', 'align-items': 'center' });
+    try {
+      if (host) {
+        var cs = window.getComputedStyle(host);
+        var h = host.clientHeight - (parseFloat(cs.paddingTop) || 0) - (parseFloat(cs.paddingBottom) || 0);
+        if (h > 0 && canvas[0].offsetHeight < h - 1) canvas.css('height', h + 'px');
+      }
+    } catch (e) {}
+  }
+  // Individual padding (px) on top of the one Bubble applies; blank = none.
+  function miPad(root, p) {
+    var map = { top: p.padding_top, right: p.padding_right, bottom: p.padding_bottom, left: p.padding_left };
+    Object.keys(map).forEach(function (k) {
+      var n = parseFloat(map[k]);
+      root.style['padding' + k.charAt(0).toUpperCase() + k.slice(1)] = (isFinite(n) && n >= 0) ? n + 'px' : '';
+    });
+  }
+  // Copies the typography chosen in the Bubble editor onto the input. The
+  // values come from properties.bubble (runtime and, when exposed, preview).
+  // A value that already equals what the element container computes becomes
+  // "inherit", so hover / pressed styles Bubble applies to the container keep
+  // flowing through to the text.
   function miStyle(input, host, properties) {
     var b = null;
     try { b = properties.bubble; } catch (e) {}
-    function call(n) { try { return (b && typeof b[n] === 'function') ? b[n]() : null; } catch (e) { return null; } }
+    function get(n) {
+      var v = null;
+      try { if (b && typeof b[n] === 'function') v = b[n](); } catch (e) {}
+      if (v == null || v === '') {
+        try { var q = properties[n]; v = (typeof q === 'function') ? q() : q; } catch (e) {}
+      }
+      return v;
+    }
     function put(prop, value) {
       input.style[prop] = '';
       if (value == null || value === '') return;
@@ -612,13 +641,25 @@ var MI = (function () {
         if (host && window.getComputedStyle(host)[prop] === window.getComputedStyle(input)[prop]) input.style[prop] = 'inherit';
       } catch (e) {}
     }
-    var ff = call('font_face'), fs = call('font_size'), al = call('alignment');
-    put('fontFamily', ff ? String(ff).split('::').join('') : null);
-    put('fontSize', (fs != null && fs !== '') ? fs + 'px' : null);
-    put('color', miColor(call('font_color'), ''));
-    put('fontWeight', call('bold') === true ? '700' : null);
-    put('fontStyle', call('italic') === true ? 'italic' : null);
-    put('textDecoration', call('underline') === true ? 'underline' : null);
+    var ff = get('font_face'), fs = get('font_size'), al = get('alignment'), weight = null;
+    var family = null;
+    if (ff != null && String(ff).trim() !== '') {
+      var seg = String(ff).split('::').filter(function (s) { return s.trim() !== ''; })[0] || '';
+      var m = seg.match(/^(.*?):(\d{3})/);
+      if (m) { seg = m[1]; weight = m[2]; } else seg = seg.split(':')[0];
+      seg = seg.trim().replace(/["']/g, '');
+      if (seg) family = (seg.indexOf(',') !== -1) ? seg : '"' + seg + '", system-ui, sans-serif';
+    }
+    if (!family && host) {
+      // nothing from Bubble: never fall back to the browser's default serif
+      try { if (/^"?times/i.test(window.getComputedStyle(host).fontFamily)) family = 'system-ui, -apple-system, "Segoe UI", Roboto, sans-serif'; } catch (e) {}
+    }
+    put('fontFamily', family);
+    put('fontSize', (fs != null && fs !== '' && isFinite(parseFloat(fs))) ? parseFloat(fs) + 'px' : null);
+    put('color', miColor(get('font_color'), ''));
+    put('fontWeight', get('bold') === true ? '700' : weight);
+    put('fontStyle', get('italic') === true ? 'italic' : null);
+    put('textDecoration', get('underline') === true ? 'underline' : null);
     put('textAlign', (al === 'left' || al === 'center' || al === 'right') ? al : null);
     try { input.style.setProperty('--mi-color', window.getComputedStyle(input).color); } catch (e) {}
   }
@@ -674,13 +715,14 @@ var MI = (function () {
   // ===== element ==========================================================
   d.MI = MI;
   // update.js and the actions run in separate scopes, so the helpers travel on d
-  d.U = { opts: miOpts, color: miColor, style: miStyle, auto: miAutocomplete, mode: miInputMode };
+  d.U = { opts: miOpts, color: miColor, style: miStyle, layout: miLayout, pad: miPad, auto: miAutocomplete, mode: miInputMode };
   d.ns = 'mi_' + Math.random().toString(36).slice(2, 10);
   miEnsureStyle();
 
   var host = instance.canvas[0] ? instance.canvas[0].parentElement : null;
   d.host = host;
   instance.canvas.addClass('mi-host');
+  miLayout(instance.canvas, host);
 
   var root = $('<div class="mi-root"></div>');
   var ccBtn = $('<button type="button" class="mi-cc" aria-haspopup="listbox" aria-expanded="false"></button>').hide();
@@ -777,7 +819,7 @@ var MI = (function () {
   d.maybeAlert = function() {
     if (!d.dirtyAlert) return;
     d.dirtyAlert = false;
-    if (!d.alertOnSuccess || d.disabled || d.readOnly) return;
+    if (!d.alertOnSuccess || d.disabled || d.readOnly || d.bound === false) return;
     var raw = d.state.raw;
     // only a value that is saved as a good value counts as a success
     if (raw !== '' && d.spec.kind !== 'none' && !MI.isValid(d.spec, raw, d.checksum)) return;
