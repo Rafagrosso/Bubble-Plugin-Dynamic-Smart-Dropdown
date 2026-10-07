@@ -99,10 +99,15 @@ function(instance, properties, context) {
       d.lastAB = ''; d.dirtyAlert = false;
     }
     if (!recent) d.seenAB = '';
+    // Bound to a database field the input mirrors that field: blank when the
+    // field is blank. Initial content only applies to an input that is not bound.
+    var bound = d.bound === true || d.lastAB !== null;
     if (d.lastInit === undefined || initText !== d.lastInit) {
       d.lastInit = initText;
-      d.apply(MI.parseText(spec, initText, false), {});
-      d.dirtyAlert = false;
+      if (!bound) {
+        d.apply(MI.parseText(spec, initText, false), {});
+        d.dirtyAlert = false;
+      }
     }
   }
 
