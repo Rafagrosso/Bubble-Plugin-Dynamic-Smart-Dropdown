@@ -1,0 +1,13 @@
+{
+    "caption": "Focus input",
+    "fields": {
+        "AGj": {
+            "caption": "Select all",
+            "editor": "Checkbox",
+            "name": "select_all",
+            "rank": 0,
+            "doc": "Seleciona todo o conteúdo ao focar.",
+            "default_val": false
+        }
+    }
+}

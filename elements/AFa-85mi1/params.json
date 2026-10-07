@@ -1,0 +1,508 @@
+{
+    "add_hover_pressed": true,
+    "add_is_visible": true,
+    "autobinding_value": "text",
+    "can_fit_height": true,
+    "can_fit_width": true,
+    "category": "input forms",
+    "default_dim": {
+        "height": 44,
+        "width": 250
+    },
+    "display": "Masked Input",
+    "events": {
+        "AGa": {
+            "caption": "Value is changed",
+            "doc": "Disparado quando o usuário altera o valor (ou uma ação \"Set value\" sem Quiet).",
+            "name": "value_changed"
+        },
+        "AGb": {
+            "caption": "Pressed Enter",
+            "doc": "Disparado ao pressionar Enter dentro do input.",
+            "name": "pressed_enter"
+        },
+        "AGc": {
+            "caption": "Input is focused",
+            "doc": "Disparado quando o input recebe foco.",
+            "name": "input_focused"
+        },
+        "AGd": {
+            "caption": "Input loses focus",
+            "doc": "Disparado quando o input perde o foco.",
+            "name": "input_blurred"
+        },
+        "AGe": {
+            "caption": "Mask is completed",
+            "doc": "Disparado quando a digitação completa todas as posições obrigatórias da máscara.",
+            "name": "mask_completed"
+        },
+        "AGf": {
+            "caption": "Country is changed",
+            "doc": "Disparado quando o usuário escolhe outro país no seletor de telefone.",
+            "name": "country_changed"
+        }
+    },
+    "fields": {
+        "AFA": {
+            "caption": "Preenchimento automático",
+            "editor": "Label",
+            "name": "sec_autofill",
+            "rank": 25
+        },
+        "AFB": {
+            "caption": "Browser autofill",
+            "default_val": "Automático",
+            "doc": "Preenchimento automático nativo do navegador. \"Automático\" escolhe pela máscara (Telefone → tel-national, CEP → postal-code, Cartão → cc-number). \"Desligado (off)\" desativa o autofill e os gerenciadores de senha.",
+            "editor": "Dropdown",
+            "name": "autocomplete",
+            "optional": true,
+            "options": "Automático,Desligado (off),Ligado (on),Nome completo (name),Nome (given-name),Sobrenome (family-name),E-mail (email),Telefone (tel),Telefone nacional (tel-national),CEP / código postal (postal-code),Endereço (street-address),Endereço linha 1 (address-line1),Endereço linha 2 (address-line2),Cidade (address-level2),Estado (address-level1),País (country-name),Empresa (organization),Cargo (organization-title),Usuário (username),Data de nascimento (bday),Cartão - número (cc-number),Cartão - validade (cc-exp),Cartão - CVV (cc-csc),Cartão - nome (cc-name),Código único (one-time-code)",
+            "rank": 26
+        },
+        "AFC": {
+            "caption": "Input name",
+            "doc": "Atributo name do input, usado pelo navegador para o autofill. Em branco, é derivado do tipo de autofill.",
+            "editor": "StaticText",
+            "name": "input_name",
+            "optional": true,
+            "rank": 27
+        },
+        "AFD": {
+            "caption": "Autobinding",
+            "editor": "Label",
+            "name": "sec_autobinding",
+            "rank": 28
+        },
+        "AFE": {
+            "caption": "Value saved (autobinding and \"Value\")",
+            "default_val": "Com máscara",
+            "doc": "O que o autobinding grava e o estado \"Value\" devolve: \"Com máscara\" (como exibido) ou \"Sem máscara\" (só o conteúdo, ex.: CPF só com dígitos; números em formato 1234.56). Os estados \"Masked value\" e \"Raw value\" ficam sempre disponíveis.",
+            "editor": "Dropdown",
+            "name": "autobinding_format",
+            "optional": true,
+            "options": "Com máscara,Sem máscara",
+            "rank": 29
+        },
+        "AFF": {
+            "caption": "Show an alert on success",
+            "default_val": false,
+            "doc": "Como no input do Bubble: mostra um aviso quando o valor foi salvo. O aviso só aparece quando o valor é válido para a máscara e nunca exibe o conteúdo digitado.",
+            "editor": "Checkbox",
+            "name": "alert_on_success",
+            "rank": 30,
+            "value": "boolean"
+        },
+        "AFG": {
+            "caption": "Alert message",
+            "default_val": "Salvo com sucesso!",
+            "doc": "Texto do aviso de sucesso.",
+            "editor": "DynamicValue",
+            "name": "success_message",
+            "optional": true,
+            "rank": 31,
+            "value": "text"
+        },
+        "AFH": {
+            "caption": "Aparência extra",
+            "editor": "Label",
+            "name": "sec_aparencia",
+            "rank": 32
+        },
+        "AFI": {
+            "caption": "Extra horizontal padding (px)",
+            "default_val": 0,
+            "doc": "Espaço interno extra à esquerda e à direita do texto, somado ao padding definido no estilo do Bubble. Normalmente 0.",
+            "editor": "StaticNumber",
+            "name": "extra_padding_x",
+            "optional": true,
+            "rank": 33
+        },
+        "AFJ": {
+            "caption": "Focus outline color",
+            "doc": "Contorno desenhado ao redor do elemento enquanto o input tem foco. Deixe vazio para não usar.",
+            "editor": "Color",
+            "name": "focus_outline_color",
+            "optional": true,
+            "rank": 34
+        },
+        "AFK": {
+            "caption": "Focus outline width (px)",
+            "default_val": 2,
+            "doc": "Espessura do contorno de foco.",
+            "editor": "StaticNumber",
+            "name": "focus_outline_width",
+            "optional": true,
+            "rank": 35
+        },
+        "AFL": {
+            "caption": "Country list background",
+            "default_val": "rgba(255,255,255,1)",
+            "doc": "Fundo da lista de países.",
+            "editor": "Color",
+            "name": "popup_background",
+            "optional": true,
+            "rank": 36
+        },
+        "AFM": {
+            "caption": "Country list font color",
+            "default_val": "rgba(30,41,59,1)",
+            "doc": "Cor do texto da lista de países.",
+            "editor": "Color",
+            "name": "popup_font_color",
+            "optional": true,
+            "rank": 37
+        },
+        "AFN": {
+            "caption": "Country list hover color",
+            "default_val": "rgba(241,245,249,1)",
+            "doc": "Cor do item sob o cursor na lista de países.",
+            "editor": "Color",
+            "name": "popup_hover_color",
+            "optional": true,
+            "rank": 38
+        },
+        "AFb": {
+            "caption": "Máscara",
+            "editor": "Label",
+            "name": "sec_mascara",
+            "rank": 0
+        },
+        "AFc": {
+            "caption": "Mask type",
+            "default_val": "Nenhuma",
+            "doc": "Tipo de máscara aplicada enquanto o usuário digita (sempre da esquerda para a direita). \"Nenhuma\" = input comum. CPF/CNPJ/RG/IE/Telefone/CEP/Caixa Postal e outras já vêm prontas; \"Personalizada\" usa o campo Custom mask. Pode ser trocado por condição do Bubble.",
+            "editor": "Dropdown",
+            "name": "mask_type",
+            "optional": true,
+            "options": "Nenhuma,CPF,CNPJ,CPF ou CNPJ (automático),RG,Inscrição Estadual,Telefone,CEP,Caixa Postal,Data (dd/mm/aaaa),Hora (hh:mm),Data e hora,Moeda,Número,Percentual,Cartão de crédito,Placa de veículo,PIS / NIS,Título de eleitor,CNH,Código postal (Portugal),ZIP (EUA),Personalizada",
+            "rank": 1
+        },
+        "AFd": {
+            "caption": "Mask type (dynamic)",
+            "doc": "Opcional. Texto com o nome da máscara (ex.: \"CPF\", \"CEP\", \"Telefone\", \"Personalizada\"). Quando preenchido, substitui o Mask type — use com um custom state para trocar a máscara em tempo real.",
+            "editor": "DynamicValue",
+            "name": "dynamic_mask_type",
+            "optional": true,
+            "rank": 2,
+            "value": "text"
+        },
+        "AFe": {
+            "caption": "Custom mask",
+            "doc": "Padrão da máscara personalizada. 0 = dígito, 9 = dígito opcional, A = letra ou dígito, S = letra; qualquer outro caractere é literal (use \\ antes para escrever 0, 9, A ou S literais). Vários padrões separados por | (o menor que couber é usado). Ex.: (00) 0000-0000|(00) 00000-0000. Se preenchido com Mask type \"Nenhuma\", a máscara personalizada é aplicada. Aceita custom state: ao mudar, o valor é reformatado.",
+            "editor": "DynamicValue",
+            "name": "custom_mask",
+            "optional": true,
+            "rank": 3,
+            "value": "text"
+        },
+        "AFf": {
+            "caption": "State (Inscrição Estadual)",
+            "default_val": "Genérica",
+            "doc": "UF usada pela máscara de Inscrição Estadual. \"Genérica\" aceita até 14 dígitos sem pontuação. Em todas as opções é possível digitar ISENTO.",
+            "editor": "Dropdown",
+            "name": "ie_state",
+            "optional": true,
+            "options": "Genérica,AC,AL,AP,AM,BA,CE,DF,ES,GO,MA,MT,MS,MG,PA,PB,PR,PE,PI,RJ,RN,RS,RO,RR,SC,SP,SE,TO",
+            "rank": 4
+        },
+        "AFg": {
+            "caption": "Alphanumeric CNPJ",
+            "default_val": false,
+            "doc": "Aceita o novo CNPJ alfanumérico (letras nas 12 primeiras posições; as letras são convertidas em maiúsculas). Vale para CNPJ e CPF ou CNPJ.",
+            "editor": "Checkbox",
+            "name": "cnpj_alpha",
+            "rank": 5,
+            "value": "boolean"
+        },
+        "AFh": {
+            "caption": "Letter case",
+            "default_val": "Automático",
+            "doc": "Converte as letras digitadas. \"Automático\" mantém o padrão de cada máscara (ex.: placa e CNPJ alfanumérico em maiúsculas).",
+            "editor": "Dropdown",
+            "name": "letter_case",
+            "optional": true,
+            "options": "Automático,Maiúsculas,Minúsculas",
+            "rank": 6
+        },
+        "AFi": {
+            "caption": "Validate check digits",
+            "default_val": true,
+            "doc": "Valida os dígitos verificadores (CPF, CNPJ, PIS, cartão, datas e horas) no estado \"Is valid\".",
+            "editor": "Checkbox",
+            "name": "validate_checksum",
+            "rank": 7,
+            "value": "boolean"
+        },
+        "AFj": {
+            "caption": "Decimal places",
+            "default_val": 2,
+            "doc": "Casas decimais de Moeda, Número e Percentual.",
+            "editor": "StaticNumber",
+            "name": "decimals",
+            "optional": true,
+            "rank": 8
+        },
+        "AFk": {
+            "caption": "Number format",
+            "default_val": "1.234,56 (BR)",
+            "doc": "Separadores de Moeda, Número e Percentual.",
+            "editor": "Dropdown",
+            "name": "number_format",
+            "optional": true,
+            "options": "1.234,56 (BR),1,234.56 (EUA)",
+            "rank": 9
+        },
+        "AFl": {
+            "caption": "Currency symbol",
+            "default_val": "R$",
+            "doc": "Símbolo exibido antes do valor na máscara Moeda.",
+            "editor": "StaticText",
+            "name": "currency_symbol",
+            "optional": true,
+            "rank": 10
+        },
+        "AFm": {
+            "caption": "Show thousands separator",
+            "default_val": true,
+            "doc": "Exibe o separador de milhar em Moeda, Número e Percentual.",
+            "editor": "Checkbox",
+            "name": "thousands_separator",
+            "rank": 11,
+            "value": "boolean"
+        },
+        "AFn": {
+            "caption": "Allow negative numbers",
+            "default_val": false,
+            "doc": "Permite o sinal de menos em Moeda, Número e Percentual.",
+            "editor": "Checkbox",
+            "name": "allow_negative",
+            "rank": 12,
+            "value": "boolean"
+        },
+        "AFo": {
+            "caption": "Telefone / País",
+            "editor": "Label",
+            "name": "sec_telefone",
+            "rank": 13
+        },
+        "AFp": {
+            "caption": "Show country selector",
+            "default_val": false,
+            "doc": "Mostra o seletor de país (bandeira + código) dentro do input quando a máscara é Telefone. A máscara muda conforme o país.",
+            "editor": "Checkbox",
+            "name": "show_country_selector",
+            "rank": 14,
+            "value": "boolean"
+        },
+        "AFq": {
+            "caption": "Default country",
+            "default_val": "Brasil (+55)",
+            "doc": "País inicial da máscara de Telefone.",
+            "editor": "Dropdown",
+            "name": "default_country",
+            "optional": true,
+            "options": "Brasil (+55),Portugal (+351),Estados Unidos (+1),Canadá (+1),Argentina (+54),Bolívia (+591),Chile (+56),Colômbia (+57),Equador (+593),México (+52),Paraguai (+595),Peru (+51),Uruguai (+598),Venezuela (+58),Angola (+244),Moçambique (+258),Cabo Verde (+238),África do Sul (+27),Nigéria (+234),Egito (+20),Espanha (+34),França (+33),Alemanha (+49),Itália (+39),Reino Unido (+44),Irlanda (+353),Países Baixos (+31),Bélgica (+32),Suíça (+41),Áustria (+43),Suécia (+46),Noruega (+47),Dinamarca (+45),Finlândia (+358),Polônia (+48),Rússia (+7),Turquia (+90),Israel (+972),Arábia Saudita (+966),Emirados Árabes Unidos (+971),Índia (+91),China (+86),Japão (+81),Coreia do Sul (+82),Austrália (+61),Nova Zelândia (+64)",
+            "rank": 15
+        },
+        "AFr": {
+            "caption": "Country (dynamic)",
+            "doc": "Opcional. Nome ou código ISO do país (ex.: \"BR\", \"Portugal\"). Quando preenchido, substitui o Default country; ao mudar, a máscara é reformatada.",
+            "editor": "DynamicValue",
+            "name": "dynamic_country",
+            "optional": true,
+            "rank": 16,
+            "value": "text"
+        },
+        "AFs": {
+            "caption": "Show flag images",
+            "default_val": true,
+            "doc": "As bandeiras são imagens carregadas de flagcdn.com (o navegador do usuário faz um pedido a esse serviço). Desmarque para exibir apenas o código do país e não contatar nenhum serviço externo.",
+            "editor": "Checkbox",
+            "name": "show_flag",
+            "rank": 17,
+            "value": "boolean"
+        },
+        "AFt": {
+            "caption": "Conteúdo",
+            "editor": "Label",
+            "name": "sec_conteudo",
+            "rank": 18
+        },
+        "AFu": {
+            "caption": "Initial content",
+            "doc": "Valor inicial. É formatado pela máscara e nunca é gravado no banco por conta própria — só a digitação do usuário grava.",
+            "editor": "DynamicValue",
+            "name": "initial_content",
+            "optional": true,
+            "rank": 19,
+            "value": "text"
+        },
+        "AFv": {
+            "caption": "Placeholder",
+            "doc": "Texto exibido quando o input está vazio.",
+            "editor": "DynamicValue",
+            "name": "placeholder",
+            "optional": true,
+            "rank": 20,
+            "value": "text"
+        },
+        "AFw": {
+            "caption": "Use mask example as placeholder",
+            "default_val": false,
+            "doc": "Quando não há Placeholder, mostra um exemplo da máscara (ex.: 000.000.000-00).",
+            "editor": "Checkbox",
+            "name": "use_mask_example",
+            "rank": 21,
+            "value": "boolean"
+        },
+        "AFx": {
+            "caption": "Placeholder color",
+            "default_val": "rgba(148,163,184,1)",
+            "doc": "Cor do placeholder.",
+            "editor": "Color",
+            "name": "placeholder_color",
+            "optional": true,
+            "rank": 22
+        },
+        "AFy": {
+            "caption": "Disabled",
+            "default_val": false,
+            "doc": "Desativa o input. Não grava no banco enquanto estiver desativado.",
+            "editor": "Checkbox",
+            "name": "disabled",
+            "rank": 23,
+            "value": "boolean"
+        },
+        "AFz": {
+            "caption": "Read only",
+            "default_val": false,
+            "doc": "Exibe o valor, mas o usuário não pode editar (nem grava no banco).",
+            "editor": "Checkbox",
+            "name": "read_only",
+            "rank": 24,
+            "value": "boolean"
+        }
+    },
+    "has_reset_fn": true,
+    "icon": "ion-edit",
+    "property_applications": {
+        "Background": true,
+        "Border": true,
+        "BoxShadow": true,
+        "Font": true,
+        "MinWidth": true,
+        "Padding": true,
+        "resizable": true
+    },
+    "states": {
+        "AFO": {
+            "caption": "Value",
+            "doc": "Valor do input (com ou sem máscara, conforme \"Value saved\"). É o valor do autobinding.",
+            "initialization_code": {
+                "fn": "function(properties, context) {}"
+            },
+            "name": "value",
+            "value": "text"
+        },
+        "AFP": {
+            "caption": "Masked value",
+            "doc": "Texto exatamente como aparece no input.",
+            "initialization_code": {
+                "fn": "function(properties, context) {}"
+            },
+            "name": "masked_value",
+            "value": "text"
+        },
+        "AFQ": {
+            "caption": "Raw value",
+            "doc": "Conteúdo sem pontuação (ex.: CPF só com dígitos; número em formato 1234.56).",
+            "initialization_code": {
+                "fn": "function(properties, context) {}"
+            },
+            "name": "raw_value",
+            "value": "text"
+        },
+        "AFR": {
+            "caption": "Number value",
+            "doc": "Valor numérico das máscaras Moeda, Número e Percentual (vazio nas demais).",
+            "initialization_code": {
+                "fn": "function(properties, context) {}"
+            },
+            "name": "number_value",
+            "value": "number"
+        },
+        "AFS": {
+            "caption": "Is valid",
+            "doc": "Sim quando o valor está completo e válido para a máscara (inclui dígitos verificadores de CPF/CNPJ etc.). Vazio = não.",
+            "initialization_code": {
+                "fn": "function(properties, context) {}"
+            },
+            "name": "is_valid",
+            "value": "boolean"
+        },
+        "AFT": {
+            "caption": "Is complete",
+            "doc": "Sim quando todas as posições obrigatórias da máscara foram preenchidas.",
+            "initialization_code": {
+                "fn": "function(properties, context) {}"
+            },
+            "name": "is_complete",
+            "value": "boolean"
+        },
+        "AFU": {
+            "caption": "Is empty",
+            "doc": "Sim quando o input está vazio.",
+            "initialization_code": {
+                "fn": "function(properties, context) {}"
+            },
+            "name": "is_empty",
+            "value": "boolean"
+        },
+        "AFV": {
+            "caption": "Is focused",
+            "doc": "Sim enquanto o input tem foco.",
+            "initialization_code": {
+                "fn": "function(properties, context) {}"
+            },
+            "name": "is_focused",
+            "value": "boolean"
+        },
+        "AFW": {
+            "caption": "Country code (ISO)",
+            "doc": "Código ISO do país selecionado na máscara de Telefone (ex.: BR).",
+            "initialization_code": {
+                "fn": "function(properties, context) {}"
+            },
+            "name": "country_code",
+            "value": "text"
+        },
+        "AFX": {
+            "caption": "Dial code",
+            "doc": "Código de discagem do país (ex.: +55).",
+            "initialization_code": {
+                "fn": "function(properties, context) {}"
+            },
+            "name": "dial_code",
+            "value": "text"
+        },
+        "AFY": {
+            "caption": "Phone (E.164)",
+            "doc": "Telefone completo no formato internacional, ex.: +5511999998888.",
+            "initialization_code": {
+                "fn": "function(properties, context) {}"
+            },
+            "name": "phone_e164",
+            "value": "text"
+        },
+        "AFZ": {
+            "caption": "Status",
+            "doc": "Diagnóstico: \"initialized\" ao montar e \"ready\" a cada atualização.",
+            "initialization_code": {
+                "fn": "function(properties, context) {}"
+            },
+            "name": "mi_status",
+            "value": "text"
+        }
+    },
+    "support_autobinding": true
+}
