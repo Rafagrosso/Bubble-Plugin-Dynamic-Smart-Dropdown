@@ -321,7 +321,7 @@
         },
         "AFu": {
             "caption": "Initial content",
-            "doc": "Valor inicial, formatado pela máscara; nunca é gravado no banco por conta própria. Só vale para input sem autobinding: quando o input está vinculado a um campo, ele espelha o banco (vazio se o campo estiver vazio).",
+            "doc": "Valor exibido no input, formatado pela máscara. Pode ser uma expressão do banco: quando o valor muda, o input acompanha ao vivo (inclusive para vazio). O que o usuário digita permanece enquanto este valor não mudar. Se o input tem autobinding, vale o campo vinculado e este campo é ignorado. Nunca é gravado no banco por conta própria.",
             "editor": "DynamicValue",
             "name": "initial_content",
             "optional": true,

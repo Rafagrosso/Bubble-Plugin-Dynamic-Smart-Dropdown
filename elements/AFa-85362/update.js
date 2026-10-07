@@ -74,42 +74,28 @@ function(instance, properties, context) {
   try { if (properties.bubble && typeof properties.bubble.auto_binding === 'function') d.bound = !!properties.bubble.auto_binding(); } catch (e) {}
   var hasAB = (typeof ab === 'string' && ab !== '') || typeof ab === 'number';
   var initText = blank(properties.initial_content) ? '' : String(properties.initial_content);
+  d.lastInit = initText;
   var canonical = d.valueFormat === 'raw';
-  // Bubble echoes the bound value back after every write, and the first echo
-  // can still carry the OLD database value. Right after our own write
-  // (d.abSentAt) a differing value is therefore never applied, so clearing the
-  // input to blank is never reverted to the previous fill.
-  var recent = !!d.abSentAt && (Date.now() - d.abSentAt < 3000);
-  if (hasAB) {
-    var s = String(ab);
-    // never overwrite what is being typed; the echo of our own write is skipped
-    if (!d.focused && !d._abT) {
-      if (s === d.lastAB || s === d.outputValue()) {
-        d.lastAB = s; d.seenAB = s;
-      } else if (!recent) {
-        d.apply(MI.parseText(spec, s, canonical), {});
-        d.lastAB = s; d.seenAB = s; d.dirtyAlert = false;
-      }
-    }
-    d.lastInit = initText;
-  } else {
-    // the bound field was emptied elsewhere: follow it (never right after our own write)
-    if (d.bound === true && d.seenAB && !d.focused && !d._abT && !recent && d.state.raw !== '') {
-      d.apply({ raw: '', text: '', caret: 0 }, {});
-      d.lastAB = ''; d.dirtyAlert = false;
-    }
-    if (!recent) d.seenAB = '';
-    // Bound to a database field the input mirrors that field: blank when the
-    // field is blank. Initial content only applies to an input that is not bound.
-    var bound = d.bound === true || d.lastAB !== null;
-    if (d.lastInit === undefined || initText !== d.lastInit) {
-      d.lastInit = initText;
-      if (!bound) {
-        d.apply(MI.parseText(spec, initText, false), {});
-        d.dirtyAlert = false;
-      }
-    }
+
+  // ---- the live source -----------------------------------------------------------
+  // The input always mirrors its source: the bound database field (blank when
+  // that field is blank) or, when nothing is bound, the Initial content (which
+  // is usually a live expression of the database). Whenever the source CHANGES
+  // the input follows it. While it does not change, what the user typed stays
+  // (it is saved by the autobinding). Never applied while the user is typing.
+  var fromAB = hasAB || d.bound === true;
+  var srcText = hasAB ? String(ab) : (d.bound === true ? '' : initText);
+  var srcKey = (fromAB ? 'ab:' : 'in:') + srcText;
+  if (srcKey !== d.srcKey && (d.focused || d._abT)) {
+    d.deferred = { key: srcKey, text: srcText, fromAB: fromAB, canon: fromAB && canonical, at: Date.now() };
+  } else if (srcKey !== d.srcKey) {
+    d.deferred = null;
+    d.srcKey = srcKey;
+    d.apply(MI.parseText(spec, srcText, fromAB && canonical), {});
+    if (fromAB) d.lastAB = d.outputValue();
+    d.dirtyAlert = false;
   }
+  d.seenAB = fromAB ? srcText : null;
 
   d.publishStates();
   instance.publishState('mi_status', 'ready');
