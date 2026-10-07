@@ -11,6 +11,7 @@ function(instance, properties, context) {
   d.valueFormat = (MI.norm(properties.autobinding_format).indexOf('sem') === 0) ? 'raw' : 'masked';
   var dl = parseFloat(properties.autobinding_delay);
   d.abDelay = isFinite(dl) ? Math.max(0, Math.min(5000, dl)) : 600;
+  d.keepOnReset = properties.reset_keeps_value !== false;
   d.alertOnSuccess = !!properties.alert_on_success;
   d.successMessage = blank(properties.success_message) ? 'Salvo com sucesso!' : String(properties.success_message);
   d.showFlag = properties.show_flag !== false;

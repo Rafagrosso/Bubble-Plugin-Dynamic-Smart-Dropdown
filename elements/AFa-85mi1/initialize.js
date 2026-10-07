@@ -1066,9 +1066,22 @@ var MI = (function () {
       if (selectAll) input[0].select();
     } catch (e) {}
   };
-  // "Reset relevant inputs": back to the initial content, like a native input.
-  // It does not write to the database field.
+  // "Reset relevant inputs". Like a native input, an input bound to a database
+  // field keeps (re-shows) the saved value instead of going blank, so a
+  // "save, then reset" workflow never wipes what was just saved. An unbound
+  // input goes back to its initial content. Nothing is written to the database.
+  d.keepOnReset = true;
   d.resetToInitial = function() {
+    var saved = (d.seenAB != null && d.seenAB !== '') ? String(d.seenAB) : null;
+    var bound = d.bound === true || saved !== null || d.lastAB != null;
+    if (d.keepOnReset && bound) {
+      if (saved !== null) {
+        d.apply(MI.parseText(d.spec, saved, d.valueFormat === 'raw'), {});
+        d.lastAB = saved;
+      }
+      d.dirtyAlert = false;
+      return;
+    }
     var t = d.lastInit == null ? '' : d.lastInit;
     d.apply(MI.parseText(d.spec, t, d.valueFormat === 'raw'), {});
     d.lastAB = d.seenAB;
