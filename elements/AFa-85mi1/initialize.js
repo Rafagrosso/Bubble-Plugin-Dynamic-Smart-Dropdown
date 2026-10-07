@@ -609,6 +609,24 @@ var MI = (function () {
       }
     } catch (e) {}
   }
+  // Editor preview: the canvas Bubble gives the preview does not always stretch
+  // to the element, so the content is pinned to the element's box (inside its
+  // padding) and centred, whatever height the canvas ends up with.
+  function miLayoutPreview(canvas, root) {
+    var el = canvas[0], host = el ? el.parentElement : null;
+    // normally the element's own box; one level up only if that one is collapsed
+    if (host && host.clientHeight < 2 && host.parentElement) host = host.parentElement;
+    canvas.css({ width: '100%', display: 'flex', 'align-items': 'center' });
+    if (!host) return;
+    try {
+      var cs = window.getComputedStyle(host);
+      if (cs.position === 'static') host.style.position = 'relative';
+      root.css({
+        position: 'absolute', width: 'auto', height: 'auto',
+        top: cs.paddingTop, right: cs.paddingRight, bottom: cs.paddingBottom, left: cs.paddingLeft
+      });
+    } catch (e) {}
+  }
   // Individual padding (px) on top of the one Bubble applies; blank = none.
   function miPad(root, p) {
     var map = { top: p.padding_top, right: p.padding_right, bottom: p.padding_bottom, left: p.padding_left };
