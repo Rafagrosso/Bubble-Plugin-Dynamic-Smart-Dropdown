@@ -3,20 +3,20 @@
     "fields": {
         "AGh": {
             "caption": "Value",
+            "doc": "Texto a colocar no input; ele é formatado pela máscara.",
             "editor": "DynamicValue",
             "name": "value",
+            "optional": true,
             "rank": 0,
-            "doc": "Texto a colocar no input; ele é formatado pela máscara.",
-            "value": "text",
-            "optional": true
+            "value": "text"
         },
         "AGi": {
             "caption": "Quiet",
+            "default_val": false,
+            "doc": "Não dispara o evento \"Value is changed\".",
             "editor": "Checkbox",
             "name": "quiet",
-            "rank": 1,
-            "doc": "Não dispara o evento \"Value is changed\".",
-            "default_val": false
+            "rank": 1
         }
     }
 }

@@ -3,11 +3,11 @@
     "fields": {
         "AGg": {
             "caption": "Quiet",
+            "default_val": false,
+            "doc": "Não dispara o evento \"Value is changed\".",
             "editor": "Checkbox",
             "name": "quiet",
-            "rank": 0,
-            "doc": "Não dispara o evento \"Value is changed\".",
-            "default_val": false
+            "rank": 0
         }
     }
 }
