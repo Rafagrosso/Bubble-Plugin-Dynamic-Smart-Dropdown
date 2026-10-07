@@ -53,8 +53,8 @@ function(instance, properties, context) {
   var ph = !blank(properties.placeholder) ? String(properties.placeholder)
          : (properties.use_mask_example ? MI.example(spec) : '');
   if (ph) input.attr('placeholder', ph); else input.removeAttr('placeholder');
-  var px = parseFloat(properties.extra_padding_x);
-  d.$root.css({ 'padding-left': px > 0 ? px + 'px' : '', 'padding-right': px > 0 ? px + 'px' : '' });
+  U.pad(d.$root[0], properties);
+  U.layout(instance.canvas, d.host);
 
   // ---- style from the Bubble editor -------------------------------------------
   U.style(input[0], d.host, properties);
@@ -66,6 +66,9 @@ function(instance, properties, context) {
 
   // ---- value: autobinding (database) or initial content ---------------------------
   var ab = properties.autobinding;
+  // Bubble tells whether the user picked a field to bind in the property editor
+  d.bound = null;
+  try { if (properties.bubble && typeof properties.bubble.auto_binding === 'function') d.bound = !!properties.bubble.auto_binding(); } catch (e) {}
   var hasAB = (typeof ab === 'string' && ab !== '') || typeof ab === 'number';
   var initText = blank(properties.initial_content) ? '' : String(properties.initial_content);
   var canonical = d.valueFormat === 'raw';
