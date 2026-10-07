@@ -793,6 +793,8 @@ var MI = (function () {
   d.seenAB = null;       // last value Bubble reported for the autobinding
   d.lastInit = undefined;
   d.dirtyAlert = false;
+  d.lastEditAt = 0;
+  d.deferred = null;      // a source change that arrived while the user was typing
   d.focusOutline = '';
   d.popColors = {};
 
@@ -838,7 +840,6 @@ var MI = (function () {
   // Blur, Enter and explicit actions flush immediately.
   d.abDelay = 600;
   d._abT = null;
-  d.abSentAt = 0;          // when we last wrote; echoes right after it can be stale
   d.writeAutobinding = function(immediate) {
     if (d._abT) { clearTimeout(d._abT); d._abT = null; }
     if (d.disabled || d.readOnly) return;
@@ -850,7 +851,6 @@ var MI = (function () {
       if (v === '' && (d.state.raw !== '' || input.val() !== '')) return;
       if (v === d.lastAB) return;
       d.lastAB = v;
-      d.abSentAt = Date.now();
       // an empty value is published as null: Bubble can ignore an empty string
       // but always clears the bound field for null
       try { if (typeof instance.publishAutobinding === 'function') instance.publishAutobinding(v === '' ? null : v); } catch (e) {}
@@ -887,6 +887,7 @@ var MI = (function () {
     o = o || {};
     var prevText = d.state.text, wasComplete = d.pub.is_complete;
     d.state = { raw: res.raw, text: res.text };
+    if (o.user) d.lastEditAt = Date.now();
     if (input.val() !== res.text) input.val(res.text);
     if (o.user && d.focused && res.caret != null) {
       try { input[0].setSelectionRange(res.caret, res.caret); } catch (e) {}
@@ -960,6 +961,14 @@ var MI = (function () {
     if (host && d.focusOutline) host.style.outline = d._prevOutline || '';
     d.setPub('is_focused', false);
     d.flushAutobinding();
+    // a database change that arrived while typing is shown now, unless it is
+    // older than the user's last edit
+    var df = d.deferred; d.deferred = null;
+    if (df && df.at >= d.lastEditAt && df.key !== d.srcKey) {
+      d.srcKey = df.key;
+      d.apply(MI.parseText(d.spec, df.text, df.canon), {});
+      if (df.fromAB) d.lastAB = d.outputValue();
+    }
     d.maybeAlert();
     instance.triggerEvent('input_blurred');
   });
@@ -1097,7 +1106,7 @@ var MI = (function () {
   d.keepOnReset = true;
   d.resetToInitial = function() {
     var saved = (d.seenAB != null && d.seenAB !== '') ? String(d.seenAB) : null;
-    var bound = d.bound === true || saved !== null || d.lastAB != null;
+    var bound = d.bound === true || saved !== null;
     if (d.keepOnReset && bound) {
       if (saved !== null) {
         d.apply(MI.parseText(d.spec, saved, d.valueFormat === 'raw'), {});
