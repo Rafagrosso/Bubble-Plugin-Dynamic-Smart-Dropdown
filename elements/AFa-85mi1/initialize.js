@@ -617,6 +617,24 @@ var MI = (function () {
       root.style['padding' + k.charAt(0).toUpperCase() + k.slice(1)] = (isFinite(n) && n >= 0) ? n + 'px' : '';
     });
   }
+  var MI_SYSTEM_FONTS = /^(arial|helvetica|times|georgia|verdana|tahoma|trebuchet|courier|system-ui|sans-serif|serif|monospace|segoe|-apple)/i;
+  function seg0(ff) {
+    var s = String(ff == null ? '' : ff).split('::').filter(function (x) { return x.trim() !== ''; })[0] || '';
+    return s.split(':')[0].replace(/["']/g, '').trim();
+  }
+  // The editor does not always have the chosen Google font loaded; ask for it
+  // once (a stylesheet request to fonts.googleapis.com) so the text matches.
+  function miLoadFont(name) {
+    try {
+      if (!name || name.indexOf(',') !== -1 || !/^[A-Za-z0-9 ]+$/.test(name) || MI_SYSTEM_FONTS.test(name)) return;
+      var id = 'mi-font-' + name.toLowerCase().replace(/\s+/g, '-');
+      if (document.getElementById(id)) return;
+      var l = document.createElement('link');
+      l.id = id; l.rel = 'stylesheet';
+      l.href = 'https://fonts.googleapis.com/css2?family=' + encodeURIComponent(name).replace(/%20/g, '+') + ':wght@300;400;500;600;700&display=swap';
+      document.head.appendChild(l);
+    } catch (e) {}
+  }
   // Copies the typography chosen in the Bubble editor onto the input. The
   // values come from properties.bubble (runtime and, when exposed, preview).
   // A value that already equals what the element container computes becomes
@@ -655,6 +673,8 @@ var MI = (function () {
       try { if (/^"?times/i.test(window.getComputedStyle(host).fontFamily)) family = 'system-ui, -apple-system, "Segoe UI", Roboto, sans-serif'; } catch (e) {}
     }
     put('fontFamily', family);
+    input.setAttribute('data-mi-font', ff == null ? '' : String(ff));
+    if (family && properties.load_google_font !== false) miLoadFont(seg0(ff));
     put('fontSize', (fs != null && fs !== '' && isFinite(parseFloat(fs))) ? parseFloat(fs) + 'px' : null);
     put('color', miColor(get('font_color'), ''));
     put('fontWeight', get('bold') === true ? '700' : weight);

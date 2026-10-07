@@ -114,7 +114,7 @@
             "editor": "Color",
             "name": "focus_outline_color",
             "optional": true,
-            "rank": 37
+            "rank": 38
         },
         "AFK": {
             "caption": "Focus outline width (px)",
@@ -123,7 +123,7 @@
             "editor": "StaticNumber",
             "name": "focus_outline_width",
             "optional": true,
-            "rank": 38
+            "rank": 39
         },
         "AFL": {
             "caption": "Country list background",
@@ -132,7 +132,7 @@
             "editor": "Color",
             "name": "popup_background",
             "optional": true,
-            "rank": 39
+            "rank": 40
         },
         "AFM": {
             "caption": "Country list font color",
@@ -141,7 +141,7 @@
             "editor": "Color",
             "name": "popup_font_color",
             "optional": true,
-            "rank": 40
+            "rank": 41
         },
         "AFN": {
             "caption": "Country list hover color",
@@ -150,7 +150,7 @@
             "editor": "Color",
             "name": "popup_hover_color",
             "optional": true,
-            "rank": 41
+            "rank": 42
         },
         "AFb": {
             "caption": "Máscara",
@@ -379,7 +379,7 @@
             "editor": "StaticNumber",
             "name": "padding_top",
             "optional": true,
-            "rank": 33
+            "rank": 34
         },
         "AKb": {
             "caption": "Padding right (px)",
@@ -387,7 +387,7 @@
             "editor": "StaticNumber",
             "name": "padding_right",
             "optional": true,
-            "rank": 34
+            "rank": 35
         },
         "AKc": {
             "caption": "Padding bottom (px)",
@@ -395,7 +395,7 @@
             "editor": "StaticNumber",
             "name": "padding_bottom",
             "optional": true,
-            "rank": 35
+            "rank": 36
         },
         "AKd": {
             "caption": "Padding left (px)",
@@ -403,7 +403,16 @@
             "editor": "StaticNumber",
             "name": "padding_left",
             "optional": true,
-            "rank": 36
+            "rank": 37
+        },
+        "AKe": {
+            "caption": "Load Google font if missing",
+            "default_val": true,
+            "doc": "Se a fonte escolhida no estilo do Bubble for uma fonte do Google e o editor/página não a tiver carregado, o plugin a solicita ao Google Fonts (pedido ao fonts.googleapis.com). Desmarque para nunca contatar o Google.",
+            "editor": "Checkbox",
+            "name": "load_google_font",
+            "rank": 33,
+            "value": "boolean"
         }
     },
     "has_reset_fn": true,
