@@ -89,7 +89,7 @@
             "doc": "Como no input do Bubble: mostra um aviso quando o valor foi salvo. O aviso só aparece quando o valor é válido para a máscara e nunca exibe o conteúdo digitado.",
             "editor": "Checkbox",
             "name": "alert_on_success",
-            "rank": 31,
+            "rank": 32,
             "value": "boolean"
         },
         "AFG": {
@@ -99,14 +99,14 @@
             "editor": "DynamicValue",
             "name": "success_message",
             "optional": true,
-            "rank": 32,
+            "rank": 33,
             "value": "text"
         },
         "AFH": {
             "caption": "Aparência extra",
             "editor": "Label",
             "name": "sec_aparencia",
-            "rank": 33
+            "rank": 34
         },
         "AFJ": {
             "caption": "Focus outline color",
@@ -114,7 +114,7 @@
             "editor": "Color",
             "name": "focus_outline_color",
             "optional": true,
-            "rank": 39
+            "rank": 40
         },
         "AFK": {
             "caption": "Focus outline width (px)",
@@ -123,7 +123,7 @@
             "editor": "StaticNumber",
             "name": "focus_outline_width",
             "optional": true,
-            "rank": 40
+            "rank": 41
         },
         "AFL": {
             "caption": "Country list background",
@@ -132,7 +132,7 @@
             "editor": "Color",
             "name": "popup_background",
             "optional": true,
-            "rank": 41
+            "rank": 42
         },
         "AFM": {
             "caption": "Country list font color",
@@ -141,7 +141,7 @@
             "editor": "Color",
             "name": "popup_font_color",
             "optional": true,
-            "rank": 42
+            "rank": 43
         },
         "AFN": {
             "caption": "Country list hover color",
@@ -150,7 +150,7 @@
             "editor": "Color",
             "name": "popup_hover_color",
             "optional": true,
-            "rank": 43
+            "rank": 44
         },
         "AFb": {
             "caption": "Máscara",
@@ -379,7 +379,7 @@
             "editor": "StaticNumber",
             "name": "padding_top",
             "optional": true,
-            "rank": 35
+            "rank": 36
         },
         "AKb": {
             "caption": "Padding right (px)",
@@ -387,7 +387,7 @@
             "editor": "StaticNumber",
             "name": "padding_right",
             "optional": true,
-            "rank": 36
+            "rank": 37
         },
         "AKc": {
             "caption": "Padding bottom (px)",
@@ -395,7 +395,7 @@
             "editor": "StaticNumber",
             "name": "padding_bottom",
             "optional": true,
-            "rank": 37
+            "rank": 38
         },
         "AKd": {
             "caption": "Padding left (px)",
@@ -403,7 +403,7 @@
             "editor": "StaticNumber",
             "name": "padding_left",
             "optional": true,
-            "rank": 38
+            "rank": 39
         },
         "AKe": {
             "caption": "Load Google font if missing",
@@ -411,7 +411,7 @@
             "doc": "Se a fonte escolhida no estilo do Bubble for uma fonte do Google e o editor/página não a tiver carregado, o plugin a solicita ao Google Fonts (pedido ao fonts.googleapis.com). Desmarque para nunca contatar o Google.",
             "editor": "Checkbox",
             "name": "load_google_font",
-            "rank": 34,
+            "rank": 35,
             "value": "boolean"
         },
         "AKf": {
@@ -422,6 +422,15 @@
             "name": "autobinding_delay",
             "optional": true,
             "rank": 30
+        },
+        "AKg": {
+            "caption": "Keep saved value on reset",
+            "default_val": true,
+            "doc": "Quando o input está vinculado a um campo (autobinding), \"Reset relevant inputs\" mantém o valor salvo em vez de limpar o input, como o input nativo do Bubble. Desmarque para sempre voltar ao Initial content.",
+            "editor": "Checkbox",
+            "name": "reset_keeps_value",
+            "rank": 31,
+            "value": "boolean"
         }
     },
     "has_reset_fn": true,
