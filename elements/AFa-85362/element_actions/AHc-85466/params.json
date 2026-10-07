@@ -3,11 +3,11 @@
     "fields": {
         "AGj": {
             "caption": "Select all",
+            "default_val": false,
+            "doc": "Seleciona todo o conteúdo ao focar.",
             "editor": "Checkbox",
             "name": "select_all",
-            "rank": 0,
-            "doc": "Seleciona todo o conteúdo ao focar.",
-            "default_val": false
+            "rank": 0
         }
     }
 }
