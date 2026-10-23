@@ -3,12 +3,12 @@
     "fields": {
         "AKu": {
             "caption": "Service",
+            "default_val": "ViaCEP",
+            "doc": "Serviço usado na busca.",
             "editor": "Dropdown",
             "name": "provider",
-            "rank": 0,
-            "doc": "Serviço usado na busca.",
-            "default_val": "ViaCEP",
-            "options": "ViaCEP,BrasilAPI"
+            "options": "ViaCEP,BrasilAPI",
+            "rank": 0
         }
     }
 }
