@@ -893,7 +893,7 @@ var MI = (function () {
       try { input[0].setSelectionRange(res.caret, res.caret); } catch (e) {}
     }
     d.publishStates();
-    if (o.user) d.cepCheck();
+    d.cepCheck();   // any change of the CEP (typed, from the database, action) searches again
     if (!o.user) return;
     d.writeAutobinding(o.immediate);
     d.dirtyAlert = true;
@@ -1131,10 +1131,13 @@ var MI = (function () {
       d.clearAddr('error'); instance.triggerEvent('cep_error');
     });
   };
-  // called after the user edited the value
+  // runs after every change of the value, and whenever the properties change
   d.cepCheck = function() {
     var raw = d.state.raw;
-    if (d.spec.id !== 'cep' || !d.cepProvider) return;
+    if (d.spec.id !== 'cep' || !d.cepProvider) {
+      if (d.lastCep) { d.lastCep = null; d._cepSeq++; d.clearAddr('idle'); }
+      return;
+    }
     if (raw.length === 8) { if (raw !== d.lastCep) d.lookupCEP(raw); }
     else if (d.lastCep) { d.lastCep = null; d._cepSeq++; d.clearAddr('idle'); }
   };

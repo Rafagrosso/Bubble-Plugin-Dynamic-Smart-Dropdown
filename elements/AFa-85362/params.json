@@ -456,7 +456,7 @@
         "AKi": {
             "caption": "CEP lookup",
             "default_val": "Desligado",
-            "doc": "Com a máscara CEP, busca o endereço quando o usuário completa o CEP e devolve rua, bairro, cidade e UF nos estados \"CEP ...\". Desligado por padrão: ao ligar, os 8 dígitos do CEP são enviados do navegador do usuário ao serviço escolhido (ViaCEP ou BrasilAPI) — nada além do CEP.",
+            "doc": "Com a máscara CEP, busca o endereço automaticamente sempre que o CEP completo muda (digitado, colado, vindo do banco/Initial content ou de uma ação) e devolve rua, bairro, cidade e UF nos estados \"CEP ...\". Desligado por padrão: ao ligar, os 8 dígitos do CEP são enviados do navegador do usuário ao serviço escolhido (ViaCEP ou BrasilAPI) — nada além do CEP.",
             "editor": "Dropdown",
             "name": "cep_lookup",
             "optional": true,
