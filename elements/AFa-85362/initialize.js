@@ -893,6 +893,7 @@ var MI = (function () {
       try { input[0].setSelectionRange(res.caret, res.caret); } catch (e) {}
     }
     d.publishStates();
+    if (o.user) d.cepCheck();
     if (!o.user) return;
     d.writeAutobinding(o.immediate);
     d.dirtyAlert = true;
@@ -1082,6 +1083,62 @@ var MI = (function () {
     if (d.ccOpen) d.closeCC(); else d.openCC();
   });
 
+  // ---- CEP lookup (optional, off by default) ------------------------------------
+  // Only the 8 digits of the CEP are sent, from the user's browser, to the
+  // service chosen in the properties (ViaCEP or BrasilAPI). Nothing else.
+  d.cepProvider = '';
+  d.lastCep = null;
+  d._cepSeq = 0;
+  d.clearAddr = function(status) {
+    d.setPub('cep_street', ''); d.setPub('cep_district', ''); d.setPub('cep_city', '');
+    d.setPub('cep_state', ''); d.setPub('cep_complement', ''); d.setPub('cep_ibge', '');
+    d.setPub('cep_is_found', false); d.setPub('cep_status', status || 'idle');
+  };
+  d.lookupCEP = function(cep, provider) {
+    provider = provider || d.cepProvider || 'viacep';
+    var id = ++d._cepSeq;
+    d.lastCep = cep;
+    d.clearAddr('loading');
+    if (typeof window.fetch !== 'function') { d.clearAddr('error'); instance.triggerEvent('cep_error'); return; }
+    var ctrl = window.AbortController ? new AbortController() : null;
+    var timer = setTimeout(function() { if (ctrl) ctrl.abort(); }, 8000);
+    var url = provider === 'brasilapi'
+      ? 'https://brasilapi.com.br/api/cep/v1/' + cep
+      : 'https://viacep.com.br/ws/' + cep + '/json/';
+    var opts = { credentials: 'omit', referrerPolicy: 'no-referrer' };
+    if (ctrl) opts.signal = ctrl.signal;
+    fetch(url, opts).then(function(r) {
+      if (r.status === 404 || r.status === 400) return { __notfound: true };
+      if (!r.ok) throw new Error('http ' + r.status);
+      return r.json();
+    }).then(function(j) {
+      clearTimeout(timer);
+      if (id !== d._cepSeq || d.state.raw !== cep) return;   // outdated answer
+      if (!j || j.__notfound || j.erro) { d.clearAddr('not_found'); instance.triggerEvent('cep_not_found'); return; }
+      var s = function(v) { return v == null ? '' : String(v); };
+      var br = provider === 'brasilapi';
+      d.setPub('cep_street', s(br ? j.street : j.logradouro));
+      d.setPub('cep_district', s(br ? j.neighborhood : j.bairro));
+      d.setPub('cep_city', s(br ? j.city : j.localidade));
+      d.setPub('cep_state', s(br ? j.state : j.uf));
+      d.setPub('cep_complement', s(br ? '' : j.complemento));
+      d.setPub('cep_ibge', s(br ? '' : j.ibge));
+      d.setPub('cep_is_found', true); d.setPub('cep_status', 'found');
+      instance.triggerEvent('cep_found');
+    }).catch(function() {
+      clearTimeout(timer);
+      if (id !== d._cepSeq) return;
+      d.clearAddr('error'); instance.triggerEvent('cep_error');
+    });
+  };
+  // called after the user edited the value
+  d.cepCheck = function() {
+    var raw = d.state.raw;
+    if (d.spec.id !== 'cep' || !d.cepProvider) return;
+    if (raw.length === 8) { if (raw !== d.lastCep) d.lookupCEP(raw); }
+    else if (d.lastCep) { d.lastCep = null; d._cepSeq++; d.clearAddr('idle'); }
+  };
+
   // ---- programmatic API (actions, reset) -----------------------------------
   d.setValue = function(text, fireEvents) {
     var canonical = d.valueFormat === 'raw';
@@ -1121,6 +1178,7 @@ var MI = (function () {
     d.dirtyAlert = false;
   };
 
+  d.clearAddr('idle');
   d.ready = true;
   instance.publishState('mi_status', 'initialized');
 }
