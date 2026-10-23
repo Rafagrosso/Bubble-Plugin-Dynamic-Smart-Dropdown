@@ -40,6 +40,21 @@
             "caption": "Country is changed",
             "doc": "Disparado quando o usuário escolhe outro país no seletor de telefone.",
             "name": "country_changed"
+        },
+        "AKr": {
+            "caption": "CEP address found",
+            "doc": "Disparado quando a busca de CEP encontra o endereço.",
+            "name": "cep_found"
+        },
+        "AKs": {
+            "caption": "CEP not found",
+            "doc": "Disparado quando o CEP completo não existe.",
+            "name": "cep_not_found"
+        },
+        "AKt": {
+            "caption": "CEP lookup failed",
+            "doc": "Disparado quando a busca falha (rede indisponível, tempo esgotado).",
+            "name": "cep_error"
         }
     },
     "fields": {
@@ -47,7 +62,7 @@
             "caption": "Preenchimento automático",
             "editor": "Label",
             "name": "sec_autofill",
-            "rank": 25
+            "rank": 27
         },
         "AFB": {
             "caption": "Browser autofill",
@@ -57,7 +72,7 @@
             "name": "autocomplete",
             "optional": true,
             "options": "Automático,Desligado (off),Ligado (on),Nome completo (name),Nome (given-name),Sobrenome (family-name),E-mail (email),Telefone (tel),Telefone nacional (tel-national),CEP / código postal (postal-code),Endereço (street-address),Endereço linha 1 (address-line1),Endereço linha 2 (address-line2),Cidade (address-level2),Estado (address-level1),País (country-name),Empresa (organization),Cargo (organization-title),Usuário (username),Data de nascimento (bday),Cartão - número (cc-number),Cartão - validade (cc-exp),Cartão - CVV (cc-csc),Cartão - nome (cc-name),Código único (one-time-code)",
-            "rank": 26
+            "rank": 28
         },
         "AFC": {
             "caption": "Input name",
@@ -65,13 +80,13 @@
             "editor": "StaticText",
             "name": "input_name",
             "optional": true,
-            "rank": 27
+            "rank": 29
         },
         "AFD": {
             "caption": "Autobinding",
             "editor": "Label",
             "name": "sec_autobinding",
-            "rank": 28
+            "rank": 30
         },
         "AFE": {
             "caption": "Value saved (autobinding and \"Value\")",
@@ -81,7 +96,7 @@
             "name": "autobinding_format",
             "optional": true,
             "options": "Com máscara,Sem máscara",
-            "rank": 29
+            "rank": 31
         },
         "AFF": {
             "caption": "Show an alert on success",
@@ -89,7 +104,7 @@
             "doc": "Como no input do Bubble: mostra um aviso quando o valor foi salvo. O aviso só aparece quando o valor é válido para a máscara e nunca exibe o conteúdo digitado.",
             "editor": "Checkbox",
             "name": "alert_on_success",
-            "rank": 32,
+            "rank": 34,
             "value": "boolean"
         },
         "AFG": {
@@ -99,14 +114,14 @@
             "editor": "DynamicValue",
             "name": "success_message",
             "optional": true,
-            "rank": 33,
+            "rank": 35,
             "value": "text"
         },
         "AFH": {
             "caption": "Aparência extra",
             "editor": "Label",
             "name": "sec_aparencia",
-            "rank": 34
+            "rank": 36
         },
         "AFJ": {
             "caption": "Focus outline color",
@@ -114,7 +129,7 @@
             "editor": "Color",
             "name": "focus_outline_color",
             "optional": true,
-            "rank": 40
+            "rank": 42
         },
         "AFK": {
             "caption": "Focus outline width (px)",
@@ -123,7 +138,7 @@
             "editor": "StaticNumber",
             "name": "focus_outline_width",
             "optional": true,
-            "rank": 41
+            "rank": 43
         },
         "AFL": {
             "caption": "Country list background",
@@ -132,7 +147,7 @@
             "editor": "Color",
             "name": "popup_background",
             "optional": true,
-            "rank": 42
+            "rank": 44
         },
         "AFM": {
             "caption": "Country list font color",
@@ -141,7 +156,7 @@
             "editor": "Color",
             "name": "popup_font_color",
             "optional": true,
-            "rank": 43
+            "rank": 45
         },
         "AFN": {
             "caption": "Country list hover color",
@@ -150,7 +165,7 @@
             "editor": "Color",
             "name": "popup_hover_color",
             "optional": true,
-            "rank": 44
+            "rank": 46
         },
         "AFb": {
             "caption": "Máscara",
@@ -317,7 +332,7 @@
             "caption": "Conteúdo",
             "editor": "Label",
             "name": "sec_conteudo",
-            "rank": 18
+            "rank": 20
         },
         "AFu": {
             "caption": "Initial content",
@@ -325,7 +340,7 @@
             "editor": "DynamicValue",
             "name": "initial_content",
             "optional": true,
-            "rank": 19,
+            "rank": 21,
             "value": "text"
         },
         "AFv": {
@@ -334,7 +349,7 @@
             "editor": "DynamicValue",
             "name": "placeholder",
             "optional": true,
-            "rank": 20,
+            "rank": 22,
             "value": "text"
         },
         "AFw": {
@@ -343,7 +358,7 @@
             "doc": "Quando não há Placeholder, mostra um exemplo da máscara (ex.: 000.000.000-00).",
             "editor": "Checkbox",
             "name": "use_mask_example",
-            "rank": 21,
+            "rank": 23,
             "value": "boolean"
         },
         "AFx": {
@@ -353,7 +368,7 @@
             "editor": "Color",
             "name": "placeholder_color",
             "optional": true,
-            "rank": 22
+            "rank": 24
         },
         "AFy": {
             "caption": "Disabled",
@@ -361,7 +376,7 @@
             "doc": "Desativa o input. Não grava no banco enquanto estiver desativado.",
             "editor": "Checkbox",
             "name": "disabled",
-            "rank": 23,
+            "rank": 25,
             "value": "boolean"
         },
         "AFz": {
@@ -370,7 +385,7 @@
             "doc": "Exibe o valor, mas o usuário não pode editar (nem grava no banco).",
             "editor": "Checkbox",
             "name": "read_only",
-            "rank": 24,
+            "rank": 26,
             "value": "boolean"
         },
         "AKa": {
@@ -379,7 +394,7 @@
             "editor": "StaticNumber",
             "name": "padding_top",
             "optional": true,
-            "rank": 36
+            "rank": 38
         },
         "AKb": {
             "caption": "Padding right (px)",
@@ -387,7 +402,7 @@
             "editor": "StaticNumber",
             "name": "padding_right",
             "optional": true,
-            "rank": 37
+            "rank": 39
         },
         "AKc": {
             "caption": "Padding bottom (px)",
@@ -395,7 +410,7 @@
             "editor": "StaticNumber",
             "name": "padding_bottom",
             "optional": true,
-            "rank": 38
+            "rank": 40
         },
         "AKd": {
             "caption": "Padding left (px)",
@@ -403,7 +418,7 @@
             "editor": "StaticNumber",
             "name": "padding_left",
             "optional": true,
-            "rank": 39
+            "rank": 41
         },
         "AKe": {
             "caption": "Load Google font if missing",
@@ -411,7 +426,7 @@
             "doc": "Se a fonte escolhida no estilo do Bubble for uma fonte do Google e o editor/página não a tiver carregado, o plugin a solicita ao Google Fonts (pedido ao fonts.googleapis.com). Desmarque para nunca contatar o Google.",
             "editor": "Checkbox",
             "name": "load_google_font",
-            "rank": 35,
+            "rank": 37,
             "value": "boolean"
         },
         "AKf": {
@@ -421,7 +436,7 @@
             "editor": "StaticNumber",
             "name": "autobinding_delay",
             "optional": true,
-            "rank": 30
+            "rank": 32
         },
         "AKg": {
             "caption": "Keep saved value on reset",
@@ -429,8 +444,24 @@
             "doc": "Quando o input está vinculado a um campo (autobinding), \"Reset relevant inputs\" mantém o valor salvo em vez de limpar o input, como o input nativo do Bubble. Desmarque para sempre voltar ao Initial content.",
             "editor": "Checkbox",
             "name": "reset_keeps_value",
-            "rank": 31,
+            "rank": 33,
             "value": "boolean"
+        },
+        "AKh": {
+            "caption": "CEP",
+            "editor": "Label",
+            "name": "sec_cep",
+            "rank": 18
+        },
+        "AKi": {
+            "caption": "CEP lookup",
+            "default_val": "Desligado",
+            "doc": "Com a máscara CEP, busca o endereço quando o usuário completa o CEP e devolve rua, bairro, cidade e UF nos estados \"CEP ...\". Desligado por padrão: ao ligar, os 8 dígitos do CEP são enviados do navegador do usuário ao serviço escolhido (ViaCEP ou BrasilAPI) — nada além do CEP.",
+            "editor": "Dropdown",
+            "name": "cep_lookup",
+            "optional": true,
+            "options": "Desligado,ViaCEP,BrasilAPI",
+            "rank": 19
         }
     },
     "has_reset_fn": true,
@@ -551,6 +582,78 @@
                 "fn": "function(properties, context) {}"
             },
             "name": "mi_status",
+            "value": "text"
+        },
+        "AKj": {
+            "caption": "CEP street",
+            "doc": "Rua (logradouro) devolvida pela busca de CEP.",
+            "initialization_code": {
+                "fn": "function(properties, context) {}"
+            },
+            "name": "cep_street",
+            "value": "text"
+        },
+        "AKk": {
+            "caption": "CEP district",
+            "doc": "Bairro devolvido pela busca de CEP.",
+            "initialization_code": {
+                "fn": "function(properties, context) {}"
+            },
+            "name": "cep_district",
+            "value": "text"
+        },
+        "AKl": {
+            "caption": "CEP city",
+            "doc": "Cidade devolvida pela busca de CEP.",
+            "initialization_code": {
+                "fn": "function(properties, context) {}"
+            },
+            "name": "cep_city",
+            "value": "text"
+        },
+        "AKm": {
+            "caption": "CEP state (UF)",
+            "doc": "UF devolvida pela busca de CEP (ex.: SP).",
+            "initialization_code": {
+                "fn": "function(properties, context) {}"
+            },
+            "name": "cep_state",
+            "value": "text"
+        },
+        "AKn": {
+            "caption": "CEP complement",
+            "doc": "Complemento devolvido pela busca de CEP (só ViaCEP).",
+            "initialization_code": {
+                "fn": "function(properties, context) {}"
+            },
+            "name": "cep_complement",
+            "value": "text"
+        },
+        "AKo": {
+            "caption": "CEP IBGE code",
+            "doc": "Código IBGE do município (só ViaCEP).",
+            "initialization_code": {
+                "fn": "function(properties, context) {}"
+            },
+            "name": "cep_ibge",
+            "value": "text"
+        },
+        "AKp": {
+            "caption": "CEP is found",
+            "doc": "Sim quando a última busca de CEP encontrou o endereço.",
+            "initialization_code": {
+                "fn": "function(properties, context) {}"
+            },
+            "name": "cep_is_found",
+            "value": "boolean"
+        },
+        "AKq": {
+            "caption": "CEP lookup status",
+            "doc": "\"idle\", \"loading\", \"found\", \"not_found\" ou \"error\".",
+            "initialization_code": {
+                "fn": "function(properties, context) {}"
+            },
+            "name": "cep_status",
             "value": "text"
         }
     },
