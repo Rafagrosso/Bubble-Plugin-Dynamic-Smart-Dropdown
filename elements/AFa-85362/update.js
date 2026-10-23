@@ -14,7 +14,7 @@ function(instance, properties, context) {
   var cp = MI.norm(properties.cep_lookup);
   var prevProv = d.cepProvider;
   d.cepProvider = cp.indexOf('viacep') === 0 ? 'viacep' : (cp.indexOf('brasilapi') === 0 ? 'brasilapi' : '');
-  if (prevProv !== d.cepProvider) { d.lastCep = null; d._cepSeq++; d.clearAddr('idle'); }
+  if (prevProv !== d.cepProvider) { d.lastCep = null; d._cepSeq++; d.clearAddr('idle'); }   // new service: search again
   d.keepOnReset = properties.reset_keeps_value !== false;
   d.alertOnSuccess = !!properties.alert_on_success;
   d.successMessage = blank(properties.success_message) ? 'Salvo com sucesso!' : String(properties.success_message);
@@ -102,5 +102,6 @@ function(instance, properties, context) {
   d.seenAB = fromAB ? srcText : null;
 
   d.publishStates();
+  d.cepCheck();
   instance.publishState('mi_status', 'ready');
 }
