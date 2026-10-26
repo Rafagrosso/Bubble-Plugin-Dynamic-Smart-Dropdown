@@ -1,1 +1,0 @@
-function(properties, context) {}
