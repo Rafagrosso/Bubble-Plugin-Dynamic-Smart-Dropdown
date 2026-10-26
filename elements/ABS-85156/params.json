@@ -460,6 +460,15 @@
             "optional": true,
             "options": "Nenhuma,Texto,Moeda (R$),Número,Percentual,CPF/CNPJ,CEP,Telefone,Peso (kg),Data (dd/mm/aaaa)",
             "rank": 10
+        },
+        "ALc": {
+            "caption": "Load Google font if missing",
+            "default_val": true,
+            "doc": "Se a fonte escolhida no estilo do Bubble for uma fonte do Google e o editor/página não a tiver carregado, o plugin a solicita ao Google Fonts (pedido ao fonts.googleapis.com). Desmarque para nunca contatar o Google.",
+            "editor": "Checkbox",
+            "name": "load_google_font",
+            "rank": 53,
+            "value": "boolean"
         }
     },
     "has_reset_fn": true,

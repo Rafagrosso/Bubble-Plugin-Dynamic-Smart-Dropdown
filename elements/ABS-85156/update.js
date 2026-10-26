@@ -2,14 +2,60 @@ function(instance, properties, context) {
   var d = instance.data;
   if (!d || !d.ready) return;
 
-  // ---- typography inherited from the Bubble element ----------------------
-  try {
-    var ff = properties.bubble.font_face().split('::').join('');
-    var fs = properties.bubble.font_size() + 'px';
-    var fc = properties.bubble.font_color();
-    d.$root.css({ 'font-family': ff, 'font-size': fs, 'color': fc });
-    d.$popup.css({ 'font-family': ff, 'font-size': fs });
-  } catch (e) {}
+  // ---- typography from the Bubble element style ----------------------
+  // ---- font from the Bubble editor (shared by update and preview) ---------
+  var SDD_SYS = /^(arial|helvetica|times|georgia|verdana|tahoma|trebuchet|courier|system-ui|sans-serif|serif|monospace|segoe|-apple)/i;
+  function sddLoadFont(name) {
+    try {
+      if (!name || name.indexOf(',') !== -1 || !/^[A-Za-z0-9 ]+$/.test(name) || SDD_SYS.test(name)) return;
+      var id = 'sdd-font-' + name.toLowerCase().replace(/\s+/g, '-');
+      if (document.getElementById(id)) return;
+      var l = document.createElement('link');
+      l.id = id; l.rel = 'stylesheet';
+      l.href = 'https://fonts.googleapis.com/css2?family=' + encodeURIComponent(name).replace(/%20/g, '+') + ':wght@300;400;500;600;700&display=swap';
+      document.head.appendChild(l);
+    } catch (e) {}
+  }
+  // family, size, colour, weight, style and alignment of the element style;
+  // every property is read on its own, so one failing never drops the others
+  function sddFontInfo(properties, host) {
+    var b = null;
+    try { b = properties.bubble; } catch (e) {}
+    function get(n) {
+      var v = null;
+      try { if (b && typeof b[n] === 'function') v = b[n](); } catch (e) {}
+      if (v == null || v === '') {
+        try { var q = properties[n]; v = (typeof q === 'function') ? q() : q; } catch (e) {}
+      }
+      return v;
+    }
+    var ff = get('font_face'), fs = parseFloat(get('font_size')), family = null, weight = null, base = '';
+    if (ff != null && String(ff).trim() !== '') {
+      var seg = String(ff).split('::').filter(function (s) { return s.trim() !== ''; })[0] || '';
+      var m = seg.match(/^(.*?):(\d{3})/);
+      if (m) { seg = m[1]; weight = m[2]; } else seg = seg.split(':')[0];
+      base = seg.trim().replace(/["']/g, '');
+      if (base) family = (base.indexOf(',') !== -1) ? base : '"' + base + '", system-ui, sans-serif';
+    }
+    if (!family && host) {
+      try { if (/^"?times/i.test(window.getComputedStyle(host).fontFamily)) family = 'system-ui, -apple-system, "Segoe UI", Roboto, sans-serif'; } catch (e) {}
+    }
+    var al = get('alignment'), col = get('font_color');
+    if (base && properties.load_google_font !== false) sddLoadFont(base.indexOf(',') === -1 ? base : '');
+    return {
+      family: family, size: isFinite(fs) ? fs + 'px' : null,
+      color: (col == null || String(col).trim() === '' || String(col).toLowerCase() === 'none') ? null : String(col),
+      weight: get('bold') === true ? '700' : weight, style: get('italic') === true ? 'italic' : null,
+      decoration: get('underline') === true ? 'underline' : null,
+      align: (al === 'left' || al === 'center' || al === 'right') ? al : null
+    };
+  }
+  var fontInfo = sddFontInfo(properties, d.$root[0] ? d.$root[0].parentElement : null);
+  d.$root.css({
+    'font-family': fontInfo.family || '', 'font-size': fontInfo.size || '', 'color': fontInfo.color || '',
+    'font-weight': fontInfo.weight || '', 'font-style': fontInfo.style || ''
+  });
+  d.$popup.css({ 'font-family': fontInfo.family || '', 'font-size': fontInfo.size || '' });
 
   // dropdown_font_size overrides the popup font size when provided
   try {
