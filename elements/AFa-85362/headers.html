@@ -1,0 +1,28 @@
+<!-- Masked Input — estilos do elemento (também injetados por initialize.js/preview.js caso este bloco não carregue). -->
+<style id="mi-style-v1">
+.mi-host { overflow: visible !important; }
+.mi-root { position: relative; display: flex; align-items: center; width: 100%; height: 100%; min-width: 0; box-sizing: border-box; font-family: inherit; font-size: inherit; color: inherit; }
+.mi-root *, .mi-pop * { box-sizing: border-box; }
+.mi-input { flex: 1 1 auto; min-width: 0; width: 100%; height: 100%; margin: 0; padding: 0; border: 0; outline: 0; background: transparent; box-shadow: none; border-radius: 0; -webkit-appearance: none; appearance: none; font: inherit; font-family: inherit; font-size: inherit; font-weight: inherit; font-style: inherit; letter-spacing: inherit; color: inherit; text-align: inherit; text-decoration: inherit; text-overflow: ellipsis; line-height: normal; }
+.mi-input::placeholder { color: var(--mi-ph, #94a3b8); opacity: 1; }
+.mi-input::-ms-input-placeholder { color: var(--mi-ph, #94a3b8); }
+.mi-input:disabled { cursor: not-allowed; opacity: 1; -webkit-text-fill-color: currentColor; }
+.mi-input:-webkit-autofill, .mi-input:-webkit-autofill:hover, .mi-input:-webkit-autofill:focus { -webkit-text-fill-color: var(--mi-color, inherit) !important; caret-color: var(--mi-color, auto); transition: background-color 600000s 0s, color 600000s 0s; }
+.mi-cc { flex: 0 0 auto; display: inline-flex; align-items: center; gap: 6px; height: 100%; margin: 0 8px 0 0; padding: 0 8px 0 0; border: 0; border-right: 1px solid var(--mi-sep, rgba(148,163,184,.45)); border-radius: 0; background: transparent; color: inherit; font: inherit; cursor: pointer; white-space: nowrap; }
+.mi-cc:disabled { cursor: not-allowed; }
+.mi-cc .mi-dial { font-size: .92em; opacity: .85; }
+.mi-cc svg { flex: 0 0 auto; opacity: .6; }
+.mi-flag { width: 20px; height: 15px; flex: 0 0 auto; object-fit: cover; border-radius: 2px; display: inline-block; }
+.mi-flag-txt { display: inline-flex; align-items: center; justify-content: center; min-width: 20px; height: 15px; font-size: 9px; font-weight: 700; border-radius: 2px; background: rgba(148,163,184,.3); }
+.mi-pop { position: fixed; z-index: 2147483647; display: flex; flex-direction: column; min-width: 260px; max-height: 320px; overflow: hidden; background: var(--mi-pop-bg, #fff); color: var(--mi-pop-fg, #1e293b); border: 1px solid rgba(148,163,184,.4); border-radius: 10px; box-shadow: 0 12px 32px rgba(15,23,42,.18); font-family: inherit; font-size: 14px; }
+.mi-pop-search { flex: 0 0 auto; margin: 8px; padding: 8px 10px; border: 1px solid rgba(148,163,184,.45); border-radius: 8px; outline: 0; background: transparent; color: inherit; font: inherit; }
+.mi-pop-list { flex: 1 1 auto; overflow-y: auto; margin: 0; padding: 0 4px 6px; list-style: none; }
+.mi-opt { display: flex; align-items: center; gap: 10px; width: 100%; padding: 8px 10px; border: 0; border-radius: 8px; background: transparent; color: inherit; font: inherit; text-align: left; cursor: pointer; }
+.mi-opt:hover, .mi-opt.mi-active { background: var(--mi-pop-hover, #f1f5f9); }
+.mi-opt.mi-sel { font-weight: 600; }
+.mi-opt .mi-name { flex: 1 1 auto; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.mi-opt .mi-dial { opacity: .65; }
+.mi-empty { padding: 12px; text-align: center; opacity: .6; }
+.mi-toast { position: fixed; top: 20px; left: 50%; transform: translateX(-50%); z-index: 2147483647; padding: 10px 18px; border-radius: 10px; background: #16a34a; color: #fff; font: 600 14px/1.3 inherit; font-family: inherit; box-shadow: 0 8px 24px rgba(0,0,0,.18); pointer-events: none; opacity: 1; transition: opacity .3s ease; }
+.mi-toast.mi-out { opacity: 0; }
+</style>
