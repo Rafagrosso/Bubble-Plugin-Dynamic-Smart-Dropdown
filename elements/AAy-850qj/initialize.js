@@ -11,6 +11,7 @@ function(instance, context) {
   d.selectedIds = [];
   d._plan = [];               // flat render plan (group headers + options)
   d._planIdx = 0;             // how much of the plan is already in the DOM
+  d._lastSig = '';            // selection last published (see publishSelection)
   d.defaultIds = [];          // what the default fields currently point at
   d.searchLimit = 0;          // caps search results only
   d.sortDir = 'none';
@@ -447,7 +448,15 @@ function(instance, context) {
     var sel = d.getSelection();
     instance.publishState('selected', sel.length ? sel[sel.length - 1].original : null);
     instance.publishState('selected_list', sel.map(function(s) { return s.original; }));
-    if (fireEvent) instance.triggerEvent('searchbox_value_is_changed');
+    // The event only fires when the selection really differs from what was
+    // last published. Loading the page (default value arriving, or Bubble's
+    // reset running while nothing is picked yet) is not a change, so a
+    // "value is changed" workflow can no longer save a blank value over the
+    // record that is still loading.
+    var sig = d.selectedIds.join('|');
+    var changed = (sig !== d._lastSig);
+    d._lastSig = sig;
+    if (fireEvent && changed) instance.triggerEvent('searchbox_value_is_changed');
   };
 
   d.toggleItem = function(id) {
